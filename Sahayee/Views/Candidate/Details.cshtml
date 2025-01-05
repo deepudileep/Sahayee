@@ -1,0 +1,148 @@
+﻿@model Sahayee.Models.ViewModel.CandidateDetailsViewModel
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Left Section: Profile Picture and Details -->
+        <div class="col-md-2 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <img src="/Images/user.png" alt="Profile Picture" class="img-fluid rounded-circle mb-3" />
+                    <h4 class="card-title">@Model.User.FirstName @Model.User.LastName</h4>
+                    <p class="text-muted">@Model.User.Email</p>
+                    <p class="text-muted">Phone:      @Model.User.PhoneNumber</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section: Profile Form -->
+        <div class="col-md-5">
+            <input type="hidden" name="Id" value="@Model.User.Id" />
+
+            <!-- Personal Information -->
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span class="h5">Personal Information</span>
+                </div>
+                <div class="card-body" id="personalInfo">
+                    <div class="mb-2">First Name:      <strong><span data-field="FirstName">@Model.User.FirstName</span></strong></div>
+                    <div class="mb-2">Last Name:      <strong><span data-field="LastName">@Model.User.LastName</span></strong></div>
+                    <div class="mb-2">Gender:      <strong><span data-field="Gender">@Model.User.Gender</span></strong></div>
+                    <div class="mb-2">Date of Birth:      <strong><span data-field="DOB">@Model.User.DOB.ToString("yyyy-MM-dd")</span></strong></div>
+                    <div class="mb-2">Nationality:      <strong><span data-field="Nationality">@Model.User.Nationality</span></strong></div>
+                    <div class="mb-2">Email:      <strong><span data-field="Email">@Model.User.Email</span></strong></div>
+                    <div class="mb-2">Phone Number:      <strong><span data-field="PhoneNumber">@Model.User.PhoneNumber</span></strong></div>
+                </div>
+                <div class="card-footer text-end d-none" id="saveBtn-personalInfo">
+                    <button type="submit" class="btn btn-success btn-sm">Save</button>
+                </div>
+            </div>
+
+            <!-- Address -->
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span class="h5">Address</span>
+                </div>
+                <div class="card-body" id="address">
+                    <div class="mb-2">Current Address:      <strong><span data-field="CurrentAddress">@Model.User.CurrentAddress</span></strong></div>
+                    <div class="mb-2">Permanent Address:      <strong><span data-field="PermanentAddress">@Model.User.PermanentAddress</span></strong></div>
+                </div>
+                <div class="card-footer text-end d-none" id="saveBtn-address">
+                    <button type="submit" class="btn btn-success btn-sm">Save</button>
+                </div>
+            </div>
+
+            <!-- Identification Details -->
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span class="h5">Identification Details</span>
+                </div>
+                <div class="card-body" id="identification">
+                    <div class="mb-2">Passport Number:      <strong><span data-field="PassportNumber">@Model.User.PassportNumber</span></strong></div>
+                    <div class="mb-2">Visa Status:      <strong><span data-field="VisaStatus">@Model.User.VisaStatus</span></strong></div>
+                </div>
+                <div class="card-footer text-end d-none" id="saveBtn-identification">
+                    <button type="submit" class="btn btn-success btn-sm">Save</button>
+                </div>
+            </div>
+
+            <!-- Professional Details -->
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span class="h5">Professional Details</span>
+                </div>
+                <div class="card-body" id="professional">
+                    <div class="mb-2">Occupation:      <strong><span data-field="Occupation">@Model.User.Occupation</span></strong></div>
+                    <div class="mb-2">Specialization:      <strong><span data-field="Specialization">@Model.User.Specialization</span></strong></div>
+                    <div class="mb-2">Years of Experience:      <strong><span data-field="YearsOfExperience">@Model.User.YearsOfExperience</span></strong></div>
+                    <div class="mb-2">Current Employer:      <strong><span data-field="CurrentEmployer">@Model.User.CurrentEmployer</span></strong></div>
+                    <div class="mb-2">Professional License Number:      <strong><span data-field="ProfessionalLicenseNumber">@Model.User.ProfessionalLicenseNumber</span></strong></div>
+                    <div class="mb-2">Languages Spoken:      <strong><span data-field="LanguagesSpoken">@string.Join(", ", Model.User.LanguagesSpoken ?? Array.Empty<string>())</span></strong></div>
+                    <div class="mb-2">Preferred Country for Work:      <strong><span data-field="PreferredCountryForWork">@Model.User.PreferredCountryForWork</span></strong></div>
+                </div>
+                <div class="card-footer text-end d-none" id="saveBtn-professional">
+                    <button type="submit" class="btn btn-success btn-sm">Save</button>
+                </div>
+            </div>
+
+            <!-- Educational Background -->
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span class="h5">Educational Background</span>
+                </div>
+                <div class="card-body" id="education">
+                    <div class="mb-2">Highest Qualification:      <strong><span data-field="HighestQualification">@Model.User.HighestQualification</span></strong></div>
+                    <div class="mb-2">Institution Name:      <strong><span data-field="InstitutionName">@Model.User.InstitutionName</span></strong></div>
+                    <div class="mb-2">Year of Graduation:      <strong><span data-field="YearOfGraduation">@Model.User.YearOfGraduation</span></strong></div>
+                </div>
+                <div class="card-footer text-end d-none" id="saveBtn-education">
+                    <button type="submit" class="btn btn-success btn-sm">Save</button>
+                </div>
+            </div>
+
+            <!-- Certifications -->
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span class="h5">Certifications</span>
+                </div>
+                <div class="card-body" id="certifications">
+                    <div class="mb-2">Certifications:      <strong><span data-field="Certifications">@string.Join(", ", Model.User.Certifications ?? Array.Empty<string>())</span></strong></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="row">
+                <!-- Jobs Applied -->
+                <div class="col-md-4">
+                    <div class="card shadow border-0">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-primary">@Model.UsersStatistics.JobCount</div>
+                            <h5 class="card-title mt-2">Jobs Applied</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Courses Applied -->
+                <div class="col-md-4">
+                    <div class="card shadow border-0">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-success">@Model.UsersStatistics.CourseCount</div>
+                            <h5 class="card-title mt-2">Courses Applied</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Queries Raised -->
+                <div class="col-md-4">
+                    <div class="card shadow border-0">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-danger">@Model.UsersStatistics.QueryCount</div>
+                            <h5 class="card-title mt-2">Queries Raised</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

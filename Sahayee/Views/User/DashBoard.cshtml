@@ -1,0 +1,120 @@
+﻿@model Sahayee.Models.ViewModel.ProfileViewModel
+
+<div class="container mt-5">
+    <div class="row g-4">
+        <!-- First Column: Profile Section -->
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm rounded-lg p-4">
+                <!-- Profile Picture -->
+                <img src="/Images/user.png" alt="Profile Picture" class="card-img-top rounded-circle mx-auto mb-3" style="width: 120px; height: 120px; border: 4px solid #007bff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+
+                <!-- Card Body with Dynamic Data -->
+                <div class="card-body">
+                    <h5 class="card-title text-primary font-weight-bold">Welcome, @Model.User.FirstName @Model.User.LastName</h5>
+                    <p class="card-text text-muted"><i class="bi bi-envelope"></i> @Model.User.Email</p>
+                    <p class="card-text text-muted"><i class="bi bi-geo-alt"></i> @Model.User.Location</p>
+                    <p class="card-text text-muted"><i class="bi bi-telephone"></i> @Model.User.PhoneNumber</p>
+                    <p class="card-text text-muted"><i class="bi bi-gender-ambiguous"></i> @Model.User.Gender</p>
+                    <p class="card-text text-muted"><i class="bi bi-calendar"></i> @Model.User.DOB.ToString("MMMM dd, yyyy")</p>
+
+                    <!-- Button to View Profile -->
+
+                    <div class="d-flex justify-content-between">
+                        <a href="/Course/MyCourses" class="btn btn-outline-primary">My Courses</a>
+                        <a href="/Job/MyJobs" class="btn btn-outline-success">My Jobs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Column: Notifications Section -->
+        <div class="col-md-5">
+            <div class="card shadow-sm rounded-lg p-4">
+                <div class="card-body">
+                    <h5 class="card-title text-secondary border-bottom pb-3 mb-4">
+                        <i class="bi bi-newspaper"></i> News and Trends
+                    </h5>
+                    <ul class="list-unstyled">
+                        @foreach (var newsItem in Model.News)
+                        {
+                            <li class="mb-3">
+                                <h5 class="h5 text-dark">@newsItem.Title</h5>
+                                <small class="text-muted">@newsItem.NewsDate.ToString("MMM dd, yyyy")</small>
+                                <p>@newsItem.Content</p>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Third Column: News and Trends Section -->
+        <div class="col-md-4">
+            <div class="card shadow-sm rounded-lg p-4">
+                <div class="card-body">
+                    <!-- Trending Jobs -->
+                    <h5 class="card-title text-secondary border-bottom pb-3 mb-4">
+                        <i class="bi bi-newspaper"></i> Trending Jobs
+                    </h5>
+
+                    <div class="mt-4">
+                        <!-- By Category -->
+                        <div class="trending-section mb-4 p-3 border rounded shadow-sm bg-light">
+                            <h6 class="font-weight-bold  mb-3"><i class="bi bi-list-ul"></i> By Category</h6>
+                            <ul class="list-unstyled">
+                                @foreach (var item in Model.JobCounts.Category)
+                                {
+                                    <li class="mb-2">
+                                        <a href="@Url.Action("Jobs", "Job", new { position = item.Type, location = "all", institution = "all" })"
+                                           class="text-decoration-none d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-file-earmark-text text-info"></i> @item.Type</span>
+                                            <span class="badge bg-primary rounded-pill">@item.Count Openings</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+
+                        <!-- By Hospital -->
+                        <div class="trending-section mb-4 p-3 border rounded shadow-sm bg-light">
+                            <h6 class="font-weight-bold  mb-3"><i class="bi bi-hospital"></i> By Hospital</h6>
+                            <ul class="list-unstyled">
+                                @foreach (var item in Model.JobCounts.Hospital)
+                                {
+                                    <li class="mb-2">
+                                        <a href="@Url.Action("Jobs", "Job", new { position = "all", location = "all", institution = item.Type })"
+                                           class="text-decoration-none d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-building text-info"></i> @item.Type</span>
+                                            <span class="badge bg-success rounded-pill">@item.Count Openings</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+
+                        <!-- By Country -->
+                        <div class="trending-section p-3 border rounded shadow-sm bg-light">
+                            <h6 class="font-weight-bold  mb-3"><i class="bi bi-globe"></i> By Country</h6>
+                            <ul class="list-unstyled">
+                                @foreach (var item in Model.JobCounts.Country)
+                                {
+                                    <li class="mb-2">
+                                        <a href="@Url.Action("Jobs", "Job", new { position = "all", location = item.Type, institution = "all" })"
+                                           class="text-decoration-none d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-geo-alt text-info"></i> @item.Type</span>
+                                            <span class="badge bg-warning text-dark rounded-pill">@item.Count Openings</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

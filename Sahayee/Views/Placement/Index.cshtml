@@ -1,0 +1,156 @@
+﻿@model Sahayee.Models.ViewModel.PlacementsViewModels
+@{
+    ViewData["Title"] = "Job Board";
+}
+
+<!-- Main container -->
+<section class="container mt-5">
+    <div class="row g-4">
+
+        <!-- First Column: Trending Jobs Section -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm rounded-lg p-4">
+                <div class="card-body">
+                    <h5 class="card-title text-secondary border-bottom pb-3 mb-4">
+                        <i class="bi bi-newspaper"></i> Trending Jobs
+                    </h5>
+
+                    <div class="mt-4">
+                        <!-- By Category -->
+                        <div class="trending-section mb-4 p-3 border rounded shadow-sm bg-light">
+                            <h6 class="font-weight-bold mb-3"><i class="bi bi-list-ul"></i> By Category</h6>
+                            <ul class="list-unstyled">
+                                @foreach (var item in Model.JobCounts.Category)
+                                {
+                                    <li class="mb-2">
+                                        <a href="@Url.Action("Jobs", "Job", new { position = item.Type, location = "all", institution = "all" })"
+                                           class="text-decoration-none d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-file-earmark-text text-info"></i> @item.Type</span>
+                                            <span class="badge bg-primary rounded-pill">@item.Count Openings</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+
+                        <!-- By Hospital -->
+                        <div class="trending-section mb-4 p-3 border rounded shadow-sm bg-light">
+                            <h6 class="font-weight-bold mb-3"><i class="bi bi-hospital"></i> By Hospital</h6>
+                            <ul class="list-unstyled">
+                                @foreach (var item in Model.JobCounts.Hospital)
+                                {
+                                    <li class="mb-2">
+                                        <a href="@Url.Action("Jobs", "Job", new { position = "all", location = "all", institution = item.Type })"
+                                           class="text-decoration-none d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-building text-info"></i> @item.Type</span>
+                                            <span class="badge bg-success rounded-pill">@item.Count Openings</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+
+                        <!-- By Country -->
+                        <div class="trending-section p-3 border rounded shadow-sm bg-light">
+                            <h6 class="font-weight-bold  mb-3"><i class="bi bi-globe"></i> By Country</h6>
+                            <ul class="list-unstyled">
+                                @foreach (var item in Model.JobCounts.Country)
+                                {
+                                    <li class="mb-2">
+                                        <a href="@Url.Action("Jobs", "Job", new { position = "all", location = item.Type, institution = "all" })"
+                                           class="text-decoration-none d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-geo-alt text-info"></i> @item.Type</span>
+                                            <span class="badge bg-warning text-dark rounded-pill">@item.Count Openings</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Column: Latest News Section -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm rounded-lg p-4">
+                <div class="card-body">
+                    <h5 class="card-title text-secondary border-bottom pb-3 mb-4">
+                        <i class="bi bi-newspaper"></i> News and Trends
+                    </h5>
+                    <ul class="list-unstyled">
+                        @foreach (var newsItem in Model.News)
+                        {
+                            <li class="mb-3">
+                                <h5 class="h5 text-dark">@newsItem.Title</h5>
+                                <small class="text-muted">@newsItem.NewsDate.ToString("MMM dd, yyyy")</small>
+                                <p>@newsItem.Content</p>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Third Column: Post a Query Section -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm rounded-lg p-4">
+                <div class="card-body">
+                    <h5 class="card-title text-secondary mb-4">
+                        <i class="bi bi-question-circle"></i> Post a Query to Sahayee
+                    </h5>
+                    <div class="query-box">
+                        <form action="Index" method="post">
+                            <div class="mb-3">
+                                <input type="text" name="name" class="form-control" placeholder="Your Name" required value="@Model.Query.Name">
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" name="email" class="form-control" placeholder="Your Email" required value="@Model.Query.Email">
+                            </div>
+                            <div class="mb-3">
+                                <input type="tel" name="contact" class="form-control" placeholder="Your Contact Number" required value="@Model.Query.Contact">
+                            </div>
+                            <div class="mb-3">
+                                <select name="profession" class="form-select" required>
+                                    <option value="" disabled selected>Select Profession</option>
+                                    <option value="Nurse">Nurse</option>
+                                    <option value="Home Care Assistant">Home Care Assistant</option>
+                                    <option value="Physician">Physician</option>
+                                    <option value="Lab Technician">Lab Technician</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <select name="country" class="form-select" required>
+                                    <option value="" disabled selected>Looking for Opportunities in</option>
+                                    <option value="UK">UK</option>
+                                    <option value="Canada">Canada</option>
+                                    <option value="Germany">Germany</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <textarea name="message" class="form-control" placeholder="Your Message" rows="4"></textarea>
+                            </div>
+                            <div class="text-center">
+                                <input type="submit" value="Submit Query" class="btn btn-primary w-100 mb-3">
+                            </div>
+                            @if (ViewBag.Message != null)
+                            {
+                                <div class="alert alert-success">
+                                    @ViewBag.Message
+                                </div>
+                            }
+
+                            @if (ViewBag.Error != null)
+                            {
+                                <div class="alert alert-danger">
+                                    @ViewBag.Error
+                                </div>
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- End Row -->
+</section> <!-- End Container -->

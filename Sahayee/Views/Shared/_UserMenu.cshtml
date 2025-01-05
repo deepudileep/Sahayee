@@ -1,0 +1,128 @@
+﻿<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
+
+
+<script>
+    // Global array to hold notifications
+    let notifications = [];
+
+    // Ensure the DOM is ready before manipulating elements
+    document.addEventListener("DOMContentLoaded", function () {
+        const notificationCountElement = document.getElementById('notificationCount');
+        const notificationMessagesList = document.getElementById('notificationMessages');
+
+        // Create the SignalR connection
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/notificationHub")
+            .build();
+
+        // Listen for "ReceiveMessage" events from the server
+        connection.on("ReceiveMessage", function (message) {
+            // Add new message to the notification list
+            notifications.push(message);
+
+            // Update the notification counter
+            if (notificationCountElement) {
+                let currentCount = parseInt(notificationCountElement.innerText, 10);
+                notificationCountElement.innerText = currentCount + 1; // Increment the counter
+            }
+        });
+
+        // Start the SignalR connection
+        connection.start().catch(function (err) {
+            return console.error("SignalR connection error: ", err.toString());
+        });
+
+        // Function to show the notification list when the bell icon is clicked
+        window.showNotifications = function () {
+            const notificationsList = document.getElementById("notificationDropdown");
+
+            if (notifications.length > 0) {
+                // Display notifications list
+                const notificationMessagesList = document.getElementById("notificationMessages");
+                notificationMessagesList.innerHTML = ''; // Clear existing notifications
+
+                // Add each notification to the list
+                notifications.forEach(function (message) {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('dropdown-item');
+                    listItem.innerHTML = message; // Using innerHTML to support HTML formatting in message if needed
+                    listItem.onclick = function () {
+                        // Clear the notifications after clicking a notification item
+                        notifications = [];
+                        notificationMessagesList.innerHTML = ''; // Clear list
+                        notificationCountElement.innerText = '0'; // Reset notification count
+                        // Close the dropdown
+                        const dropdown = new bootstrap.Dropdown(notificationList);
+                        dropdown.hide();
+                    };
+                    notificationMessagesList.appendChild(listItem);
+                });
+
+                // Reset the notification count after showing
+                notificationCountElement.innerText = '0';
+            } else {
+                // Optionally, you can show a default message if there are no notifications
+                const notificationMessagesList = document.getElementById("notificationMessages");
+                notificationMessagesList.innerHTML = ''; // Clear existing notifications
+                const emptyItem = document.createElement('li');
+                emptyItem.classList.add('dropdown-item');
+                emptyItem.innerText = "No new notifications.";
+                notificationMessagesList.appendChild(emptyItem);
+            }
+        };
+    });
+</script>
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="~/Images/logo.jpg" alt="Sahayee Logo" width="100" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item"><a class="nav-link" href="/User/Dashboard">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/Job/Jobs">Search Job</a></li>
+                <li class="nav-item"><a class="nav-link" href="/Course/Courses">Find Courses</a></li>
+                <li class="nav-item"><a class="nav-link" href="/Placement/Index">Placements</a></li>
+
+                <!-- Authentication Conditional Rendering -->
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link " style="font-size:16px;cursor:pointer" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false" onclick="showNotifications()">
+                            <i class="fas fa-bell rounded-circle me-2" width="30"></i> <span class="badge bg-danger" id="notificationCount">0</span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="notificationDropdown" id="notificationMessages" style="max-height: 300px; overflow-y: auto;">
+                        </ul>
+                    </li>
+
+                    <!-- User Profile Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="@Url.Content("~/Images/user.png")" alt="Profile Picture" width="30" class="rounded-circle me-2" />
+                            @User.Identity.Name
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                            <li><a class="dropdown-item" href="/User/Profile">Profile</a></li>
+                            <li>
+                                <form method="post" asp-action="Logout" asp-controller="User">
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+
+                }
+                else
+                {
+                    <li class="nav-item"><a class="nav-link" href="/User/Registration">Login/Sign Up</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>

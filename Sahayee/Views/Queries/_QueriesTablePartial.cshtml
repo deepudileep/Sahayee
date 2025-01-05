@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Sahayee.Models.DB.Queries>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>UserId</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Query Type</th>
+            <th>Message</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var job in Model)
+        {
+            <tr>
+                <td>@job.Id</td>
+                <td>@job.Name</td>
+                <td>@job.Email</td>
+                <td>@job.Profession</td>
+                <td>@job.Message</td>
+                <td>
+                    <button class="btn btn-warning">Approve</button>
+                    @*<a href="/Job/AdminApplicantDetails?jobAId=@job.Id" class="btn btn-warning">Details</a>*@
+                    @*<button class="btn btn-danger" onclick="openDeleteModal('@job.Id')">Delete</button>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

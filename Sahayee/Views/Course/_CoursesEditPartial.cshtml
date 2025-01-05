@@ -1,0 +1,53 @@
+﻿@model Sahayee.Models.ViewModel.CourseViewModel
+
+<div class="modal-body" id="">
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <div class="mb-3">
+        <label for="courseTitle" class="form-label">Course Title</label>
+        <input type="text" name="Name" id="Name" class="form-control" value="@Model.Name" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="courseDepartment" class="form-label">Category</label>
+        <select name="Category" id="courseCategory" class="form-select" asp-for="Category" asp-items="@(new SelectList(Model.Categories, "Id", "Name", Model.Category))" required>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="courseInstitution" class="form-label">Institution</label>
+        <select name="Institution" id="courseInstitution" class="form-select" asp-for="Institution" asp-items="@(new SelectList(Model.Institutions, "Id", "Name", Model.Institution))" required>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="courseLocation" class="form-label">Location</label>
+        <select name="Location" id="courseLocation" class="form-select" asp-for="Location" asp-items="@(new SelectList(Model.Locations, "Id", "Name", Model.Location))" required>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="courseContact" class="form-label">Duration</label>
+        <input type="number" name="Duration" id="Duration" class="form-control" value="@Model.Duration" required />
+    </div>
+    <div class="mb-3">
+        <label for="courseTrainer" class="form-label">Trainer</label>
+        <input type="text" name="Trainer" id="Trainer" class="form-control" value="@Model.Trainer" required />
+    </div>
+    <div class="mb-3">
+        <label for="courseDate" class="form-label">Start Date</label>
+        <input type="date" name="StartDate" id="StartDate" class="form-control" value="@Model.StartDate" required />
+    </div>
+    <div class="mb-3">
+        <label for="Summary" class="form-label">Course Summary</label>
+        <textarea name="Summary" id="Summary" class="form-control" rows="4" required>@Model.Summary</textarea>
+    </div>
+</div>
+<div class="modal-footer">
+    <!-- For editing/viewing course, show delete button -->
+    <button type="button" class="btn btn-danger" id="deleteBtn" onclick="deleteCourse('@Model.Id')">Delete</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <input type="submit" class="btn btn-primary" id="saveBtn" value="Save" />
+</div>
+
+

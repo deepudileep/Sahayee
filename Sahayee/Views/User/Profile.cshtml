@@ -1,0 +1,159 @@
+﻿@model Sahayee.Models.DB.User
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Left Section: Profile Picture and Details -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <img src="/Images/user.png" alt="Profile Picture" class="img-fluid rounded-circle mb-3" />
+                    <h4 class="card-title">@Model.FirstName @Model.LastName</h4>
+                    <p class="text-muted">@Model.Email</p>
+                    <p class="text-muted">Phone:      @Model.PhoneNumber</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section: Profile Form -->
+        <div class="col-md-8">
+            <h2 class="mb-4">Profile Details</h2>
+            <form method="post" action="/User/UpdateProfile">
+                <input type="hidden" name="Id" value="@Model.Id" />
+
+                <!-- Personal Information -->
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="h5">Personal Information</span>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="toggleEdit('personalInfo')">Edit</button>
+                    </div>
+                    <div class="card-body" id="personalInfo">
+                        <div class="mb-2">First Name:      <strong><span data-field="FirstName">@Model.FirstName</span></strong></div>
+                        <div class="mb-2">Last Name:      <strong><span data-field="LastName">@Model.LastName</span></strong></div>
+                        <div class="mb-2">Gender:      <strong><span data-field="Gender">@Model.Gender</span></strong></div>
+                        <div class="mb-2">Date of Birth:      <strong><span data-field="DOB">@Model.DOB.ToString("yyyy-MM-dd")</span></strong></div>
+                        <div class="mb-2">Nationality:      <strong><span data-field="Nationality">@Model.Nationality</span></strong></div>
+                        <div class="mb-2">Email:      <strong><span data-field="Email">@Model.Email</span></strong></div>
+                        <div class="mb-2">Phone Number:      <strong><span data-field="PhoneNumber">@Model.PhoneNumber</span></strong></div>
+                    </div>
+                    <div class="card-footer text-end d-none" id="saveBtn-personalInfo">
+                        <button type="submit" class="btn btn-success btn-sm">Save</button>
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="h5">Address</span>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="toggleEdit('address')">Edit</button>
+                    </div>
+                    <div class="card-body" id="address">
+                        <div class="mb-2">Current Address:      <strong><span data-field="CurrentAddress">@Model.CurrentAddress</span></strong></div>
+                        <div class="mb-2">Permanent Address:      <strong><span data-field="PermanentAddress">@Model.PermanentAddress</span></strong></div>
+                    </div>
+                    <div class="card-footer text-end d-none" id="saveBtn-address">
+                        <button type="submit" class="btn btn-success btn-sm">Save</button>
+                    </div>
+                </div>
+
+                <!-- Identification Details -->
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="h5">Identification Details</span>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="toggleEdit('identification')">Edit</button>
+                    </div>
+                    <div class="card-body" id="identification">
+                        <div class="mb-2">Passport Number:      <strong><span data-field="PassportNumber">@Model.PassportNumber</span></strong></div>
+                        <div class="mb-2">Visa Status:      <strong><span data-field="VisaStatus">@Model.VisaStatus</span></strong></div>
+                    </div>
+                    <div class="card-footer text-end d-none" id="saveBtn-identification">
+                        <button type="submit" class="btn btn-success btn-sm">Save</button>
+                    </div>
+                </div>
+
+                <!-- Professional Details -->
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="h5">Professional Details</span>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="toggleEdit('professional')">Edit</button>
+                    </div>
+                    <div class="card-body" id="professional">
+                        <div class="mb-2">Occupation:      <strong><span data-field="Occupation">@Model.Occupation</span></strong></div>
+                        <div class="mb-2">Specialization:      <strong><span data-field="Specialization">@Model.Specialization</span></strong></div>
+                        <div class="mb-2">Years of Experience:      <strong><span data-field="YearsOfExperience">@Model.YearsOfExperience</span></strong></div>
+                        <div class="mb-2">Current Employer:      <strong><span data-field="CurrentEmployer">@Model.CurrentEmployer</span></strong></div>
+                        <div class="mb-2">Professional License Number:      <strong><span data-field="ProfessionalLicenseNumber">@Model.ProfessionalLicenseNumber</span></strong></div>
+                        <div class="mb-2">Languages Spoken:      <strong><span data-field="LanguagesSpoken">@string.Join(", ", Model.LanguagesSpoken ?? Array.Empty<string>())</span></strong></div>
+                        <div class="mb-2">Preferred Country for Work:      <strong><span data-field="PreferredCountryForWork">@Model.PreferredCountryForWork</span></strong></div>
+                    </div>
+                    <div class="card-footer text-end d-none" id="saveBtn-professional">
+                        <button type="submit" class="btn btn-success btn-sm">Save</button>
+                    </div>
+                </div>
+
+                <!-- Educational Background -->
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="h5">Educational Background</span>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="toggleEdit('education')">Edit</button>
+                    </div>
+                    <div class="card-body" id="education">
+                        <div class="mb-2">Highest Qualification:      <strong><span data-field="HighestQualification">@Model.HighestQualification</span></strong></div>
+                        <div class="mb-2">Institution Name:      <strong><span data-field="InstitutionName">@Model.InstitutionName</span></strong></div>
+                        <div class="mb-2">Year of Graduation:      <strong><span data-field="YearOfGraduation">@Model.YearOfGraduation</span></strong></div>
+                    </div>
+                    <div class="card-footer text-end d-none" id="saveBtn-education">
+                        <button type="submit" class="btn btn-success btn-sm">Save</button>
+                    </div>
+                </div>
+
+                <!-- Certifications -->
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="h5">Certifications</span>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="toggleEdit('certifications')">Edit</button>
+                    </div>
+                    <div class="card-body" id="certifications">
+                        <div class="mb-2">Certifications:      <strong><span data-field="Certifications">@string.Join(", ", Model.Certifications ?? Array.Empty<string>())</span></strong></div>
+                    </div>
+                    <div class="card-footer text-end d-none" id="saveBtn-certifications">
+                        <button type="submit" class="btn btn-success btn-sm">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleEdit(sectionId) {
+        const section = document.getElementById(sectionId);
+        const isEditing = section.querySelectorAll('input').length > 0;
+
+        if (isEditing) {
+            // Switching to view mode (this happens on Save)
+            section.querySelectorAll('input').forEach(input => {
+                const span = document.createElement('span');
+                span.textContent = input.value;
+                input.parentNode.replaceChild(span, input);
+            });
+
+            // Hide Save button
+            document.getElementById(`saveBtn-${sectionId}`).classList.add('d-none');
+        } else {
+            // Switching to edit mode
+            section.querySelectorAll('span').forEach(span => {
+                const input = document.createElement('input');
+                input.className = 'form-control mb-2';
+                input.value = span.textContent;
+                input.name = span.dataset.field || ''; // Restore field name if present
+                span.parentNode.replaceChild(input, span);
+            });
+
+            // Show Save button
+            document.getElementById(`saveBtn-${sectionId}`).classList.remove('d-none');
+        }
+
+        // Change Edit button text
+        document.querySelector(`button[onclick="toggleEdit('${sectionId}')"]`).textContent = isEditing ? 'Edit' : 'Cancel';
+    }
+</script>

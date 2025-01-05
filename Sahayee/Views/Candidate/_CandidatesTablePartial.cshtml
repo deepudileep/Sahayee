@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Sahayee.Models.ViewModel.CandidateViewModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Profession</th>
+            <th>Jobs Applied</th>
+            <th>Courses Applied</th>
+            <th>Queries</th>
+            <th>Registered On</th>
+            <th>Profile Status</th>
+            <th>Last Followup</th>
+            <th>Follow up on</th>
+            <th>Follow up done By</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var job in Model)
+        {
+            <tr>
+                <td>@job.Name</td>
+                <td>@job.Profession</td>
+                <td>@job.JobsApplied</td>
+                <td>@job.CoursesApplied</td>
+                <td>@job.Queries</td>
+                <td>@job.RegisteredOn</td>
+                <td>@job.ProfileStatus</td>
+                <td>@job.LastFollowUp</td>
+                <td>@job.FollowUpOn</td>
+                <td>@job.FollowUpDoneBy</td>
+                <td>
+                    <a href="/Candidate/Details?userId=@job.Id" class="btn btn-warning">Details</a>
+                    @*<button class="btn btn-danger" onclick="openDeleteModal('@job.Id')">Delete</button>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

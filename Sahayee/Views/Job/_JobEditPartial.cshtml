@@ -1,0 +1,47 @@
+﻿@model Sahayee.Models.ViewModel.JobsViewModel
+
+<div class="modal-body" id="">
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <div class="mb-3">
+        <label for="jobTitle" class="form-label">Job Title</label>
+        <input type="text" name="JobTitle" id="jobTitle" class="form-control" value="@Model.JobTitle" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="jobDepartment" class="form-label">Department</label>
+        <select name="Department" id="jobDepartment" class="form-select" asp-for="Department" asp-items="@(new SelectList(Model.Positions, "Id", "Name", Model.Department))" required>
+        </select>
+    </div>
+
+
+    <div class="mb-3">
+        <label for="jobInstitution" class="form-label">Institution</label>
+        <select name="Institution" id="jobInstitution" class="form-select" asp-for="Institution" asp-items="@(new SelectList(Model.Institutions, "Id", "Name", Model.Institution))" required>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="jobLocation" class="form-label">Location</label>
+        <select name="Location" id="jobLocation" class="form-select" asp-for="Location" asp-items="@(new SelectList(Model.Locations, "Id", "Name", Model.Location))" required>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="jobContact" class="form-label">Contact Email</label>
+        <input type="email" name="ContactEmail" id="jobContact" class="form-control" value="@Model.ContactEmail" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="jobDescription" class="form-label">Job Description</label>
+        <textarea name="Description" id="jobDescription" class="form-control" rows="4" required>@Model.Description</textarea>
+    </div>
+</div>
+<div class="modal-footer">
+    <!-- For editing/viewing job, show delete button -->
+    <button type="button" class="btn btn-danger" id="deleteBtn" onclick="deleteJob('@Model.Id')">Delete</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <input type="submit" class="btn btn-primary" id="saveBtn" value="Save" />
+</div>
+
+

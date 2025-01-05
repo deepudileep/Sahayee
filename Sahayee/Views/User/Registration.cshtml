@@ -1,0 +1,65 @@
+﻿@model Sahayee.Models.ViewModel.RegistrationViewModel
+
+<div class="col-md-6 mx-auto">
+    <!-- Card Container -->
+    <div class="card shadow-lg rounded-4 p-4 mt-5">
+        <h1 class="text-center mb-4 text-primary">Let's Go</h1>
+
+        <!-- Form Start -->
+        <form method="post" action="/User/Registration">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" asp-for="FirstName" placeholder="First Name" required />
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" asp-for="LastName" placeholder="Last Name" required />
+                </div>
+            </div>
+            <div class="mb-3">
+                <input type="email" class="form-control" asp-for="Email" placeholder="Email" required />
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" asp-for="Location" placeholder="Location" required />
+            </div>
+            <div class="mb-3">
+                <input type="tel" class="form-control" asp-for="PhoneNumber" placeholder="Phone Number" required />
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <input type="date" class="form-control" asp-for="DOB" required />
+                </div>
+                <div class="col-md-6">
+                    <select class="form-select" asp-for="Gender" required>
+                        <option value="" disabled selected>Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Non-Binary">Non-Binary</option>
+                        <option value="PreferNotToSay">Prefer Not to Say</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="termsCheck" required />
+                <label class="form-check-label" for="termsCheck">
+                    I agree to the <a href="/terms-and-conditions" target="_blank">terms and conditions</a>
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button class="btn btn-primary w-100 mb-3 rounded-pill" type="submit">Submit</button>
+                <p>Or</p>
+                <!-- Google Sign In Button -->
+                <button class="btn btn-outline-secondary w-100 rounded-pill google-btn">
+                    <img src="/Images/GSign.png" alt="Google Logo" width="20" class="me-2" />
+                    Sign in with Google
+                </button>
+
+                <!-- Login Redirect Button -->
+                <a href="/User/Login" class="btn btn-link w-100 mt-3">Already have an account? Login here</a>
+            </div>
+        </form>
+        <!-- Form End -->
+    </div>
+    <!-- Card End -->
+</div>

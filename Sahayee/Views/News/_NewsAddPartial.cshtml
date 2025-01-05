@@ -1,0 +1,41 @@
+﻿@model Sahayee.Models.ViewModel.NewsViewModel
+
+<div class="modal-body" id="">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="mb-3">
+        <label for="Type" class="form-label">Category</label>
+        <select name="TypeId" id="TypeId" class="form-select" asp-for="TypeId" asp-items="@(new SelectList(Model.Type, "Id", "Name", Model.TypeId))" required>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="Title" class="form-label">News Title</label>
+        <input type="text" name="Title" id="Title" class="form-control" value="@Model.Title" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="Country" class="form-label">Country</label>
+        <select name="Country" id="Country" class="form-select" asp-for="Country" asp-items="@(new SelectList(Model.Countries, "Id", "Name", Model.Country))" required>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="Date" class="form-label">Date</label>
+        <input type="date" name="NewsDate" id="NewsDate" class="form-control" value="@Model.NewsDate.ToString("yyyy-MM-dd")" required />
+
+    </div>
+    <div class="mb-3">
+        <label for="Summary" class="form-label">Summary</label>
+        <input type="text" name="Summary" id="Summary" class="form-control" value="@Model.Summary" required />
+    </div>
+    <div class="mb-3">
+        <label for="Content" class="form-label">Description</label>
+        <textarea name="Content" id="Content" class="form-control" rows="4" required>@Model.Content</textarea>
+    </div>
+</div>
+<div class="modal-footer">
+    <!-- For editing/viewing job, show delete button -->
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <input type="submit" class="btn btn-primary" id="saveBtn" value="Save" />
+</div>
+
+

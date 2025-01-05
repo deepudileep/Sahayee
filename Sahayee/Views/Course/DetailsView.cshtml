@@ -1,0 +1,83 @@
+﻿@model Sahayee.Models.DB.Course
+
+<div class="container my-5">
+    <!-- Display Message -->
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Course Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+        <h2 class="text-primary fw-bold">@Model.Name</h2>
+        <div class="d-flex">
+            <a href="/Courses" class="btn btn-outline-secondary me-2">Back</a>
+            <form method="post" asp-action="ApplyForCourse" class="m-0">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-success">Enroll</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Video Section -->
+    <div class="mb-4 text-center">
+        <iframe src="https://www.youtube.com/embed/example_video_id"
+                title="Course Introduction"
+                class="w-100 rounded shadow-lg"
+                style="height: 400px;"
+                allowfullscreen>
+        </iframe>
+    </div>
+
+    <!-- Course Details -->
+    <div class="mb-4">
+        <h3 class="text-dark">Course Details</h3>
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th scope="row" class="text-secondary">Duration:</th>
+                    <td>@Model.Duration</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-secondary">Start Date:</th>
+                    <td>@Model.StartDate</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-secondary">Trainer:</th>
+                    <td>@Model.Trainer</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-secondary">Category:</th>
+                    <td>@Model.Category</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-secondary">Mode:</th>
+                    <td>@Model.Location</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-secondary">Institution:</th>
+                    <td>@Model.Institution</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Course Description -->
+    <div class="mb-4">
+        <h3 class="text-dark">Course Description</h3>
+        <p class="text-muted">
+            @Model.Summary
+        </p>
+    </div>
+
+    <!-- Enroll Button -->
+    <div class="text-center mt-4">
+        <form method="post" asp-action="ApplyForCourse">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit" class="btn btn-success btn-lg shadow-sm">Enroll Now</button>
+        </form>
+    </div>
+</div>

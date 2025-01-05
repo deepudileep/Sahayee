@@ -1,0 +1,88 @@
+﻿@model Sahayee.Models.ViewModel.CourseApplicationDetailsViewModel
+
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Filter Panel -->
+        <aside class="col-lg-3 col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Filter Courses</h5>
+                    <form>
+                        <!-- Key/Title Filter -->
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Key, Title</label>
+                            <input type="text" id="category" name="category" class="form-control" placeholder="Search by title or keyword">
+                        </div>
+                        <!-- Location Filter -->
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <select id="location" name="location" class="form-select">
+                                @foreach (var location in Model.Location)
+                                {
+                                    <option value="@location.Id">@location.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <!-- Experience Level Filter -->
+                        <div class="mb-3">
+                            <label for="experience" class="form-label">Istituions</label>
+                            <select class="form-select me-2" id="instituion">
+                                @foreach (var position in Model.Institutions)
+                                {
+                                    <option value="@position.Id">@position.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <!-- Department Filter -->
+                        <div class="mb-3">
+                            <label for="department" class="form-label">Categories</label>
+                            <select id="categories" name="categories" class="form-select">
+                                @foreach (var position in Model.Categories)
+                                {
+                                    <option value="@position.Id">@position.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="button" class="btn btn-primary" onclick="filterCourses()">Apply Filters</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Job Listings -->
+        <section class="col-lg-9 col-md-8">
+            <div class="row g-3">
+                <div id="jobTableContainer">
+                    @await Html.PartialAsync("_CoursesApplicationDetailsPartial", Model)
+                </div>
+
+            </div>
+        </section>
+    </div>
+</div>
+<script>
+    function filterCourses() {
+
+        const categories = document.getElementById('categories').value;
+        const location = document.getElementById('location').value;
+        const instituion = document.getElementById('instituion').value;
+
+        fetch(`/Course/ReloadCourse?category=${categories}&location=${location}&institution=${instituion}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'text/html' // Expect HTML response
+            }
+        })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('jobTableContainer').innerHTML = html;
+            })
+            .catch(error => console.error('Error fetching Course:', error));
+    }
+
+
+</script>

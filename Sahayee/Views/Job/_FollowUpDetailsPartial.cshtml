@@ -1,0 +1,31 @@
+﻿@model List<Sahayee.Models.DB.FollowUp>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th>Done By</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Date.ToShortDateString()</td>
+                    <td>@item.Status</td>
+                    <td>@item.Notes</td>
+                    <td>@item.DoneBy</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">No follow-up history available</td>
+            </tr>
+        }
+    </tbody>
+</table>

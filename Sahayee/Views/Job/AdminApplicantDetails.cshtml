@@ -1,0 +1,191 @@
+﻿
+@model List<Sahayee.Models.ViewModel.JobApplicationWithDetails>
+
+<div class="container mt-5">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Applicant Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Date Applied</th>
+                <th>Status</th>
+                <th>Notes</th>
+                <th>Follow-Up Date</th>
+                <th>Follow-Up By</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var app in Model)
+            {
+                <tr>
+                    <td>@app.UserDetails.FirstName @app.UserDetails.LastName</td>
+                    <td>@app.UserDetails.Email</td>
+                    <td>@app.UserDetails.PhoneNumber</td>
+                    <td>@app.AppliedOn</td>
+                    <td>
+                        <span class="text-@(app.Status == "Applied" ? "warning" : "success")">
+                            @app.Status
+                        </span>
+                    </td>
+                    <td>@app.UserMessage</td>
+                    <td>@app.FollowUpDate</td>
+                    <td>@app.FollowUpBy</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#followUpModal"
+                                onclick="populateFollowUpModal('@app.Id')">
+                            Follow-Up
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Follow-Up Modal -->
+    <div class="modal fade" id="followUpModal" tabindex="-1" aria-labelledby="followUpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="followUpModalLabel">Follow-Up History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Notes</th>
+                                <th>Done By</th>
+                            </tr>
+                        </thead>
+                        <tbody id="followUpHistoryTable">
+                            <!-- Follow-up details will be populated dynamically -->
+                        </tbody>
+                    </table>
+
+                    <h3>Update Follow-Up</h3>
+                    <form id="followUpForm">
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Application Status</label>
+                            <select id="status" class="form-select">
+                                <option value="Job Applied">Job Applied</option>
+                                <option value="Application Reviewed">Application Reviewed</option>
+                                <option value="Interview Scheduled">Interview Scheduled</option>
+                                <option value="Interview Completed">Interview Completed</option>
+                                <option value="Offer Extended">Offer Extended</option>
+                                <option value="Offer Accepted">Offer Accepted</option>
+                                <option value="Offer Rejected">Offer Rejected</option>
+                                <option value="Job Accepted">Job Accepted</option>
+                                <option value="Job Declined">Job Declined</option>
+                                <option value="Hired">Hired</option>
+                                <option value="Not Hired">Not Hired</option>
+                            </select>
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="adminNotes" class="form-label">Admin Notes</label>
+                            <textarea id="adminNotes" class="form-control" rows="4"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-success" onclick="saveFollowUp()">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const applications = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+
+    function populateFollowUpModal(id) {
+        const app = applications.find(a => a.Id === id);
+
+        if (!app) {
+            alert('Application not found!');
+            return;
+        }
+
+        const followUpHistoryTable = document.getElementById("followUpHistoryTable");
+        followUpHistoryTable.innerHTML = ""; // Clear existing rows
+        app.FollowUpHistory.forEach(item => {
+            const row = `<tr>
+                                                        <td>${new Date(item.Date).toLocaleDateString()}</td>
+                                                        <td>${item.Status}</td>
+                                                        <td>${item.Notes}</td>
+                                                        <td>${item.DoneBy}</td>
+                                                     </tr>`;
+            followUpHistoryTable.insertAdjacentHTML('beforeend', row);
+        });
+        const modal = document.getElementById("followUpModal");
+        modal.setAttribute("data-application-id", id);
+        // Populate modal with current data
+        document.getElementById("status").value = app.Status;
+        document.getElementById("adminNotes").value = ""; // Reset admin notes
+    }
+
+    function saveFollowUp() {
+
+        const selectedStatus = document.getElementById("status").value;
+        const adminNotes = document.getElementById("adminNotes").value;
+        const modal = document.getElementById('followUpModal');
+
+        // Access data attributes using `dataset`
+        const applicationId = modal.dataset.applicationId; // Assumes application ID is set as data attribute
+        const data = {
+            ApplicationId: applicationId,
+            Status: selectedStatus,
+            AdminNotes: adminNotes
+        };
+        $.ajax({
+            url: '/Job/SaveFollowUp',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    const app = applications.find(a => a.Id === applicationId);
+
+                    // Add the new follow-up entry to the app's follow-up history
+                    if (app) {
+                        const newFollowUp = {
+                            Date: new Date(),
+                            ApplicationStatus: selectedStatus,
+                            AdminNotes: adminNotes,
+                            DoneBy: "Admin" // Replace with the actual user or admin value if needed
+                        };
+
+                        app.FollowUpHistory.push(newFollowUp);
+
+                        // Refresh the table content
+                        const followUpHistoryTable = document.getElementById("followUpHistoryTable");
+                        followUpHistoryTable.innerHTML = ""; // Clear existing rows
+                        app.FollowUpHistory.forEach(item => {
+                            const row = `<tr>
+                                                    <td>${new Date(item.Date).toLocaleDateString()}</td>
+                                                        <td>${item.ApplicationStatus}</td>
+                                                        <td>${item.AdminNotes}</td>
+                                                    <td>${item.DoneBy}</td>
+                                                 </tr>`;
+                            followUpHistoryTable.insertAdjacentHTML('beforeend', row);
+                        });
+                    }
+                    // Optionally fetch and update the UI here
+                } else {
+                    alert("Failed: " + response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                alert("An error occurred: " + xhr.responseText);
+            }
+        });
+    }
+
+</script>
+

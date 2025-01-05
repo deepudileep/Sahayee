@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Sahayee.Models.DB.News>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Country</th>
+            <th>Type</th>
+            <th>Summary</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var job in Model)
+        {
+            <tr>
+                <td>@job.Title</td>
+                <td>@job.Country</td>
+                <td>@job.TypeId</td>
+                <td>@job.Summary</td>
+                <td>@job.NewsDate</td>
+                <td>
+                    <button class="btn btn-warning" onclick="openModal('@job.Id')">Edit</button>
+                    @*<a href="/Job/AdminApplicantDetails?jobAId=@job.Id" class="btn btn-warning">Details</a>*@
+                    @*<button class="btn btn-danger" onclick="openDeleteModal('@job.Id')">Delete</button>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

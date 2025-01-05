@@ -1,0 +1,154 @@
+﻿@{
+    ViewData["Title"] = "Explore Career Options";
+}
+
+<style>
+    .card-custom-height {
+        height: 60%; /* Set card height to 60% */
+    }
+
+    /* To ensure content inside the card stretches correctly */
+    .card-body {
+        flex-grow: 1; /* Makes sure the content takes all available space */
+    }
+
+    /* Optional: If you want to prevent the cards from overflowing */
+    .card {
+        overflow: hidden;
+    }
+
+    /* Adding margin-bottom to the last section or the whole container for more space */
+    .container {
+        margin-bottom: 50px; /* Adjust this value to create more space at the bottom of the page */
+    }
+
+    /* Optionally, if you want to add more space between the last row of cards and the footer */
+    .row {
+        margin-bottom: 30px; /* Adjust bottom margin of the row if needed */
+    }
+
+    /* Footer styling if you'd like it to be pushed down even further */
+    footer {
+        margin-top: 50px; /* Adding space above the footer */
+    }
+</style>
+
+<div class="container my-5">
+    <h1 class="text-center text-primary mb-4">Explore Career Options</h1>
+    <div class="row g-3">
+        <!-- Column 1 -->
+        <div class="col-lg-4">
+            <!-- Box 1 -->
+
+            <div class="card  shadow-sm card-custom-height d-flex flex-column">
+                <div class="card-header bg-primary text-white text-center py-2">
+                    <h6 class="mb-0">Explore Career Pathways</h6>
+                </div>
+                <div class="card-body">
+                    <p class="card-text mb-2">Discover the growth opportunities in various healthcare fields.</p>
+                    <p class="mb-1"><strong>Nurses:</strong> From Staff Nurse to Nurse Practitioner</p>
+                    <p class="mb-1"><strong>Doctors:</strong> From General Practitioner to Specialist</p>
+                    <p class="mb-1"><strong>Technicians & Therapists:</strong> From Technician to Supervisor</p>
+                </div>
+                <div class="card-footer bg-light text-center py-2">
+                    <a href="#" class="btn btn-primary btn-sm">Learn more ➡️</a>
+                </div>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="card  shadow-sm mt-3 card-custom-height d-flex flex-column">
+                <div class="card-header bg-primary text-white text-center py-2">
+                    <h6 class="mb-0">Upskill and Certify Yourself</h6>
+                </div>
+                <div class="card-body">
+                    <p class="card-text mb-2">Stand out with advanced training and certifications.</p>
+                    <ul class="list-unstyled mb-0">
+                        <li><a href="#" class="text-decoration-none text-primary">Sahayee Certified: Enhance your job prospects</a></li>
+                        <li><a href="#" class="text-decoration-none text-primary">Advanced Nursing</a></li>
+                        <li><a href="#" class="text-decoration-none text-primary">Healthcare IT</a></li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-light text-center py-2">
+                    <a href="#" class="btn btn-outline-primary btn-sm">View All Certifications</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Column 2 -->
+        <div class="col-lg-4">
+            <!-- Box 1 -->
+            <div class="card  shadow-sm card-custom-height d-flex flex-column">
+                <div class="card-header bg-primary text-white text-center py-2">
+                    <h6 class="mb-0">Build a Standout Profile</h6>
+                </div>
+                <div class="card-body">
+                    <p class="card-text mb-2">Create a profile that highlights your skills and achievements to attract potential employers.</p>
+                    <ul class="list-unstyled mb-0">
+                        <li>Showcase certifications and accomplishments</li>
+                        <li>Upload a professional photo</li>
+                        <li>Update your contact information</li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-light text-center py-2">
+                    <a href="#" class="btn btn-outline-primary btn-sm">Download Resume Template</a>
+                </div>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="card  shadow-sm mt-3 card-custom-height d-flex flex-column">
+                <div class="card-header bg-primary text-white text-center py-2">
+                    <h6 class="mb-0">Job Market Insights</h6>
+                </div>
+                <div class="card-body">
+                    <p class="card-text mb-2">Stay informed with the latest trends in the healthcare job market.</p>
+                    <p class="mb-1"><strong>UK Healthcare Job Trends:</strong> Demand for Nurses is high in public hospitals. Salaries range from £30,000-£45,000.</p>
+                    <p class="mb-0"><strong>Visa Information:</strong> Learn about the work visa process for healthcare jobs in the UK.</p>
+                </div>
+                <div class="card-footer bg-light text-center py-2">
+                    <a href="#" class="btn btn-primary btn-sm">Learn More ➡️</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Column 3 -->
+        <div class="col-lg-4">
+            <!-- Box 1 -->
+            <div class="card  shadow-sm card-custom-height d-flex flex-column">
+                <div class="card-header bg-primary text-white text-center py-2">
+                    <h6 class="mb-0">Career Guidance Resources</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li><strong>Resume Building Workshop:</strong> Craft a standout resume</li>
+                        <li><strong>Interview Tips:</strong> Prepare for job interviews like a pro</li>
+                        <li><strong>Job Readiness Program:</strong> Sign up for our all-in-one job preparation course</li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-light text-center py-2">
+                    <a href="#" class="btn btn-outline-primary btn-sm">Start Assessment</a>
+                </div>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="card  shadow-sm mt-3 card-custom-height d-flex flex-column">
+                <div class="card-header bg-primary text-white text-center py-2">
+                    <h6 class="mb-0">Success Stories</h6>
+                </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-3">
+                        <p class="mb-0">"Sahayee helped me secure my dream job in the UK as a registered nurse."</p>
+                        <p class="text-muted small">— Priya, Nurse</p>
+                    </blockquote>
+                    <blockquote class="blockquote mb-0">
+                        <p class="mb-0">"The resume building workshop was a game-changer. I landed interviews within weeks."</p>
+                        <p class="text-muted small">— Raj, Medical Technician</p>
+                    </blockquote>
+                </div>
+                <div class="card-footer bg-light text-center py-2">
+                    <a href="#" class="btn btn-primary btn-sm">Read More Success Stories ➡️</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="height:100px"></div>
+</div>
