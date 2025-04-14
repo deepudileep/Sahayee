@@ -44,13 +44,131 @@ namespace Sahayee.Controllers
 
             var viewModel = new JobFilterViewModel
             {
-                Position = StaticData.GetPositions(),
-                Location = StaticData.GetLocations(),
-                Institutions = StaticData.GetInstitution(),
+                Companies = new List<CommonList>() { new CommonList { Id = "all", Name = "All Companies" } },
+                Locations = new List<CommonList>() { new CommonList { Id = "all", Name = "All Locations" } },
+                JobTypes = StaticData.GetJobType(),
                 Jobs = jobs
             };
 
             return View(viewModel);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Create(string id)
+        {
+            JobsViewModel jobsViewModel = new JobsViewModel();
+            if (!string.IsNullOrEmpty(id))
+            {
+                var job = _mongoDbService.GetById(ObjectId.Parse(id));
+                jobsViewModel = new JobsViewModel
+                {
+                    Id = job.Id.ToString(),
+                    JobTitle = job.JobTitle,
+                    CompanyName = job.CompanyName,
+                    JobType = job.JobType,
+                    JobLocation = job.JobLocation,
+                    IsRemote = job.IsRemote,
+                    SalaryRange = job.SalaryRange,
+                    JobOverview = job.JobOverview,
+                    Responsibilities = string.Join(Environment.NewLine, job.Responsibilities),
+                    RequiredSkills = string.Join(Environment.NewLine, job.RequiredSkills),
+                    CertificationsRequired = string.Join(Environment.NewLine, job.CertificationsRequired),
+                    EducationRequirements = job.EducationRequirements,
+                    ExperienceLevel = job.ExperienceLevel,
+                    PreferredQualifications = job.PreferredQualifications,
+                    WorkplaceSetting = job.WorkplaceSetting,
+                    ShiftDetails = job.ShiftDetails,
+                    WorkHours = job.WorkHours,
+                    ApplicationDeadline = job.ApplicationDeadline,
+                    HowToApply = job.HowToApply,
+                    DocumentsRequired = string.Join(Environment.NewLine, job.DocumentsRequired),
+                    CompanyOverview = job.CompanyOverview,
+                    CompanyLogoPath = job.CompanyLogoPath,
+                    Website = job.Website,
+                    ContactPerson = job.ContactPerson,
+                    ContactPersonEmail = job.ContactPersonEmail,
+                    ContactPersonPhone = job.ContactPersonPhone,
+                    BenefitsOffered = string.Join(Environment.NewLine, job.BenefitsOffered),
+                    RelocationAssistance = job.RelocationAssistance,
+                    EqualOpportunityStatement = job.EqualOpportunityStatement,
+                    Tags = job.Tags,
+                    JobCategory = job.JobCategory,
+                    ApplicationTrackingEnabled = job.ApplicationTrackingEnabled
+                };
+            }
+            jobsViewModel.Companies = new List<CommonList>() { new CommonList { Id = "all", Name = "All Companies" } };
+            jobsViewModel.Locations = new List<CommonList>() { new CommonList { Id = "all", Name = "All Locations" } };
+            jobsViewModel.JobTypes = StaticData.GetJobType();
+            jobsViewModel.JobCategories = StaticData.GetCategories();
+            return View(jobsViewModel);
+        }
+        [HttpGet]
+        public async Task<IActionResult> DetailsView(string id)
+        {
+            var result = _mongoDbService.GetById(ObjectId.Parse(id));
+            return View(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(JobsViewModel model, IFormFile? companyLogo)
+        {
+            // Handle file uploads (if any)
+            if (companyLogo != null)
+            {
+                string filename = Guid.NewGuid() + companyLogo.FileName;
+                var companyLogoPath = Path.Combine("wwwroot/uploads", filename);
+                using (var stream = new FileStream(companyLogoPath, FileMode.Create))
+                {
+                    await companyLogo.CopyToAsync(stream);
+                }
+                model.CompanyLogoPath = "/uploads/" + filename;
+            }
+
+            var modelData = new Jobs
+            {
+                Id = string.IsNullOrEmpty(model.Id) ? MongoDB.Bson.ObjectId.GenerateNewId() : ObjectId.Parse(model.Id),
+                JobTitle = model.JobTitle,
+                CompanyName = model.CompanyName,
+                JobType = model.JobType,
+                JobLocation = model.JobLocation,
+                IsRemote = model.IsRemote,
+                SalaryRange = model.SalaryRange,
+                JobOverview = model.JobOverview,
+                Responsibilities = model.Responsibilities.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                RequiredSkills = model.RequiredSkills.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                CertificationsRequired = model.CertificationsRequired.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                EducationRequirements = model.EducationRequirements,
+                ExperienceLevel = model.ExperienceLevel,
+                PreferredQualifications = model.PreferredQualifications,
+                WorkplaceSetting = model.WorkplaceSetting,
+                ShiftDetails = model.ShiftDetails,
+                WorkHours = model.WorkHours,
+                ApplicationDeadline = model.ApplicationDeadline, // Default to current date if null
+                HowToApply = model.HowToApply,
+                DocumentsRequired = model.DocumentsRequired.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                CompanyOverview = model.CompanyOverview,
+                CompanyLogoPath = model.CompanyLogoPath,
+                Website = model.Website,
+                ContactPerson = model.ContactPerson,
+                ContactPersonEmail = model.ContactPersonEmail,
+                ContactPersonPhone = model.ContactPersonPhone,
+                BenefitsOffered = model.BenefitsOffered.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                RelocationAssistance = model.RelocationAssistance,
+                EqualOpportunityStatement = model.EqualOpportunityStatement,
+                Tags = model.Tags,
+                JobCategory = model.JobCategory,
+                ApplicationTrackingEnabled = model.ApplicationTrackingEnabled
+            };
+            if (string.IsNullOrEmpty(model.Id))
+            {
+                // Save the model to MongoDB
+
+                _mongoDbService.Insert(modelData);
+            }
+            else
+            {
+                _mongoDbService.UpdateById(modelData.Id, modelData);
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -66,9 +184,9 @@ namespace Sahayee.Controllers
 
             var viewModel = new JobFilterViewModel
             {
-                Position = StaticData.GetPositions(),
-                Location = StaticData.GetLocations(),
-                Institutions = StaticData.GetInstitution(),
+                Companies = new List<CommonList>() { new CommonList { Id = "all", Name = "All Companies" } },
+                Locations = new List<CommonList>() { new CommonList { Id = "all", Name = "All Locations" } },
+                JobTypes = StaticData.GetJobType(),
                 Jobs = jobs
             };
 
@@ -87,9 +205,9 @@ namespace Sahayee.Controllers
             var result = await _mongoDbService.GetJobsAppliedByUserAsync(userId);
             var viewModel = new JobApplicationDetailsViewModel
             {
-                Position = StaticData.GetPositions(),
-                Location = StaticData.GetLocations(),
-                Institutions = StaticData.GetInstitution(),
+                Companies = new List<CommonList>() { new CommonList { Id = "all", Name = "All Companies" } },
+                Locations = new List<CommonList>() { new CommonList { Id = "all", Name = "All Locations" } },
+                JobTypes = StaticData.GetJobType(),
                 JobApplicationWithDetails = result
             };
             return View(viewModel);
@@ -132,13 +250,15 @@ namespace Sahayee.Controllers
                 return StatusCode(500, new { success = false, message = $"Error: {ex.Message}" });
             }
         }
-        public IActionResult ReloadJobs(string position = "all", string location = "all", string institution = "all")
+
+
+        public IActionResult ReloadJobs(string JobType = "all", string Company = "all", string location = "all")
         {
             var filterCriteria = new Dictionary<string, string>();
 
-            if (position != "all") filterCriteria.Add("Department", position);
-            if (location != "all") filterCriteria.Add("Location", location);
-            if (institution != "all") filterCriteria.Add("Institution", institution);
+            if (JobType != "all") filterCriteria.Add("JobType", JobType);
+            if (Company != "all") filterCriteria.Add("CompanyName", Company);
+            if (location != "all") filterCriteria.Add("JobLocation", location);
 
             var jobs = _mongoDbService.ApplyFilters(filterCriteria);
 
@@ -237,56 +357,27 @@ namespace Sahayee.Controllers
 
 
         [HttpGet]
-        public IActionResult FilterJobs(string position = "all", string location = "all", string institution = "all")
+        public IActionResult FilterJobs(string JobType = "all", string Company = "all", string location = "all")
         {
-            var filterCriteria = new Dictionary<string, string>
-                {
-                    { "Department", position },
-                    { "Location", location },
-                    { "Institution", institution },
-                };
+            var filterCriteria = new Dictionary<string, string>();
+
+            if (JobType != "all") filterCriteria.Add("JobType", JobType);
+            if (Company != "all") filterCriteria.Add("CompanyName", Company);
+            if (location != "all") filterCriteria.Add("JobLocation", location);
             var jobs = _mongoDbService.ApplyFilters(filterCriteria);
 
             return PartialView("_JobTablePartial", jobs);
         }
         [HttpGet]
-        public IActionResult EditJob(string id)
-        {
-            var job = _mongoDbService.GetById(ObjectId.Parse(id));
-            JobsViewModel jobsViewModel = new JobsViewModel();
-            jobsViewModel.Id = job.Id.ToString();
-            jobsViewModel.Institution = job.Institution;
-            jobsViewModel.ContactEmail = job.ContactEmail;
-            jobsViewModel.Department = job.Department;
-            jobsViewModel.Location = job.Location;
-            jobsViewModel.JobTitle = job.JobTitle;
-            jobsViewModel.Description = job.Description;
-            jobsViewModel.Locations = StaticData.GetLocations();
-            jobsViewModel.Positions = StaticData.GetPositions();
-            jobsViewModel.Institutions = StaticData.GetInstitution();
-            return PartialView("_JobEditPartial", jobsViewModel);
-        }
-        [HttpGet]
-        public IActionResult DetailsPartial(string id)
-        {
-            var job = _mongoDbService.GetById(ObjectId.Parse(id));
-            JobsViewModel jobsViewModel = new JobsViewModel();
-            jobsViewModel.Id = job.Id.ToString();
-            jobsViewModel.Institution = job.Institution;
-            jobsViewModel.ContactEmail = job.ContactEmail;
-            jobsViewModel.Department = job.Department;
-            jobsViewModel.Location = job.Location;
-            jobsViewModel.JobTitle = job.JobTitle;
-            jobsViewModel.Description = job.Description;
-            return PartialView("_JobDetailsPartial", jobsViewModel);
-        }
+
         [HttpGet]
         public IActionResult AddJob()
         {
             JobsViewModel jobsViewModel = new JobsViewModel();
-            jobsViewModel.Locations = StaticData.GetLocations();
-            jobsViewModel.Positions = StaticData.GetPositions();
-            jobsViewModel.Institutions = StaticData.GetInstitution();
+            jobsViewModel.Companies = new List<CommonList>() { new CommonList { Id = "all", Name = "All Companies" } };
+            jobsViewModel.Locations = new List<CommonList>() { new CommonList { Id = "all", Name = "All Locations" } };
+            jobsViewModel.JobTypes = StaticData.GetJobType();
+            jobsViewModel.JobCategories = StaticData.GetCategories();
             return PartialView("_JobEditPartial", jobsViewModel);
         }
         [HttpPost]
@@ -296,32 +387,6 @@ namespace Sahayee.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public IActionResult SaveJob(JobsViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var job = new Jobs
-                {
-                    ContactEmail = model.ContactEmail,
-                    Department = model.Department,
-                    Description = model.Description,
-                    Institution = model.Institution,
-                    JobTitle = model.JobTitle,
-                    Location = model.Location,
-                    LastModified = DateTime.Now,
-                    Id = ObjectId.GenerateNewId()
-                };
-                if (String.IsNullOrEmpty(model.Id))
-                    _mongoDbService.Insert(job);
-                else
-                {
-                    job.Id = ObjectId.Parse(model.Id);
-                    job.LastModified = DateTime.Now;
-                    _mongoDbService.UpdateById(ObjectId.Parse(model.Id), job);
-                }
-            }
-            return RedirectToAction("Index");
-        }
+
     }
 }

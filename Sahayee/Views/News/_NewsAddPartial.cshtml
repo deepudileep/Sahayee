@@ -20,7 +20,7 @@
 
     <div class="mb-3">
         <label for="Date" class="form-label">Date</label>
-        <input type="date" name="NewsDate" id="NewsDate" class="form-control" value="@Model.NewsDate.ToString("yyyy-MM-dd")" required />
+        <input type="date" name="NewsDate" id="NewsDate" class="form-control" asp-for="NewsDate" required />
 
     </div>
     <div class="mb-3">

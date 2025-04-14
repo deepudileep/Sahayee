@@ -1,89 +1,287 @@
 ﻿@model Sahayee.Models.ViewModel.CourseFilterViewModel
 
 
-<div class="container mt-5">
-    <div class="row">
-        <!-- Filter Panel -->
-        <aside class="col-lg-3 col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Filter Courses</h5>
-                    <form>
-                        <!-- Key/Title Filter -->
-                        <div class="mb-3">
-                            <label for="category" class="form-label">Key, Title</label>
-                            <input type="text" id="category" name="category" class="form-control" placeholder="Search by title or keyword">
-                        </div>
-                        <!-- Location Filter -->
-                        <div class="mb-3">
-                            <label for="location" class="form-label">Location</label>
-                            <select id="location" name="location" class="form-select">
-                                @foreach (var location in Model.Location)
-                                {
-                                    <option value="@location.Id">@location.Name</option>
-                                }
-                            </select>
-                        </div>
-                        <!-- Experience Level Filter -->
-                        <div class="mb-3">
-                            <label for="experience" class="form-label">Istituions</label>
-                            <select class="form-select me-2" id="instituion">
-                                @foreach (var position in Model.Institutions)
-                                {
-                                    <option value="@position.Id">@position.Name</option>
-                                }
-                            </select>
-                        </div>
-                        <!-- Department Filter -->
-                        <div class="mb-3">
-                            <label for="department" class="form-label">Department</label>
-                            <select id="categories" name="categories" class="form-select">
-                                @foreach (var position in Model.Categories)
-                                {
-                                    <option value="@position.Id">@position.Name</option>
-                                }
-                            </select>
-                        </div>
-                        <!-- Submit Button -->
-                        <div class="d-grid">
-                            <button type="button" class="btn btn-primary" onclick="filterCourses()">Apply Filters</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </aside>
 
-        <!-- Job Listings -->
-        <section class="col-lg-9 col-md-8">
-            <h2 class="mb-4">Courses</h2>
-            <div class="row g-3">
-                <div id="jobTableContainer">
+<div class="wrapper  bg-[rgba(246,247,249,1)] ">
+    <div class="container py-3 xl:!py-5 lg:!py-5 md:!py-5">
+        <nav class="inline-block" aria-label="breadcrumb">
+            <ol class="breadcrumb  flex flex-wrap bg-[none] p-0 !rounded-none list-none !mb-0">
+                <li class="breadcrumb-item flex text-[#60697b]"><a class=" text-inherit hover:text-[#3f78e0]" href="/Home/Index">Home</a></li>
+                <li class="breadcrumb-item flex text-[#60697b] pl-2 before:font-normal before:flex before:items-center before:text-[rgba(96,105,123,0.35)] before:content-['\e931'] before:text-[0.9rem] before:-mt-px before:pr-2 before:font-Unicons active" aria-current="page">Course</li>
+            </ol>
+        </nav>
+        <!-- /nav -->
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /section -->
+<section class="wrapper !bg-[#ffffff]">
+    <div class="container pb-[4.5rem] xl:pb-24 lg:pb-24 md:pb-24 pt-14">
+        <div class="flex flex-wrap mx-[-15px] mt-[-50px]">
+            <aside class="xl:w-3/12 lg:w-3/12 w-full flex-[0_0_auto] px-[15px] max-w-full sidebar mt-[50px]">
+                <div class="widget mt-1">
+                    <h4 class="widget-title !mb-3">Categories</h4>
+                    <ul class="pl-0 list-none">
+
+                        <li class="!mb-1">
+
+                            <div class="collapse show mt-1" id="clothing-collapse" style="">
+
+                                <div class="form-input-wrapper mb-4">
+                                    <input id="textInputExample" onblur="onLocationInputBlur(this.value)"
+                                           name="title" type="text"
+                                           class="form-control relative text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Eg: General Nursing" />
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="!mb-1">
+                            <a href="#" class="items-center rounded text-[#60697b]" data-bs-toggle="collapse" data-bs-target="#clothing-collapse" aria-expanded="true">
+                                Course Type <span class="text-[0.7rem] text-[#aab0bc] ml-1">(@Model.CourseType.Count)</span>
+                            </a>
+                            <div class="collapse show mt-1" id="clothing-collapse" style="">
+                                <div class="form-select-wrapper mb-4">
+                                    <select id="ddlCourseType"
+                                            onchange="onCourseTypeChange(this.value)"
+                                            asp-items="@(new SelectList(Model.CourseType, "Id", "Name",Model.CourseTypeId))"
+                                            class="form-select">
+                                    </select>
+
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="!mb-1">
+                            <a href="#" class="items-center rounded text-[#60697b]" data-bs-toggle="collapse" data-bs-target="#clothing-collapse" aria-expanded="true">
+                                Institutions <span class="text-[0.7rem] text-[#aab0bc] ml-1">(@Model.Institutions?.Count)</span>
+                            </a>
+                            <div class="collapse show mt-1" id="clothing-collapse" style="">
+                                <select id="ddlInst"
+                                        onchange="onInstitutionsChange(this.value)"
+                                        asp-items="@(new SelectList(Model.Institutions, "Id", "Name",Model.InstitutionsId))"
+                                        class="form-select">
+                                </select>
+
+                            </div>
+                        </li>
+                        <li class="!mb-1">
+                            <a href="#" class="items-center rounded text-[#60697b]" data-bs-toggle="collapse" data-bs-target="#clothing-collapse" aria-expanded="true">
+                                Categories <span class="text-[0.7rem] text-[#aab0bc] ml-1">(@Model.Categories.Count)</span>
+                            </a>
+                            <div class="collapse show mt-1" id="clothing-collapse" style="">
+                                <select id="ddlCategory"
+                                        onchange="onCategoriesChange(this.value)"
+                                        asp-items="@(new SelectList(Model.Categories, "Id", "Name",Model.CategoryId))"
+                                        class="form-select">
+                                </select>
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.widget -->
+                @* <div class="widget mt-8">
+                <h4 class="widget-title !mb-3">Rating</h4>
+                <div class="form-check block min-h-[1.36rem] pl-[1.55rem] !mb-1">
+                <input class="form-check-input" type="radio" name="rating" id="rating5" checked>
+                <label class="form-check-label" for="rating5">
+                <span class="ratings  inline-block relative w-20 h-[0.8rem] text-[0.9rem] leading-none before:text-[rgba(38,43,50,0.1)] after:inline-block after:not-italic after:font-normal after:absolute after:text-[#fcc032] after:content-['\2605\2605\2605\2605\2605'] after:overflow-hidden after:left-0 after:top-0 before:inline-block before:not-italic before:font-normal before:absolute before:text-[#fcc032] before:content-['\2605\2605\2605\2605\2605'] before:overflow-hidden before:left-0 before:top-0 five"></span>
+                </label>
+                </div>
+                <!-- /.form-check -->
+                <div class="form-check block min-h-[1.36rem] pl-[1.55rem] !mb-1">
+                <input class="form-check-input" type="radio" name="rating" id="rating4">
+                <label class="form-check-label" for="rating4">
+                <span class="ratings  inline-block relative w-20 h-[0.8rem] text-[0.9rem] leading-none before:text-[rgba(38,43,50,0.1)] after:inline-block after:not-italic after:font-normal after:absolute after:text-[#fcc032] after:content-['\2605\2605\2605\2605\2605'] after:overflow-hidden after:left-0 after:top-0 before:inline-block before:not-italic before:font-normal before:absolute before:text-[#fcc032] before:content-['\2605\2605\2605\2605\2605'] before:overflow-hidden before:left-0 before:top-0 four"></span>
+                </label>
+                </div>
+                <!-- /.form-check -->
+                <div class="form-check block min-h-[1.36rem] pl-[1.55rem] !mb-1">
+                <input class="form-check-input" type="radio" name="rating" id="rating3">
+                <label class="form-check-label" for="rating3">
+                <span class="ratings  inline-block relative w-20 h-[0.8rem] text-[0.9rem] leading-none before:text-[rgba(38,43,50,0.1)] after:inline-block after:not-italic after:font-normal after:absolute after:text-[#fcc032] after:content-['\2605\2605\2605\2605\2605'] after:overflow-hidden after:left-0 after:top-0 before:inline-block before:not-italic before:font-normal before:absolute before:text-[#fcc032] before:content-['\2605\2605\2605\2605\2605'] before:overflow-hidden before:left-0 before:top-0 three"></span>
+                </label>
+                </div>
+                <!-- /.form-check -->
+                <div class="form-check block min-h-[1.36rem] pl-[1.55rem] !mb-1">
+                <input class="form-check-input" type="radio" name="rating" id="rating2">
+                <label class="form-check-label" for="rating2">
+                <span class="ratings  inline-block relative w-20 h-[0.8rem] text-[0.9rem] leading-none before:text-[rgba(38,43,50,0.1)] after:inline-block after:not-italic after:font-normal after:absolute after:text-[#fcc032] after:content-['\2605\2605\2605\2605\2605'] after:overflow-hidden after:left-0 after:top-0 before:inline-block before:not-italic before:font-normal before:absolute before:text-[#fcc032] before:content-['\2605\2605\2605\2605\2605'] before:overflow-hidden before:left-0 before:top-0 two"></span>
+                </label>
+                </div>
+                <!-- /.form-check -->
+                <div class="form-check block min-h-[1.36rem] pl-[1.55rem] !mb-1">
+                <input class="form-check-input" type="radio" name="rating" id="rating1">
+                <label class="form-check-label" for="rating1">
+                <span class="ratings  inline-block relative w-20 h-[0.8rem] text-[0.9rem] leading-none before:text-[rgba(38,43,50,0.1)] after:inline-block after:not-italic after:font-normal after:absolute after:text-[#fcc032] after:content-['\2605\2605\2605\2605\2605'] after:overflow-hidden after:left-0 after:top-0 before:inline-block before:not-italic before:font-normal before:absolute before:text-[#fcc032] before:content-['\2605\2605\2605\2605\2605'] before:overflow-hidden before:left-0 before:top-0 one"></span>
+                </label>
+                </div>
+                <!-- /.form-check -->
+                </div>*@
+                <!-- /.widget -->
+                <!-- /.widget -->
+            </aside>
+            <div class="xl:w-9/12 lg:w-9/12 w-full flex-[0_0_auto] px-[15px] max-w-full xl:!order-2 lg:!order-2 mt-[50px]">
+                <div class="flex flex-wrap mx-[-15px] items-center mb-10 !relative z-[1]">
+                    <div class="md:w-7/12 lg:w-7/12 xl:w-8/12 w-full flex-[0_0_auto] px-[15px] max-w-full xl:pr-40">
+
+                        <p class="mb-0 text-[#aab0bc]"> @Model.Courses.Count results</p>
+                        @{
+                            var category = Context.Request.Query["category"];
+                            var location = Context.Request.Query["location"];
+                            var institution = Context.Request.Query["institution"];
+                            var title = Context.Request.Query["title"];
+
+
+                            @if (!string.IsNullOrEmpty(category) && category != "all")
+                            {
+                                <p class="mb-0 text-[#aab0bc]">
+                                    Category: @category
+                                </p>
+                            }
+
+                            @if (!string.IsNullOrEmpty(location) && location != "all")
+                            {
+                                <p class="mb-0 text-[#aab0bc]">
+                                    CourseType: @location
+                                </p>
+                            }
+
+                            @if (!string.IsNullOrEmpty(institution) && institution != "all")
+                            {
+                                <p class="mb-0 text-[#aab0bc]">
+                                    Institution: @Model.Institutions?.FirstOrDefault()?.Name
+                                </p>
+                            }
+                            @if (!string.IsNullOrEmpty(title))
+                            {
+                                <p class="mb-0 text-[#aab0bc]">
+                                    Keyname: @title
+                                </p>
+                            }
+                        }
+                    </div>
+                    <!--/column -->
+                    <div class="md:w-5/12 lg:w-5/12 xl:w-4/12 w-full flex-[0_0_auto] px-[15px] max-w-full xl:!ml-auto lg:!ml-auto md:!ml-auto xl:!text-right lg:!text-right md:!text-right mt-5 xl:!mt-0 lg:!mt-0 md:!mt-0">
+                        @*<div class="form-select-wrapper">
+                        <select class="form-select">
+                        <option value="popularity">Sort by popularity</option>
+                        <option value="rating">Sort by average rating</option>
+                        <option value="newness">Sort by newness</option>
+                        <option value="price: low to high">Sort by price: low to high</option>
+                        <option value="price: high to low">Sort by price: high to low</option>
+                        </select>
+                        </div>*@
+                        <!--/.form-select-wrapper -->
+                    </div>
+
+                    <!--/column -->
+                </div>
+                <div class="flex flex-wrap mx-[-15px] items-center mb-10 !relative z-[1]">
                     @await Html.PartialAsync("_CoursesPartial", Model)
                 </div>
+                <nav class="flex" aria-label="pagination">
+                    <ul class="pagination">
+                        @if (Model.CurrentPage > 1)
+                        {
+                            <li class="page-item">
 
+                                <a class="page-link" asp-action="Courses" asp-route-pageNumber="@(Model.CurrentPage - 1)" aria-label="Previous">
+                                    <span aria-hidden="true"><i class="uil uil-arrow-left before:content-['\e949']"></i></span>
+                                </a>
+
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item disabled">
+
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true"><i class="uil uil-arrow-left before:content-['\e949']"></i></span>
+                                </a>
+
+                            </li>
+
+                        }
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            if (i == Model.CurrentPage)
+                            {
+                                <li class="page-item active"><a class="page-link" href="#">@i</a></li>
+                            }
+                            else
+                            {
+                                <li class="page-item"><a class="page-link" asp-action="Courses" asp-route-pageNumber="@(Model.CurrentPage + 1)">@i</a></li>
+                            }
+                        }
+                        @if (Model.CurrentPage < Model.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Courses" asp-route-pageNumber="@(Model.TotalPages - 1)" aria-label="Next">
+                                    <span aria-hidden="true"><i class="uil uil-arrow-right before:content-['\e94c']"></i></span>
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+
+
+                    @*<ul class="pagination">
+                    <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true"><i class="uil uil-arrow-left before:content-['\e949']"></i></span>
+                    </a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true"><i class="uil uil-arrow-right before:content-['\e94c']"></i></span>
+                    </a>
+                    </li>
+                    </ul>*@
+                    <!-- /.pagination -->
+                </nav>
+                <!-- /nav -->
             </div>
-        </section>
+            <!-- /column -->
+            <!-- /column .sidebar -->
+        </div>
+        <!-- /.row -->
     </div>
-</div>
+    <!-- /.container -->
+</section>
 <script>
-    function filterCourses() {
+    function onCourseTypeChange(selectedValue) {
 
-        const categories = document.getElementById('categories').value;
-        const location = document.getElementById('location').value;
-        const instituion = document.getElementById('instituion').value;
+        // Construct the URL to call the Courses action method
 
-        fetch(`/Course/ReloadCourse?category=${categories}&location=${location}&institution=${instituion}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'text/html' // Expect HTML response
-            }
-        })
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('jobTableContainer').innerHTML = html;
-            })
-            .catch(error => console.error('Error fetching Course:', error));
+        const url = `/Course/Courses?category=all&location=${selectedValue}&institution=all`;
+        // Redirect to the URL
+        window.location.href = url;
     }
 
+    function onInstitutionsChange(selectedValue) {
 
+        // Construct the URL to call the Courses action method
+        const url = `/Course/Courses?category=all&location=all&institution=${selectedValue}`;
+
+        // Redirect to the URL
+        window.location.href = url;
+    }
+
+    function onCategoriesChange(selectedValue) {
+
+        // Construct the URL to call the Courses action method
+        const url = `/Course/Courses?category=${selectedValue}&location=all&institution=all`;
+        // Redirect to the URL
+        window.location.href = url;
+    }
+    function onLocationInputBlur(selectedValue) {
+        if (selectedValue.trim() !== "") { // Ensure input is not empty
+            const url = `/Course/Courses?category=all&location=all&institution=all&title=${selectedValue}`;
+            window.location.href = url;
+        }
+    }
 </script>

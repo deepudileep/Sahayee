@@ -39,7 +39,29 @@ namespace Sahayee.Controllers
 
             return View(viewModel);
         }
+        public IActionResult Blog()
+        {
+            BlogViewModel homeViewModels = new BlogViewModel();
+            homeViewModels.PopularNews = _mongoDbService.Get()
+      .OrderByDescending(news => news.NewsDate) // Order by the latest entries
+      .Take(4) // Take the latest 6 entries
+      .ToList();
+            homeViewModels.News = _mongoDbService.Get().ToList();
+            return View(homeViewModels);
+        }
 
+        [HttpGet]
+        public IActionResult BlogDetails(string id)
+        {
+            BlogViewModel homeViewModels = new BlogViewModel();
+            homeViewModels.PopularNews = _mongoDbService.Get()
+      .OrderByDescending(news => news.NewsDate) // Order by the latest entries
+      .Take(4) // Take the latest 6 entries
+      .ToList();
+            homeViewModels.News = _mongoDbService.Get().ToList();
+            homeViewModels.Selected = _mongoDbService.GetById(ObjectId.Parse(id));
+            return View(homeViewModels);
+        }
 
         [HttpGet]
         public IActionResult FilterNews(string country = "all")
@@ -85,14 +107,7 @@ namespace Sahayee.Controllers
             jobsViewModel.Id = job.Id.ToString();
             return PartialView("_NewsDetailsPartial", jobsViewModel);
         }
-        [HttpGet]
-        public IActionResult AddNews()
-        {
-            NewsViewModel jobsViewModel = new NewsViewModel();
-            jobsViewModel.Countries = StaticData.GetCountries();
-            jobsViewModel.Type = StaticData.GetNewsType();
-            return PartialView("_NewsAddPartial", jobsViewModel);
-        }
+
         [HttpPost]
         public IActionResult DeleteNews(string id)
         {
@@ -100,30 +115,70 @@ namespace Sahayee.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public IActionResult SaveNews(NewsViewModel model)
+
+        [HttpGet]
+        public async Task<IActionResult> Create(string id)
         {
-            if (ModelState.IsValid)
+            NewsViewModel jobsViewModel = new NewsViewModel();
+            if (!string.IsNullOrEmpty(id))
             {
-                var job = new News
+                var job = _mongoDbService.GetById(ObjectId.Parse(id));
+
+                jobsViewModel.Countries = StaticData.GetCountries();
+                jobsViewModel.Type = StaticData.GetNewsType();
+                jobsViewModel.Title = job.Title;
+                jobsViewModel.NewsDate = job.NewsDate;
+                jobsViewModel.image = job.image;
+                jobsViewModel.TypeId = job.TypeId;
+                jobsViewModel.Country = job.Country;
+                jobsViewModel.Summary = job.Summary;
+                jobsViewModel.Content = job.Content;
+                jobsViewModel.Id = job.Id.ToString();
+            }
+            jobsViewModel.Countries = StaticData.GetCountries();
+            jobsViewModel.Type = StaticData.GetNewsType();
+            return View(jobsViewModel);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Create(NewsViewModel model, IFormFile? image)
+        {
+            // Handle file uploads (if any)
+            var job = new News
+            {
+                Title = model.Title,
+                TypeId = model.TypeId,
+                Country = model.Country,
+                NewsDate = model.NewsDate,
+                Summary = model.Summary,
+                Content = model.Content,
+            };
+            if (image != null)
+            {
+                var imagePath = Path.Combine(Guid.NewGuid() + image.FileName);
+                var logoPath = Path.Combine("wwwroot/uploads", imagePath);
+                using (var stream = new FileStream(logoPath, FileMode.Create))
                 {
-                    Title = model.Title,
-                    TypeId = model.TypeId,
-                    Country = model.Country,
-                    NewsDate = model.NewsDate,
-                    Summary = model.Summary,
-                    Content = model.Content,
-                    Id = ObjectId.GenerateNewId()
-                };
-                if (String.IsNullOrEmpty(model.Id))
-                    _mongoDbService.Insert(job);
-                else
-                {
-                    job.Id = ObjectId.Parse(model.Id);
-                    _mongoDbService.UpdateById(ObjectId.Parse(model.Id), job);
+                    await image.CopyToAsync(stream);
                 }
+                job.image = imagePath;
+            }
+
+            if (string.IsNullOrEmpty(model.Id))
+            {
+                // Save the model to MongoDB
+
+                job.Id = ObjectId.GenerateNewId();
+                _mongoDbService.Insert(job);
+            }
+            else
+            {
+                job.Id = ObjectId.Parse(model.Id);
+                _mongoDbService.UpdateById(job.Id, job);
             }
             return RedirectToAction("Index");
         }
+
     }
 }

@@ -7,7 +7,7 @@
         public string Email { get; set; }
         public string Location { get; set; }
         public string PhoneNumber { get; set; }
-        public DateTime DOB { get; set; }
+        public DateTime? DOB { get; set; }
         public string Gender { get; set; }
     }
 }

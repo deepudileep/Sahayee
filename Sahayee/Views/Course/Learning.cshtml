@@ -1,0 +1,212 @@
+﻿@model Sahayee.Models.ViewModel.CourseHomeViewModel
+<section id="home">
+    <div class="wrapper  bg-[rgba(246,247,249,1)] ">
+        <div class="container pt-10 xl:pt-[4.5rem] lg:pt-[4.5rem] md:pt-[4.5rem] pb-[4.5rem] xl:pb-28 lg:pb-28 md:pb-28 !text-center">
+            <div class="flex flex-wrap mx-[-15px] !text-center">
+                <div class="xl:w-9/12 lg:w-9/12 xxl:w-7/12 w-full flex-[0_0_auto] px-[15px] max-w-full !mx-auto" data-cues="zoomIn" data-group="welcome" data-interval="-200">
+                    <h2 class="text-[calc(1.365rem_+_1.38vw)] font-bold leading-[1.2] xl:text-[2.4rem] mb-4">Discover Your Learning Path.</h2>
+                    <p class="lead text-[1.2rem] leading-normal md:!px-5 lg:!px-5 xl:!px-20 xxl:!px-10">Explore courses designed to elevate your career in healthcare.</p>
+                    <form asp-action="Courses" asp-controller="Course" method="get" style="display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                        <input id="textInputExample"
+                               name="title" type="text"
+                               class="form-control relative text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]"
+                               placeholder="Eg: General Nursing" style="width: 50%;margin-left: 20%;" required />
+                        <button type="submit"
+                                class="btn btn-aqua text-white !bg-[#54a8c7] border-[#54a8c7] hover:text-white hover:bg-[#54a8c7] hover:border-[#54a8c7] focus:shadow-[rgba(79,152,181,1)] focus:text-white active:text-white active:bg-[#54a8c7] active:border-[#54a8c7] disabled:text-white disabled:bg-[#54a8c7] disabled:border-[#54a8c7] !rounded-[50rem] btn-login h-[calc(2.5rem_+_2px)]"
+                                style="">
+                            <i class="uil uil-search before:content-['\eca5'] !text-[1.1rem]"></i>
+                        </button>
+                    </form>
+                    <div style="height:15px"></div>
+                    <a asp-controller="Course"
+                       asp-action="Courses"
+                       asp-route-category="all"
+                       asp-route-location="all"
+                       asp-route-institution="all">Advanced Search</a>
+
+                </div>
+
+            </div>
+
+            <!-- /column -->
+        </div>
+
+        <!-- /.row -->
+    </div>
+    <!-- /.wrapper -->
+</section>
+
+<section class="wrapper !bg-[#ffffff]">
+    <div class="container py-[4.5rem] xl:!py-24 lg:!py-24 md:!py-24">
+        <div class="flex flex-wrap mx-[-15px] !text-center">
+            <div class="xl:w-10/12 w-full flex-[0_0_auto] px-[15px] max-w-full !mx-auto">
+                <h2 class="!text-[.75rem] uppercase text-[#3f78e0] tracking-[0.02rem] leading-[1.35] !mb-3">Trending Courses</h2>
+                <h3 class="text-[calc(1.305rem_+_0.66vw)] font-bold xl:text-[1.8rem] !leading-[1.3]  xxl:!px-20">Take a look at our current courses.</h3>
+                <a asp-controller="Course"
+                   asp-action="Courses"
+                   asp-route-category="all"
+                   asp-route-location="all"
+                   asp-route-institution="all">View All Courses</a>
+                <div style="height:30px"></div>
+            </div>
+            <!-- /column -->
+        </div>
+        <!-- /.row -->
+        <div class="flex flex-wrap mx-[-15px] mt-[-30px]">
+            @foreach (var course in Model.Courses)
+            {
+                string firstLetters = new string(course.CourseTitle
+                .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) // Split by spaces
+                .Where(word => !string.IsNullOrEmpty(word)) // Ensure word is not empty
+                .Select(word => word[0]) // Get the first character of each word
+                .ToArray());
+                <div class="md:w-6/12 lg:w-4/12 xl:w-4/12 w-full flex-[0_0_auto] px-[15px] max-w-full mt-[30px]">
+                    <a asp-controller="Course" asp-action="DetailsView" asp-route-id="@course.Id" class="card !shadow-[0_0.25rem_1.75rem_rgba(30,34,40,0.07)] lift !h-full">
+                        <div class="card-body p-5 flex flex-row">
+                            <div>
+                                <span class=" flex items-center justify-center font-bold leading-[1.7] tracking-[-0.01rem] rounded-[100%] bg-[rgba(226,98,107)] opacity-100 text-white !w-[3rem] !h-[3rem] text-[1rem] !mr-4">@firstLetters</span>
+                            </div>
+                            <div>
+                                <span class="badge bg-[#e0e9fa] !text-[#3f78e0] rounded py-1 mb-2">Full Time</span>
+                                <h4 class="!mb-1">@course.CourseTitle</h4>
+                                <p class="mb-0 text-[#60697b]">@course.Location</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+            <!--/column -->
+        </div>
+        <!--/.row -->
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+</section>
+<!-- /section -->
+<section id="process">
+    <div class="wrapper  bg-[rgba(246,247,249,1)] ">
+        <div class="container py-[4.5rem] xl:!py-28 lg:!py-28 md:!py-28">
+            <div class="flex flex-wrap mx-[-15px] xl:mx-[-35px] lg:mx-[-20px] mt-[-50px] !mb-[4.5rem] xl:!mb-24 lg:!mb-24 md:!mb-24 items-center">
+                <div class="xl:w-7/12 lg:w-7/12 w-full flex-[0_0_auto] xl:px-[35px] lg:px-[20px] px-[15px] mt-[50px] max-w-full">
+                    <figure class="m-0 p-0"><img class="w-auto" src="~/assets/img/illustrations/i3.png" srcset="~/assets/img/illustrations/i3@2x.png 2x" alt="image"></figure>
+                </div>
+                <!--/column -->
+                <div class="xl:w-5/12 lg:w-5/12 w-full flex-[0_0_auto] xl:px-[35px] lg:px-[20px] px-[15px] mt-[50px] max-w-full">
+                    <h2 class="!text-[.75rem] uppercase text-line relative align-top pl-[1.4rem] inline-flex tracking-[0.02rem] leading-[1.35] before:content-[''] before:absolute before:inline-block before:translate-y-[-60%] before:w-3 before:h-[0.05rem] before:left-0 before:top-2/4 before:bg-[#3f78e0] text-[#3f78e0] !mb-3">Popular Healthcare Categories</h2>
+                    @foreach (var item in Model.Categories)
+                    {
+                        <div class="flex flex-row mb-4">
+                            <div>
+                                <img src="~/assets/img/icons/lineal/@item.Icon" class="svg-inject icon-svg !w-[2.2rem] !h-[2.2rem]  text-[#3f78e0] !mr-4" alt="image">
+                            </div>
+                            <div>
+                                <a asp-controller="Course"
+                               asp-action="Courses"
+                               asp-route-category="@item.Name"
+                               asp-route-location="all"
+                               asp-route-institution="all"><h4 class="!mb-1">@item.Name</h4></a>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+
+
+
+                <!--/column -->
+            </div>
+            <!--/.row -->
+            <div class="flex flex-wrap mx-[-15px] xl:mx-[-35px] lg:mx-[-20px] mt-[-50px] items-center">
+                <div class="xl:w-7/12 lg:w-7/12 w-full flex-[0_0_auto] xl:px-[35px] lg:px-[20px] px-[15px] mt-[50px] max-w-full xl:!order-2 lg:!order-2">
+                    <figure class="m-0 p-0"><img class="w-auto" src="~/assets/img/illustrations/i2.png" srcset="~/assets/img/illustrations/i2@2x.png 2x" alt="image"></figure>
+                </div>
+                <!--/column -->
+                <div class="xl:w-5/12 lg:w-5/12 w-full flex-[0_0_auto] xl:px-[35px] lg:px-[20px] px-[15px] mt-[50px] max-w-full">
+                    <h2 class="!text-[.75rem] uppercase text-line relative align-top pl-[1.4rem] inline-flex tracking-[0.02rem] leading-[1.35] before:content-[''] before:absolute before:inline-block before:translate-y-[-60%] before:w-3 before:h-[0.05rem] before:left-0 before:top-2/4 before:bg-[#3f78e0] text-[#3f78e0] !mb-3">New Organizations</h2>
+                    <h3 class="text-[calc(1.285rem_+_0.42vw)] font-bold xl:text-[1.6rem] !leading-[1.3] mb-7">Top Healthcare Colleges.</h3>
+                    <div class="accordion accordion-wrapper" id="accordionExample">
+                        @for (int i = 0; i < Model.Organization.Count; i++)
+                        {
+                            int sum = i + 1;
+                            var id = "heading" + sum;
+                            var collapseId = "collapse" + sum;
+                            var org = Model.Organization[i];
+                            var expanded = i == 0 ? true : false;  // Expand the first item by default
+                            <div class="card plain accordion-item">
+                                <div class="card-header !mb-0 !p-[0_0_.8rem_0] !border-0 !bg-inherit" id="@id">
+                                    <button class="accordion-button hover:!text-[#3f78e0]"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#@collapseId"
+                                            aria-expanded="@expanded"
+                                            aria-controls="@collapseId">
+                                        @org.Name
+                                    </button>
+                                </div>
+                                <!--/.card-header -->
+                                <div id="@collapseId" class="accordion-collapse collapse @(expanded ? "show" : "")" aria-labelledby="@id" data-bs-parent="#accordionExample">
+                                    <div class="card-body flex-[1_1_auto]  pb-4 xl:p-[2rem_2.5rem_1.25rem] lg:p-[2rem_2.5rem_1.25rem] md:p-[2rem_2.5rem_1.25rem]">
+                                        <p>@org.Overview</p>
+                                    </div>
+                                    <!--/.card-body -->
+                                </div>
+                                <!--/.accordion-collapse -->
+                            </div>
+                        }
+                        <!--/.accordion-item -->
+                    </div>
+
+                    <!--/.accordion -->
+                </div>
+                <!--/column -->
+            </div>
+            <!--/.row -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /.wrapper -->
+</section>
+<!-- /section -->
+<!-- /section -->
+<section id="testimonials">
+    <div class="wrapper  bg-[rgba(246,247,249,1)] ">
+        <div class="container">
+            <div style="height:30px"></div>
+            <h3 class="xl:text-[2rem] text-[calc(1.325rem_+_0.9vw)] !leading-[1.2] font-DMSerif font-normal tracking-normal mb-3 !text-center">Latest Trends in Learning  </h3>
+            <div style="height:30px"></div>
+
+            @for (int i = 0; i < Model.News.Count; i++)
+            {
+                int sum = i + 1;
+                var num = "0" + sum;
+                var newsItem = Model.News[i];
+                <div class="card" style="margin-bottom:15px">
+                    <div class="card-body p-6">
+                        <div class="flex flex-row">
+                            <div>
+                                <span class="icon btn btn-circle btn-lg btn-soft-primary pointer-events-none !mr-4 xl:text-[1.3rem] !w-12 !h-12 text-[calc(1.255rem_+_0.06vw)] inline-flex items-center justify-center leading-none !p-0 !rounded-[100%]"><span class="number table-cell text-center align-middle text-[1.1rem] font-bold m-[0_auto]">@num</span></span>
+                            </div>
+                            <div>
+                                <a asp-controller="News"
+                               asp-action="BlogDetails"
+                               asp-route-id="@newsItem.Id"><h4 class="!mb-1">@newsItem.Title</h4> </a>
+                                <p class="!mb-0" style="">
+                                    @newsItem.Content
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div style="height:30px"></div>
+        <!-- /.container -->
+    </div>
+    <!-- /.wrapper -->
+</section>
+
+
+
+
+

@@ -1,34 +1,50 @@
 ﻿@model Sahayee.Models.ViewModel.AdminDashCount
-<section class="hero text-center  py-5">
-    <div class="container mt-5">
-        <div class="row">
-            <!-- Main Content -->
-            <div class="col-md-12">
-                <!-- Metrics Section -->
-                <div class="d-flex flex-wrap gap-4 mb-4">
-                    @foreach (var item in Model.DashItems)
-                    {
-                        <div class="card p-4 text-center shadow-lg border-0 rounded-3" style="width: 22%; background-color: #ffffff;">
-                            <h5 class="card-title text-primary fw-bold mb-3">@item.Title</h5>
-                            <p class="card-text fs-1 text-dark mb-3">@item.ActiveCount</p>
-                        </div>
-                    }
-                </div>
+@{
+    Layout = "_LayoutAdmin";
+}
+<div class="row">
+    @{
+        string[] cardClasses = new string[] { "bg-primary", "bg-success", "bg-warning" };
+    }
 
-                <!-- Recent Activities Section -->
-                <div class="mt-4">
-                    <h2 class="mb-3 text-primary">Recent Activities</h2>
-                    <ul class="list-unstyled">
-                        @foreach (var item in Model.LatestItems)
-                        {
-                            <li class="bg-light p-3 mb-3 rounded-3 border border-secondary">
-                                <i class="bi bi-info-circle me-2 text-muted"></i>@item.Title
-                            </li>
-                        }
-                    </ul>
+    @foreach (var (item, index) in Model.DashItems.Select((value, index) => (value, index)))
+    {
+        // Get the class based on the index, loop back to the start if we exceed the number of classes
+        var cardClass = cardClasses[index % cardClasses.Length];
+        <div class="col-md-4 grid-margin grid-margin-md-0 stretch-card">
+            <div class="card border-0 @cardClass text-white">
+                <div id="downloads-carousel" class="carousel slide card-carousel" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="card-body pb-0">
+                                <p class="card-title text-white">@item.Title</p>
+                                <h1>@item.ActiveCount</h1>
+                                <div style="height:10px"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
-    </div>
-</section>
+    }
+
+</div>
+<div class="row">
+    @foreach (var item in Model.LatestItems)
+    {
+        <div class="col-md-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">@item.Title</h4>
+                    @*<div class="media">
+                <i class="mdi mdi-earth icon-md text-info d-flex align-self-start me-3"></i>
+                <div class="media-body">
+                <p class="card-text">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque.</p>
+                </div>
+                </div>*@
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

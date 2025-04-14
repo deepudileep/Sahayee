@@ -54,6 +54,12 @@ namespace Sahayee.Repository
             return _collection.Find(combinedFilter).ToList();
         }
 
+        public List<T> ApplyFilters(string filterCriteria)
+        {
+            var filter = Builders<T>.Filter.Regex("CourseTitle", new BsonRegularExpression(filterCriteria, "i")); // Case-insensitive "like"
+            return _collection.Find(filter).ToList();
+        }
+
         public List<T> ApplyFiltersObject(Dictionary<string, ObjectId> filterCriteria)
         {
             var filterBuilder = Builders<T>.Filter;
@@ -190,13 +196,39 @@ namespace Sahayee.Repository
                     { "FollowUpHistory", 1 },
                     { "JobDetails", new BsonDocument
                         {
-                            { "_id", "$jobDetails._id" },
-                            { "JobTitle", "$jobDetails.JobTitle" },
-                            { "Department", "$jobDetails.Department" },
-                            { "Institution", "$jobDetails.Institution" },
-                            { "Location", "$jobDetails.Location" },
-                            { "ContactEmail", "$jobDetails.ContactEmail" },
-                            { "Description", "$jobDetails.Description" }
+                            { "_id", "$_id" },
+                    { "JobTitle", "$JobTitle" },
+                    { "CompanyName", "$CompanyName" },
+                    { "JobType", "$JobType" },
+                    { "JobLocation", "$JobLocation" },
+                    { "IsRemote", "$IsRemote" },
+                    { "SalaryRange", "$SalaryRange" },
+                    { "SalaryOption", "$SalaryOption" },
+                    { "JobOverview", "$JobOverview" },
+                    { "Responsibilities", "$Responsibilities" },
+                    { "RequiredSkills", "$RequiredSkills" },
+                    { "CertificationsRequired", "$CertificationsRequired" },
+                    { "EducationRequirements", "$EducationRequirements" },
+                    { "ExperienceLevel", "$ExperienceLevel" },
+                    { "PreferredQualifications", "$PreferredQualifications" },
+                    { "WorkplaceSetting", "$WorkplaceSetting" },
+                    { "ShiftDetails", "$ShiftDetails" },
+                    { "WorkHours", "$WorkHours" },
+                    { "ApplicationDeadline", "$ApplicationDeadline" },
+                    { "HowToApply", "$HowToApply" },
+                    { "DocumentsRequired", "$DocumentsRequired" },
+                    { "CompanyOverview", "$CompanyOverview" },
+                    { "CompanyLogoPath", "$CompanyLogoPath" },
+                    { "Website", "$Website" },
+                    { "ContactPerson", "$ContactPerson" },
+                    { "ContactPersonEmail", "$ContactPersonEmail" },
+                    { "ContactPersonPhone", "$ContactPersonPhone" },
+                    { "BenefitsOffered", "$BenefitsOffered" },
+                    { "RelocationAssistance", "$RelocationAssistance" },
+                    { "EqualOpportunityStatement", "$EqualOpportunityStatement" },
+                    { "Tags", "$Tags" },
+                    { "JobCategory", "$JobCategory" },
+                    { "ApplicationTrackingEnabled", "$ApplicationTrackingEnabled" }
                         }
                     },
                     { "UserDetails", new BsonDocument
@@ -249,34 +281,34 @@ namespace Sahayee.Repository
 
             return _usersCollection.Find(filter).ToList();
         }
-    public UserStatistics GetUserStatistics(string userId)
-    {
-        var _jobApplications = _collection.Database.GetCollection<JobApplication>("JobApplication");
-        var _courseApplications = _collection.Database.GetCollection<CourseApplication>("CourseApplication");
-        var _queriesCollection = _collection.Database.GetCollection<Queries>("Queries");
-        // Job Applications Count
-        var jobCount = _jobApplications.CountDocuments(new BsonDocument("UserId", userId));
-
-        // Course Applications Count
-        var courseCount = _courseApplications.CountDocuments(new BsonDocument("UserId", userId));
-
-        // Queries Count
-        var queryCount = _queriesCollection.CountDocuments(new BsonDocument("UserId", userId));
-
-        return new UserStatistics
+        public UserStatistics GetUserStatistics(string userId)
         {
-            UserId = userId,
-            JobCount = (int)jobCount,
-            CourseCount = (int)courseCount,
-            QueryCount = (int)queryCount
-        };
-    }
+            var _jobApplications = _collection.Database.GetCollection<JobApplication>("JobApplication");
+            var _courseApplications = _collection.Database.GetCollection<CourseApplication>("CourseApplication");
+            var _queriesCollection = _collection.Database.GetCollection<Queries>("Queries");
+            // Job Applications Count
+            var jobCount = _jobApplications.CountDocuments(new BsonDocument("UserId", userId));
 
-    public async Task<List<JobApplicationWithDetails>> GetJobsAppliedByUserAsync(string userId)
-    {
-        var jobApplicationCollection = _collection.Database.GetCollection<JobApplication>("JobApplication");
+            // Course Applications Count
+            var courseCount = _courseApplications.CountDocuments(new BsonDocument("UserId", userId));
 
-        var pipeline = new List<BsonDocument>
+            // Queries Count
+            var queryCount = _queriesCollection.CountDocuments(new BsonDocument("UserId", userId));
+
+            return new UserStatistics
+            {
+                UserId = userId,
+                JobCount = (int)jobCount,
+                CourseCount = (int)courseCount,
+                QueryCount = (int)queryCount
+            };
+        }
+
+        public async Task<List<JobApplicationWithDetails>> GetJobsAppliedByUserAsync(string userId)
+        {
+            var jobApplicationCollection = _collection.Database.GetCollection<JobApplication>("JobApplication");
+
+            var pipeline = new List<BsonDocument>
     {
         new BsonDocument
         {
@@ -336,13 +368,39 @@ namespace Sahayee.Repository
                     { "FollowUpHistory", 1 },
                     { "JobDetails", new BsonDocument
                         {
-                            { "_id", "$jobDetails._id" },
-                            { "JobTitle", "$jobDetails.JobTitle" },
-                            { "Department", "$jobDetails.Department" },
-                            { "Institution", "$jobDetails.Institution" },
-                            { "Location", "$jobDetails.Location" },
-                            { "ContactEmail", "$jobDetails.ContactEmail" },
-                            { "Description", "$jobDetails.Description" }
+                            { "_id", "$_id" },
+                            { "JobTitle", "$JobTitle" },
+                            { "CompanyName", "$CompanyName" },
+                    { "JobType", "$JobType" },
+                    { "JobLocation", "$JobLocation" },
+                    { "IsRemote", "$IsRemote" },
+                    { "SalaryRange", "$SalaryRange" },
+                    { "SalaryOption", "$SalaryOption" },
+                    { "JobOverview", "$JobOverview" },
+                    { "Responsibilities", "$Responsibilities" },
+                    { "RequiredSkills", "$RequiredSkills" },
+                    { "CertificationsRequired", "$CertificationsRequired" },
+                    { "EducationRequirements", "$EducationRequirements" },
+                    { "ExperienceLevel", "$ExperienceLevel" },
+                    { "PreferredQualifications", "$PreferredQualifications" },
+                    { "WorkplaceSetting", "$WorkplaceSetting" },
+                    { "ShiftDetails", "$ShiftDetails" },
+                    { "WorkHours", "$WorkHours" },
+                    { "ApplicationDeadline", "$ApplicationDeadline" },
+                    { "HowToApply", "$HowToApply" },
+                    { "DocumentsRequired", "$DocumentsRequired" },
+                    { "CompanyOverview", "$CompanyOverview" },
+                    { "CompanyLogoPath", "$CompanyLogoPath" },
+                    { "Website", "$Website" },
+                    { "ContactPerson", "$ContactPerson" },
+                    { "ContactPersonEmail", "$ContactPersonEmail" },
+                    { "ContactPersonPhone", "$ContactPersonPhone" },
+                    { "BenefitsOffered", "$BenefitsOffered" },
+                    { "RelocationAssistance", "$RelocationAssistance" },
+                    { "EqualOpportunityStatement", "$EqualOpportunityStatement" },
+                    { "Tags", "$Tags" },
+                    { "JobCategory", "$JobCategory" },
+                    { "ApplicationTrackingEnabled", "$ApplicationTrackingEnabled" }
                         }
                     },
                     { "UserDetails", new BsonDocument
@@ -363,32 +421,32 @@ namespace Sahayee.Repository
         }
     };
 
-        var result = await jobApplicationCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
+            var result = await jobApplicationCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
 
-        if (result == null || !result.Any())
-        {
-            Console.WriteLine("No matching job applications found.");
-            return new List<JobApplicationWithDetails>();
+            if (result == null || !result.Any())
+            {
+                Console.WriteLine("No matching job applications found.");
+                return new List<JobApplicationWithDetails>();
+            }
+
+            Console.WriteLine($"Found {result.Count} job applications.");
+            return result.Select(x => BsonSerializer.Deserialize<JobApplicationWithDetails>(x)).ToList();
         }
 
-        Console.WriteLine($"Found {result.Count} job applications.");
-        return result.Select(x => BsonSerializer.Deserialize<JobApplicationWithDetails>(x)).ToList();
-    }
 
+        public async Task<List<JobApplication>> GetJobApplicationsByJobIdAsync(string jobId)
+        {
+            var jobApplicationCollection = _collection.Database.GetCollection<JobApplication>("JobApplication");
+            // Query to find all JobApplications with the specified JobId
+            var filter = Builders<JobApplication>.Filter.Eq(app => app.JobId, jobId);
+            return await jobApplicationCollection.Find(filter).ToListAsync();
+        }
+        public async Task<List<CourseApplicationWithDetails>> GetCoursesAppliedByUserAsync(string userId)
+        {
+            var courseApplicationCollection = _collection.Database.GetCollection<CourseApplication>("CourseApplication");
 
-    public async Task<List<JobApplication>> GetJobApplicationsByJobIdAsync(string jobId)
-    {
-        var jobApplicationCollection = _collection.Database.GetCollection<JobApplication>("JobApplication");
-        // Query to find all JobApplications with the specified JobId
-        var filter = Builders<JobApplication>.Filter.Eq(app => app.JobId, jobId);
-        return await jobApplicationCollection.Find(filter).ToListAsync();
-    }
-    public async Task<List<CourseApplicationWithDetails>> GetCoursesAppliedByUserAsync(string userId)
-    {
-        var courseApplicationCollection = _collection.Database.GetCollection<CourseApplication>("CourseApplication");
-
-        // Convert userId to ObjectId if needed
-        var pipeline = new List<BsonDocument>
+            // Convert userId to ObjectId if needed
+            var pipeline = new List<BsonDocument>
     {
         // Match stage to filter by UserId
         new BsonDocument
@@ -455,14 +513,44 @@ namespace Sahayee.Repository
                     { "CourseDetails", new BsonDocument
                         {
                             { "_id", "$courseDetails._id" },
-                            { "Name", "$courseDetails.Name" },
-                            { "Category", "$courseDetails.Category" },
-                            { "Institution", "$courseDetails.Institution" },
-                            { "Location", "$courseDetails.Location" },
-                            { "Duration", "$courseDetails.Duration" },
-                            { "Summary", "$courseDetails.Summary" },
-                            { "Trainer", "$courseDetails.Trainer" },
-                            { "StartDate", "$courseDetails.StartDate" },
+        { "Name", "$courseDetails.Name" },
+        { "Category", "$courseDetails.Category" },
+        { "Institution", "$courseDetails.Institution" },
+        { "Location", "$courseDetails.Location" },
+        { "Duration", "$courseDetails.Duration" },
+        { "Summary", "$courseDetails.Summary" },
+        { "Trainer", "$courseDetails.Trainer" },
+        { "LastModified", "$courseDetails.LastModified" },
+        { "CourseTitle", "$courseDetails.CourseTitle" },
+        { "CourseType", "$courseDetails.CourseType" },
+        { "CourseOverview", "$courseDetails.CourseOverview" },
+        { "LearningObjectives", "$courseDetails.LearningObjectives" },
+        { "CourseContent", "$courseDetails.CourseContent" },
+        { "Prerequisites", "$courseDetails.Prerequisites" },
+        { "CertificationOffered", "$courseDetails.CertificationOffered" },
+        { "CertificateTitle", "$courseDetails.CertificateTitle" },
+        { "CertificationBody", "$courseDetails.CertificationBody" },
+        { "StartDate", "$courseDetails.StartDate" },
+        { "EndDate", "$courseDetails.EndDate" },
+        { "ApplicationDeadline", "$courseDetails.ApplicationDeadline" },
+        { "EnrollmentType", "$courseDetails.EnrollmentType" },
+        { "CourseFee", "$courseDetails.CourseFee" },
+        { "PaymentOptions", "$courseDetails.PaymentOptions" },
+        { "InstructorName", "$courseDetails.InstructorName" },
+        { "InstructorBio", "$courseDetails.InstructorBio" },
+        { "InstructorPhotoPath", "$courseDetails.InstructorPhotoPath" },
+        { "TargetAudience", "$courseDetails.TargetAudience" },
+        { "Benefits", "$courseDetails.Benefits" },
+        { "Language", "$courseDetails.Language" },
+        { "Accreditation", "$courseDetails.Accreditation" },
+        { "CourseImagePath", "$courseDetails.CourseImagePath" },
+        { "PromoVideo", "$courseDetails.PromoVideo" },
+        { "RequiredDocuments", "$courseDetails.RequiredDocuments" },
+        { "HowToApply", "$courseDetails.HowToApply" },
+        { "Tags", "$courseDetails.Tags" },
+        { "CourseLevel", "$courseDetails.CourseLevel" },
+        { "Ratings", "$courseDetails.Ratings" },
+        { "ProgressTracking", "$courseDetails.ProgressTracking" }
                         }
                     },
                     { "UserDetails", new BsonDocument
@@ -483,27 +571,27 @@ namespace Sahayee.Repository
         }
     };
 
-        // Execute the pipeline
-        var result = await courseApplicationCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
+            // Execute the pipeline
+            var result = await courseApplicationCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
 
-        if (result == null || !result.Any())
-        {
-            return new List<CourseApplicationWithDetails>();
+            if (result == null || !result.Any())
+            {
+                return new List<CourseApplicationWithDetails>();
+            }
+
+            // Deserialize the result to the target model
+            var courseApplicationsList = result.Select(x =>
+                BsonSerializer.Deserialize<CourseApplicationWithDetails>(x)).ToList();
+
+            return courseApplicationsList;
         }
 
-        // Deserialize the result to the target model
-        var courseApplicationsList = result.Select(x =>
-            BsonSerializer.Deserialize<CourseApplicationWithDetails>(x)).ToList();
+        public async Task<List<CourseApplicationWithDetails>> GetCoursesAppliedByCourseAsync(string cId)
+        {
+            var courseApplicationCollection = _collection.Database.GetCollection<CourseApplication>("CourseApplication");
 
-        return courseApplicationsList;
-    }
-
-    public async Task<List<CourseApplicationWithDetails>> GetCoursesAppliedByCourseAsync(string cId)
-    {
-        var courseApplicationCollection = _collection.Database.GetCollection<CourseApplication>("CourseApplication");
-
-        // Convert userId to ObjectId if needed
-        var pipeline = new List<BsonDocument>
+            // Convert userId to ObjectId if needed
+            var pipeline = new List<BsonDocument>
     {
         // Match stage to filter by UserId
         new BsonDocument
@@ -570,14 +658,44 @@ namespace Sahayee.Repository
                     { "CourseDetails", new BsonDocument
                         {
                             { "_id", "$courseDetails._id" },
-                            { "Name", "$courseDetails.Name" },
-                            { "Category", "$courseDetails.Category" },
-                            { "Institution", "$courseDetails.Institution" },
-                            { "Location", "$courseDetails.Location" },
-                            { "Duration", "$courseDetails.Duration" },
-                            { "Summary", "$courseDetails.Summary" },
-                            { "Trainer", "$courseDetails.Trainer" },
-                            { "StartDate", "$courseDetails.StartDate" },
+        { "Name", "$courseDetails.Name" },
+        { "Category", "$courseDetails.Category" },
+        { "Institution", "$courseDetails.Institution" },
+        { "Location", "$courseDetails.Location" },
+        { "Duration", "$courseDetails.Duration" },
+        { "Summary", "$courseDetails.Summary" },
+        { "Trainer", "$courseDetails.Trainer" },
+        { "LastModified", "$courseDetails.LastModified" },
+        { "CourseTitle", "$courseDetails.CourseTitle" },
+        { "CourseType", "$courseDetails.CourseType" },
+        { "CourseOverview", "$courseDetails.CourseOverview" },
+        { "LearningObjectives", "$courseDetails.LearningObjectives" },
+        { "CourseContent", "$courseDetails.CourseContent" },
+        { "Prerequisites", "$courseDetails.Prerequisites" },
+        { "CertificationOffered", "$courseDetails.CertificationOffered" },
+        { "CertificateTitle", "$courseDetails.CertificateTitle" },
+        { "CertificationBody", "$courseDetails.CertificationBody" },
+        { "StartDate", "$courseDetails.StartDate" },
+        { "EndDate", "$courseDetails.EndDate" },
+        { "ApplicationDeadline", "$courseDetails.ApplicationDeadline" },
+        { "EnrollmentType", "$courseDetails.EnrollmentType" },
+        { "CourseFee", "$courseDetails.CourseFee" },
+        { "PaymentOptions", "$courseDetails.PaymentOptions" },
+        { "InstructorName", "$courseDetails.InstructorName" },
+        { "InstructorBio", "$courseDetails.InstructorBio" },
+        { "InstructorPhotoPath", "$courseDetails.InstructorPhotoPath" },
+        { "TargetAudience", "$courseDetails.TargetAudience" },
+        { "Benefits", "$courseDetails.Benefits" },
+        { "Language", "$courseDetails.Language" },
+        { "Accreditation", "$courseDetails.Accreditation" },
+        { "CourseImagePath", "$courseDetails.CourseImagePath" },
+        { "PromoVideo", "$courseDetails.PromoVideo" },
+        { "RequiredDocuments", "$courseDetails.RequiredDocuments" },
+        { "HowToApply", "$courseDetails.HowToApply" },
+        { "Tags", "$courseDetails.Tags" },
+        { "CourseLevel", "$courseDetails.CourseLevel" },
+        { "Ratings", "$courseDetails.Ratings" },
+        { "ProgressTracking", "$courseDetails.ProgressTracking" }
                         }
                     },
                     { "UserDetails", new BsonDocument
@@ -598,95 +716,95 @@ namespace Sahayee.Repository
         }
     };
 
-        // Execute the pipeline
-        var result = await courseApplicationCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
+            // Execute the pipeline
+            var result = await courseApplicationCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
 
-        if (result == null || !result.Any())
-        {
-            return new List<CourseApplicationWithDetails>();
+            if (result == null || !result.Any())
+            {
+                return new List<CourseApplicationWithDetails>();
+            }
+
+            // Deserialize the result to the target model
+            var courseApplicationsList = result.Select(x =>
+                BsonSerializer.Deserialize<CourseApplicationWithDetails>(x)).ToList();
+
+            return courseApplicationsList;
         }
 
-        // Deserialize the result to the target model
-        var courseApplicationsList = result.Select(x =>
-            BsonSerializer.Deserialize<CourseApplicationWithDetails>(x)).ToList();
-
-        return courseApplicationsList;
-    }
-
-    public async Task<UpdateResult> UpdateFollowUpHistory(string applicationId, CourseFollowUp newHistoryItem)
-    {
-
-
-        // Convert applicationId to ObjectId
-        var objectId = ObjectId.Parse(applicationId);
-        var courseApplicationCollection = _collection.Database.GetCollection<CourseApplication>("CourseApplication");
-        // Define the update
-        var update = Builders<CourseApplication>.Update
-  .Push(x => x.FollowUpHistory, newHistoryItem)
-  .Set(x => x.Status, newHistoryItem.ApplicationStatus);
-
-        // Execute the update
-        var result = await courseApplicationCollection.UpdateOneAsync(
-            filter: Builders<CourseApplication>.Filter.Eq(x => x.Id, objectId),
-            update: update
-        );
-        return result;
-    }
-    public async Task<UpdateResult> UpdateJobFollowUpHistory(string applicationId, FollowUp newHistoryItem)
-    {
-
-
-        // Convert applicationId to ObjectId
-        var objectId = ObjectId.Parse(applicationId);
-        var jobApplicationCollection = _collection.Database.GetCollection<JobApplication>("JobApplication");
-        // Define the update
-        var update = Builders<JobApplication>.Update
-   .Push(x => x.FollowUpHistory, newHistoryItem)
-   .Set(x => x.Status, newHistoryItem.Status);
-
-        // Execute the update
-        var result = await jobApplicationCollection.UpdateOneAsync(
-            filter: Builders<JobApplication>.Filter.Eq(x => x.Id, objectId),
-            update: update
-        );
-        return result;
-    }
-
-    public async Task<AdminDashCount> GetAdminDashCountAsync()
-    {
-        try
+        public async Task<UpdateResult> UpdateFollowUpHistory(string applicationId, CourseFollowUp newHistoryItem)
         {
-            var jobCollection = _collection.Database.GetCollection<Jobs>("Jobs");
-            var userCollection = _collection.Database.GetCollection<User>("User");
-            var courseCollection = _collection.Database.GetCollection<Course>("Course");
 
-            // Count documents in each collection
-            var jobCountTask = jobCollection.CountDocumentsAsync(FilterDefinition<Jobs>.Empty);
-            var userCountTask = userCollection.CountDocumentsAsync(FilterDefinition<User>.Empty);
-            var courseCountTask = courseCollection.CountDocumentsAsync(FilterDefinition<Course>.Empty);
 
-            // Get the latest entry from each collection based on _id
-            var latestJobTask = jobCollection.Find(FilterDefinition<Jobs>.Empty)
-                                              .Sort(Builders<Jobs>.Sort.Descending("_id"))
-                                              .Limit(1)
-                                              .FirstOrDefaultAsync();
-            var latestUserTask = userCollection.Find(FilterDefinition<User>.Empty)
-                                               .Sort(Builders<User>.Sort.Descending("_id"))
-                                               .Limit(1)
-                                               .FirstOrDefaultAsync();
-            var latestCourseTask = courseCollection.Find(FilterDefinition<Course>.Empty)
-                                                    .Sort(Builders<Course>.Sort.Descending("_id"))
-                                                    .Limit(1)
-                                                    .FirstOrDefaultAsync();
+            // Convert applicationId to ObjectId
+            var objectId = ObjectId.Parse(applicationId);
+            var courseApplicationCollection = _collection.Database.GetCollection<CourseApplication>("CourseApplication");
+            // Define the update
+            var update = Builders<CourseApplication>.Update
+      .Push(x => x.FollowUpHistory, newHistoryItem)
+      .Set(x => x.Status, newHistoryItem.ApplicationStatus);
 
-            // Wait for all tasks to complete
-            await Task.WhenAll(jobCountTask, userCountTask, courseCountTask,
-                               latestJobTask, latestUserTask, latestCourseTask);
+            // Execute the update
+            var result = await courseApplicationCollection.UpdateOneAsync(
+                filter: Builders<CourseApplication>.Filter.Eq(x => x.Id, objectId),
+                update: update
+            );
+            return result;
+        }
+        public async Task<UpdateResult> UpdateJobFollowUpHistory(string applicationId, FollowUp newHistoryItem)
+        {
 
-            // Create and populate the dashboard count
-            var adminDashCount = new AdminDashCount
+
+            // Convert applicationId to ObjectId
+            var objectId = ObjectId.Parse(applicationId);
+            var jobApplicationCollection = _collection.Database.GetCollection<JobApplication>("JobApplication");
+            // Define the update
+            var update = Builders<JobApplication>.Update
+       .Push(x => x.FollowUpHistory, newHistoryItem)
+       .Set(x => x.Status, newHistoryItem.Status);
+
+            // Execute the update
+            var result = await jobApplicationCollection.UpdateOneAsync(
+                filter: Builders<JobApplication>.Filter.Eq(x => x.Id, objectId),
+                update: update
+            );
+            return result;
+        }
+
+        public async Task<AdminDashCount> GetAdminDashCountAsync()
+        {
+            try
             {
-                DashItems = new List<DashItems>
+                var jobCollection = _collection.Database.GetCollection<Jobs>("Jobs");
+                var userCollection = _collection.Database.GetCollection<User>("User");
+                var courseCollection = _collection.Database.GetCollection<Course>("Course");
+
+                // Count documents in each collection
+                var jobCountTask = jobCollection.CountDocumentsAsync(FilterDefinition<Jobs>.Empty);
+                var userCountTask = userCollection.CountDocumentsAsync(FilterDefinition<User>.Empty);
+                var courseCountTask = courseCollection.CountDocumentsAsync(FilterDefinition<Course>.Empty);
+
+                // Get the latest entry from each collection based on _id
+                var latestJobTask = jobCollection.Find(FilterDefinition<Jobs>.Empty)
+                                                  .Sort(Builders<Jobs>.Sort.Descending("_id"))
+                                                  .Limit(1)
+                                                  .FirstOrDefaultAsync();
+                var latestUserTask = userCollection.Find(FilterDefinition<User>.Empty)
+                                                   .Sort(Builders<User>.Sort.Descending("_id"))
+                                                   .Limit(1)
+                                                   .FirstOrDefaultAsync();
+                var latestCourseTask = courseCollection.Find(FilterDefinition<Course>.Empty)
+                                                        .Sort(Builders<Course>.Sort.Descending("_id"))
+                                                        .Limit(1)
+                                                        .FirstOrDefaultAsync();
+
+                // Wait for all tasks to complete
+                await Task.WhenAll(jobCountTask, userCountTask, courseCountTask,
+                                   latestJobTask, latestUserTask, latestCourseTask);
+
+                // Create and populate the dashboard count
+                var adminDashCount = new AdminDashCount
+                {
+                    DashItems = new List<DashItems>
             {
                 new DashItems
                 {
@@ -707,7 +825,7 @@ namespace Sahayee.Repository
                     InActiveCount = 0 // Replace with actual count logic if needed
                 }
             },
-                LatestItems = new List<LatestItems>
+                    LatestItems = new List<LatestItems>
             {
                 new LatestItems
                 {
@@ -722,23 +840,23 @@ namespace Sahayee.Repository
                     Title = latestCourseTask != null ? $"New course listed: {latestCourseTask.Result.Name}" : "No new courses"
                 }
             }
-            };
+                };
 
-            return adminDashCount;
-        }
-        catch (Exception ex)
-        {
-            // Log the exception (assuming a logger is available)
-            Console.WriteLine($"An error occurred while fetching dashboard data: {ex.Message}");
-            return new AdminDashCount
+                return adminDashCount;
+            }
+            catch (Exception ex)
             {
-                DashItems = new List<DashItems>(),
-                LatestItems = new List<LatestItems>()
-            };
+                // Log the exception (assuming a logger is available)
+                Console.WriteLine($"An error occurred while fetching dashboard data: {ex.Message}");
+                return new AdminDashCount
+                {
+                    DashItems = new List<DashItems>(),
+                    LatestItems = new List<LatestItems>()
+                };
+            }
         }
+
+
     }
-
-
-}
 
 }

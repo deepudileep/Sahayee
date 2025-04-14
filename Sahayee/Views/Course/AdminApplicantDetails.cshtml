@@ -1,6 +1,8 @@
 ﻿@model List<Sahayee.Models.ViewModel.CourseApplicationWithDetails>
-
-<div class="container mt-5">
+@{
+    Layout = "_LayoutAdmin";
+}
+<div class=" mt-5">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -19,7 +21,7 @@
             {
                 <tr>
                     <td>@app.UserDetails.FirstName @app.UserDetails.LastName</td>
-                    <td>@app.CourseDetails.Name</td>
+                    <td>@app.CourseDetails.CourseTitle</td>
                     <td>@app.AppliedOn.ToShortDateString()</td>
                     <td>@app.Status</td>
                     <td>@app.UserMessage</td>
@@ -102,11 +104,11 @@
         followUpHistoryTable.innerHTML = ""; // Clear existing rows
         app.FollowUpHistory.forEach(item => {
             const row = `<tr>
-                                                <td>${new Date(item.Date).toLocaleDateString()}</td>
-                                                <td>${item.ApplicationStatus}</td>
-                                                <td>${item.AdminNotes}</td>
-                                                <td>${item.DoneBy}</td>
-                                             </tr>`;
+                                                    <td>${new Date(item.Date).toLocaleDateString()}</td>
+                                                    <td>${item.ApplicationStatus}</td>
+                                                    <td>${item.AdminNotes}</td>
+                                                    <td>${item.DoneBy}</td>
+                                                 </tr>`;
             followUpHistoryTable.insertAdjacentHTML('beforeend', row);
         });
         const modal = document.getElementById("followUpModal");
@@ -155,11 +157,11 @@
                         followUpHistoryTable.innerHTML = ""; // Clear existing rows
                         app.FollowUpHistory.forEach(item => {
                             const row = `<tr>
-                                            <td>${new Date(item.Date).toLocaleDateString()}</td>
-                                            <td>${item.ApplicationStatus}</td>
-                                            <td>${item.AdminNotes}</td>
-                                            <td>${item.DoneBy}</td>
-                                         </tr>`;
+                                                <td>${new Date(item.Date).toLocaleDateString()}</td>
+                                                <td>${item.ApplicationStatus}</td>
+                                                <td>${item.AdminNotes}</td>
+                                                <td>${item.DoneBy}</td>
+                                             </tr>`;
                             followUpHistoryTable.insertAdjacentHTML('beforeend', row);
                         });
                     }

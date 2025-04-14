@@ -1,0 +1,116 @@
+﻿@model Sahayee.Models.ViewModel.NewsViewModel
+
+@{
+    ViewData["Title"] = String.IsNullOrEmpty(Model.Id) ? "Create " : "Update";
+}@{
+    Layout = "_LayoutAdmin";
+}
+    <div class="row">
+        <div class="card !bg-[#eff7fa] !rounded-[0.8rem] !mt-2 mb-[3rem] xl:!mb-[3rem] lg:!mb-[3rem] md:!mb-[3rem]">
+            <div class="card-body xl:!p-[2.5rem] lg:!p-[2.5rem] md:!p-[2.5rem] xl:!py-12 xl:!px-20 p-[40px]">
+                <h2 class="text-center">@ViewData["Title"]</h2>
+
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <!-- Hidden Field for Course ID -->
+                    <input type="hidden" asp-for="Id" />
+
+                    <!-- Basic Course Information -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h4>Basic News Information</h4>
+                        </div>
+                        <div class="card-body flex-[1_1_auto] p-[40px]">
+                            <div class="form-floating !relative">
+                                <input id="courseTitleInput" type="text" asp-for="Title"
+                                       class="form-control relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]"
+                                       placeholder="Enter  title">
+                                <label for="courseTitleInput"
+                                       class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">
+                                    Title
+                                </label>
+                            </div>
+                            <div style="height:5px"></div>
+                            <div class="form-floating !relative">
+                                <select id="courseCategory" asp-for="TypeId" asp-items="@(new SelectList(Model.Type, "Id", "Name", Model.TypeId))"
+                                        class="form-select form-control relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100">
+                                </select>
+                                <label for="courseCategory"
+                                       class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">
+                                    Category
+                                </label>
+                            </div>
+                            <div style="height:5px"></div>
+                            <div class="form-floating !relative">
+
+                                <select id="courseInstitution" asp-for="Country" asp-items="@(new SelectList(Model.Countries, "Id", "Name", Model.Country))"
+                                        class="form-select form-control relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100">
+                                </select>
+                                <label for="courseInstitution"
+                                       class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">
+                                    Country
+                                </label>
+                            </div>
+                            <div style="height:5px"></div>
+                            <div class="form-floating !relative">
+                                <input id="courseTitleInput" type="date" asp-for="NewsDate"
+                                       class="form-control relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]"
+                                       placeholder="Enter News Date">
+
+                                <label for="courseLocation"
+                                       class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">
+                                    News Date
+                                </label>
+                            </div>
+                            <div style="height:5px"></div>
+                            <div class="form-floating !relative">
+                                <textarea id="learningObjectives" asp-for="Content" class="form-select form-control relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100"
+                                          placeholder="Define the Content"></textarea>
+                                <label for="courseTitleInput"
+                                       class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">
+                                    Content>
+                                </label>
+                            </div>
+                            <div style="height:5px"></div>
+                            <div class="form-floating !relative">
+                                <textarea id="learningObjectives" asp-for="Summary" class="form-select form-control relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100"
+                                          placeholder="Define the Summary"></textarea>
+                                <label for="courseTitleInput"
+                                       class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">
+                                    Summary>
+                                </label>
+                            </div>
+                            <div style="height:5px"></div>
+                            <div class="form-floating !relative">
+                                <input id="courseImage" type="file" asp-for="image" name="image"
+                                       class="form-control-file relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100">
+                                <label for="courseImage"
+                                       class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">
+                                    Course Image
+                                </label>
+                                @if (!string.IsNullOrEmpty(Model.image))
+                                {
+                                    <img src="../uploads/@Model.image" alt="Course Image" class="img-thumbnail" width="100" />
+                                }
+                            </div>
+                            <div style="height:10px"></div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Submit Button -->
+                    <div class="d-flex justify-content-end">
+                        <button type="submit"
+                                class="btn btn-primary text-white !bg-[#54a8c7] border-[#54a8c7] hover:text-white hover:bg-[#54a8c7] hover:border-[#54a8c7] focus:shadow-[rgba(79,152,181,1)] focus:text-white active:text-white active:bg-[#54a8c7] active:border-[#54a8c7] disabled:text-white disabled:bg-[#54a8c7] disabled:border-[#54a8c7] !rounded-[50rem] btn-login w-full mb-2">
+                            @ViewData["Title"]
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+

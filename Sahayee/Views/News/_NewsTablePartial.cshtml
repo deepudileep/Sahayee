@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<Sahayee.Models.DB.News>
-
 <table class="table">
     <thead>
         <tr>
@@ -21,7 +20,7 @@
                 <td>@job.Summary</td>
                 <td>@job.NewsDate</td>
                 <td>
-                    <button class="btn btn-warning" onclick="openModal('@job.Id')">Edit</button>
+                    <a href="/News/Create?id=@job.Id" class="btn btn-primary text-white !bg-[#54a8c7] border-[#54a8c7] hover:text-white hover:bg-[#54a8c7] hover:border-[#54a8c7] focus:shadow-[rgba(79,152,181,1)] focus:text-white active:text-white active:bg-[#54a8c7] active:border-[#54a8c7] disabled:text-white disabled:bg-[#54a8c7] disabled:border-[#54a8c7] !rounded-[50rem] btn-login w-full mb-2">Edit</a>
                     @*<a href="/Job/AdminApplicantDetails?jobAId=@job.Id" class="btn btn-warning">Details</a>*@
                     @*<button class="btn btn-danger" onclick="openDeleteModal('@job.Id')">Delete</button>*@
                 </td>

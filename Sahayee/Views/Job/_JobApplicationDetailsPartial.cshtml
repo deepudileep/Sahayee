@@ -1,6 +1,6 @@
 ﻿@model Sahayee.Models.ViewModel.JobApplicationDetailsViewModel
 
-<div class="container mt-5">
+<div class=" mt-5">
 
     @if (Model.JobApplicationWithDetails.Any())
     {
@@ -17,10 +17,10 @@
                             </div>
                             <!-- Job Details -->
                             <p class="text-muted mb-2">
-                                <i class="bi bi-building"></i> <strong>Department:</strong> @job.JobDetails.Department
+                                <i class="bi bi-building"></i> <strong>Company:</strong> @job.JobDetails.CompanyName
                             </p>
                             <p class="text-muted mb-2">
-                                <i class="bi bi-geo-alt"></i> <strong>Location:</strong> @job.JobDetails.Location
+                                <i class="bi bi-geo-alt"></i> <strong>Location:</strong> @job.JobDetails.JobLocation
                             </p>
                             <p class="text-muted mb-2">
                                 <i class="bi bi-calendar"></i> <strong>Applied On:</strong> @job.AppliedOn.ToString("MMMM dd, yyyy")

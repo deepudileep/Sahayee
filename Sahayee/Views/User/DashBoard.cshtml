@@ -1,6 +1,6 @@
 ﻿@model Sahayee.Models.ViewModel.ProfileViewModel
 
-<div class="container mt-5">
+<div class=" mt-5">
     <div class="row g-4">
         <!-- First Column: Profile Section -->
         <div class="col-md-3">
@@ -15,7 +15,7 @@
                     <p class="card-text text-muted"><i class="bi bi-geo-alt"></i> @Model.User.Location</p>
                     <p class="card-text text-muted"><i class="bi bi-telephone"></i> @Model.User.PhoneNumber</p>
                     <p class="card-text text-muted"><i class="bi bi-gender-ambiguous"></i> @Model.User.Gender</p>
-                    <p class="card-text text-muted"><i class="bi bi-calendar"></i> @Model.User.DOB.ToString("MMMM dd, yyyy")</p>
+                    <p class="card-text text-muted"><i class="bi bi-calendar"></i> @(Model.User.DOB.HasValue ? Model.User.DOB.Value.ToString("MM/dd/yyyy") : "N/A")</p>
 
                     <!-- Button to View Profile -->
 
@@ -39,7 +39,7 @@
                         {
                             <li class="mb-3">
                                 <h5 class="h5 text-dark">@newsItem.Title</h5>
-                                <small class="text-muted">@newsItem.NewsDate.ToString("MMM dd, yyyy")</small>
+                                <small class="text-muted">@newsItem.NewsDate?.ToString("MMM dd, yyyy")</small>
                                 <p>@newsItem.Content</p>
                             </li>
                         }

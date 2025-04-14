@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Sahayee.Models.DB;
 using Sahayee.Models.ViewModel;
 using Sahayee.Repository;
+using System;
 using System.Security.Claims;
 
 namespace Sahayee.Controllers
@@ -14,37 +16,80 @@ namespace Sahayee.Controllers
         private readonly ILogger<CourseController> _logger;
         private readonly MongoDbService<Course> _mongoDbService;
         private readonly MongoDbService<CourseApplication> _mongoDbServiceCA;
+        private readonly MongoDbService<News> _mongoDbServiceNews;
+        private readonly MongoDbService<Organization> _mongoDbServiceOrganization;
 
-        public CourseController(ILogger<CourseController> logger, MongoDbService<Course> mongoDbService, MongoDbService<CourseApplication> mongoDbServiceCA)
+        public CourseController(ILogger<CourseController> logger, MongoDbService<Course> mongoDbService,
+            MongoDbService<CourseApplication> mongoDbServiceCA, MongoDbService<News> mongoDbServiceNews, MongoDbService<Organization> mongoDbServiceOrganization)
         {
             _logger = logger;
             _mongoDbService = mongoDbService;
             _mongoDbServiceCA = mongoDbServiceCA;
+            _mongoDbServiceNews = mongoDbServiceNews;
+            _mongoDbServiceOrganization = mongoDbServiceOrganization;
         }
 
-
         [HttpGet]
-        public IActionResult Courses()
+        public IActionResult Learning()
         {
             var filterCriteria = new Dictionary<string, string>
                 {
                     { "Category", "all" },
-                    { "Location", "all" },
+                    { "CourseType", "all" },
                     { "Institution", "all" },
                 };
             var course = _mongoDbService.ApplyFilters(filterCriteria);
 
-            var viewModel = new CourseFilterViewModel
+            var viewModel = new CourseHomeViewModel
             {
-                Categories = StaticData.GetCategories(),
-                Location = StaticData.GetCLocations(),
-                Institutions = StaticData.GetInstitution(),
-                Courses = course
+                Courses = course,
+                News = _mongoDbServiceNews.Get().Where(x => x.TypeId == "Course").Take(3).ToList(),
+                Organization = _mongoDbServiceOrganization.Get().Take(4).ToList(),
+                Categories = StaticData.GetCategories()
             };
 
             return View(viewModel);
         }
 
+        [HttpGet]
+        public IActionResult Courses(string category = "all", string location = "all", string institution = "all", string title = "", int pageNumber = 1, int pageSize = 9)
+        {
+            List<Course> courses = new List<Course>();
+            var filterCriteria = new Dictionary<string, string>
+                {
+                    { "Category", category },
+                    { "CourseType", location },
+                    { "Institution", institution },
+                };
+
+
+            if (string.IsNullOrEmpty(title))
+                courses = _mongoDbService.ApplyFilters(filterCriteria);
+            else
+                courses = _mongoDbService.ApplyFilters(title);
+
+            int totalCourses = courses.Count();
+            var paginatedCourses = courses
+        .Skip((pageNumber - 1) * pageSize)
+        .Take(pageSize)
+        .ToList();
+            var viewModel = new CourseFilterViewModel
+            {
+                CategoryId = category,
+                CourseTypeId = location,
+                InstitutionsId = institution,
+                Categories = StaticData.GetCategories(),
+                CourseType = StaticData.GetCourseType(),
+                Institutions = _mongoDbServiceOrganization.Get().ToList(),
+                Courses = paginatedCourses,
+                CurrentPage = pageNumber,
+                TotalPages = (int)Math.Ceiling(totalCourses / (double)pageSize)
+            };
+
+            return View(viewModel);
+        }
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> MyCourses()
         {
@@ -58,16 +103,190 @@ namespace Sahayee.Controllers
             var viewModel = new CourseApplicationDetailsViewModel
             {
                 Categories = StaticData.GetCategories(),
-                Location = StaticData.GetCLocations(),
-                Institutions = StaticData.GetInstitution(),
+                CourseTypes = StaticData.GetCourseType(),
+                Institutions = _mongoDbServiceOrganization.Get().ToList(),
                 CourseApplicationWithDetails = result
             };
             return View(viewModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Create(string id)
+        {
+            CourseViewModel courseViewModel = new CourseViewModel();
+            if (!string.IsNullOrEmpty(id))
+            {
+                var course = _mongoDbService.GetById(ObjectId.Parse(id));
+                courseViewModel = new CourseViewModel
+                {
+                    Id = course.Id.ToString(),
+                    Name = course.Name,
+                    Category = course.Category,
+                    Institution = course.Institution,
+                    Location = course.Location,
+                    Duration = course.Duration,
+                    Summary = course.Summary,
+                    Trainer = course.Trainer,
+                    LastModified = DateTime.Now,
+                    CourseTitle = course.CourseTitle,
+                    CourseType = course.CourseType,
+
+                    // Course Details
+                    CourseOverview = course.CourseOverview,
+                    LearningObjectives = course.LearningObjectives,
+                    CourseContent = course.CourseContent,
+                    Prerequisites = course.Prerequisites,
+
+                    // Certification Information
+                    CertificationOffered = course.CertificationOffered,
+                    CertificateTitle = course.CertificateTitle,
+                    CertificationBody = course.CertificationBody,
+
+                    // Enrollment Details
+                    StartDate = course.StartDate,
+                    EndDate = course.EndDate,
+                    ApplicationDeadline = course.ApplicationDeadline,
+                    EnrollmentType = course.EnrollmentType,
+                    CourseFee = course.CourseFee,
+                    PaymentOptions = course.PaymentOptions,
+
+                    // Trainer/Instructor Details
+                    InstructorName = course.InstructorName,
+                    InstructorBio = course.InstructorBio,
+                    InstructorPhotoPath = course.InstructorPhotoPath,
+
+                    // Additional Features
+                    TargetAudience = course.TargetAudience,
+                    Benefits = course.Benefits,
+                    Language = course.Language,
+                    Accreditation = course.Accreditation,
+
+                    // Media and Content
+                    CourseImagePath = course.CourseImagePath,
+                    PromoVideo = course.PromoVideo,
+
+                    // Application Process
+                    RequiredDocuments = course.RequiredDocuments,
+                    HowToApply = course.HowToApply,
+
+                    // Optional Fields
+                    Tags = course.Tags,
+                    CourseLevel = course.CourseLevel,
+                    Ratings = course.Ratings,
+                    ProgressTracking = course.ProgressTracking,
+                };
+            }
+            courseViewModel.CourseTypes = StaticData.GetCourseType();
+            courseViewModel.Categories = StaticData.GetCategories();
+            courseViewModel.Institutions = _mongoDbServiceOrganization.Get().ToList();
+            return View(courseViewModel);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CourseViewModel viewModel, IFormFile? instructorPhoto, IFormFile? courseImage)
+        {
+            // Handle file uploads (if any)
+            if (instructorPhoto != null)
+            {
+                var instructorPhotoPath = Path.Combine(Guid.NewGuid() + instructorPhoto.FileName);
+                var logoPath = Path.Combine("wwwroot/uploads", instructorPhotoPath);
+                using (var stream = new FileStream(logoPath, FileMode.Create))
+                {
+                    await instructorPhoto.CopyToAsync(stream);
+                }
+                viewModel.InstructorPhotoPath = instructorPhotoPath;
+            }
+
+            if (courseImage != null)
+            {
+                var courseImagePath = Path.Combine(Guid.NewGuid() + courseImage.FileName);
+                var logoPath = Path.Combine("wwwroot/uploads", courseImagePath);
+
+                using (var stream = new FileStream(logoPath, FileMode.Create))
+                {
+                    await courseImage.CopyToAsync(stream);
+                }
+                viewModel.CourseImagePath = courseImagePath;
+
+            }
+            var course = new Course
+            {
+                Id = string.IsNullOrEmpty(viewModel.Id) ? MongoDB.Bson.ObjectId.GenerateNewId() : ObjectId.Parse(viewModel.Id),
+                Name = viewModel.Name,
+                Category = viewModel.Category,
+                Institution = viewModel.Institution,
+                Location = viewModel.Location,
+                Duration = viewModel.Duration,
+                Summary = viewModel.Summary,
+                Trainer = viewModel.Trainer,
+                LastModified = DateTime.Now,
+                CourseTitle = viewModel.CourseTitle,
+                CourseType = viewModel.CourseType,
+
+                // Course Details
+                CourseOverview = viewModel.CourseOverview,
+                LearningObjectives = viewModel.LearningObjectives,
+                CourseContent = viewModel.CourseContent,
+                Prerequisites = viewModel.Prerequisites,
+
+                // Certification Information
+                CertificationOffered = viewModel.CertificationOffered,
+                CertificateTitle = viewModel.CertificateTitle,
+                CertificationBody = viewModel.CertificationBody,
+
+                // Enrollment Details
+                StartDate = viewModel.StartDate,
+                EndDate = viewModel.EndDate,
+                ApplicationDeadline = viewModel.ApplicationDeadline,
+                EnrollmentType = viewModel.EnrollmentType,
+                CourseFee = viewModel.CourseFee,
+                PaymentOptions = viewModel.PaymentOptions,
+
+                // Trainer/Instructor Details
+                InstructorName = viewModel.InstructorName,
+                InstructorBio = viewModel.InstructorBio,
+                InstructorPhotoPath = viewModel.InstructorPhotoPath,
+
+                // Additional Features
+                TargetAudience = viewModel.TargetAudience,
+                Benefits = viewModel.Benefits,
+                Language = viewModel.Language,
+                Accreditation = viewModel.Accreditation,
+
+                // Media and Content
+                CourseImagePath = viewModel.CourseImagePath,
+                PromoVideo = viewModel.PromoVideo,
+
+                // Application Process
+                RequiredDocuments = viewModel.RequiredDocuments,
+                HowToApply = viewModel.HowToApply,
+
+                // Optional Fields
+                Tags = viewModel.Tags,
+                CourseLevel = viewModel.CourseLevel,
+                Ratings = viewModel.Ratings,
+                ProgressTracking = viewModel.ProgressTracking,
+            };
+            if (string.IsNullOrEmpty(viewModel.Id))
+            {
+                // Save the model to MongoDB
+
+                _mongoDbService.Insert(course);
+            }
+            else
+            {
+                _mongoDbService.UpdateById(course.Id, course);
+            }
+            return RedirectToAction("Index");
+        }
+
         [HttpGet]
         public async Task<IActionResult> DetailsView(string id)
         {
             var result = _mongoDbService.GetById(ObjectId.Parse(id));
+            var Institute = _mongoDbServiceOrganization.GetById(ObjectId.Parse(result.Institution));
+            result.Institution = Institute.Name;
             return View(result);
         }
         public async Task<IActionResult> AdminApplicantDetails(string courseId)
@@ -178,7 +397,8 @@ namespace Sahayee.Controllers
 
             _mongoDbServiceCA.Insert(application);
 
-            TempData["Message"] = "Application submitted successfully!";
+            TempData["Message"] = "You've successfully enrolled in the course!";
+            TempData["Success"] = true;
             return RedirectToAction("DetailsView", new { id = id });
         }
 
@@ -188,15 +408,15 @@ namespace Sahayee.Controllers
             var filterCriteria = new Dictionary<string, string>
                 {
                     { "Category", category },
-                    { "Location", location },
+                    { "CourseType", location },
                     { "Institution", institution },
                 };
             var course = _mongoDbService.ApplyFilters(filterCriteria);
             var viewModel = new CourseFilterViewModel
             {
                 Categories = StaticData.GetCategories(),
-                Location = StaticData.GetCLocations(),
-                Institutions = StaticData.GetInstitution(),
+                CourseType = StaticData.GetCourseType(),
+                Institutions = _mongoDbServiceOrganization.Get().ToList(),
                 Courses = course
             };
 
@@ -210,7 +430,7 @@ namespace Sahayee.Controllers
             var filterCriteria = new Dictionary<string, string>
                 {
                     { "Category", "all" },
-                    { "Location", "all" },
+                    { "CourseType", "all" },
                     { "Institution", "all" },
                 };
             var course = _mongoDbService.ApplyFilters(filterCriteria);
@@ -218,8 +438,8 @@ namespace Sahayee.Controllers
             var viewModel = new CourseFilterViewModel
             {
                 Categories = StaticData.GetCategories(),
-                Location = StaticData.GetCLocations(),
-                Institutions = StaticData.GetInstitution(),
+                CourseType = StaticData.GetCourseType(),
+                Institutions = _mongoDbServiceOrganization.Get().ToList(),
                 Courses = course
             };
 
@@ -231,8 +451,8 @@ namespace Sahayee.Controllers
         {
             var filterCriteria = new Dictionary<string, string>
                 {
-                    { "Category", category },
-                    { "Location", location },
+                     { "Category", category },
+                    { "CourseType", location },
                     { "Institution", institution },
                 };
             var course = _mongoDbService.ApplyFilters(filterCriteria);
@@ -240,26 +460,7 @@ namespace Sahayee.Controllers
 
             return PartialView("_CoursesTablePartial", course);
         }
-        [HttpGet]
-        public IActionResult EditCourse(string id)
-        {
-            var course = _mongoDbService.GetById(ObjectId.Parse(id));
-            CourseViewModel courseViewModel = new CourseViewModel();
-            courseViewModel.Id = course.Id.ToString();
-            courseViewModel.Institution = course.Institution;
-            courseViewModel.Duration = course.Duration;
-            courseViewModel.Summary = course.Summary;
-            courseViewModel.Category = course.Category;
-            courseViewModel.Name = course.Name;
-            courseViewModel.Location = course.Location;
-            courseViewModel.Trainer = course.Trainer;
-            courseViewModel.StartDate = course.StartDate;
 
-            courseViewModel.Locations = StaticData.GetCLocations();
-            courseViewModel.Categories = StaticData.GetCategories();
-            courseViewModel.Institutions = StaticData.GetInstitution();
-            return PartialView("_CoursesEditPartial", courseViewModel);
-        }
         [HttpGet]
         public IActionResult DetailsPartial(string id)
         {
@@ -276,15 +477,7 @@ namespace Sahayee.Controllers
             courseViewModel.StartDate = course.StartDate;
             return PartialView("_CoursesDetailsPartial", courseViewModel);
         }
-        [HttpGet]
-        public IActionResult AddCourse()
-        {
-            CourseViewModel courseViewModel = new CourseViewModel();
-            courseViewModel.Locations = StaticData.GetCLocations();
-            courseViewModel.Categories = StaticData.GetCategories();
-            courseViewModel.Institutions = StaticData.GetInstitution();
-            return PartialView("_CoursesAddPartial", courseViewModel);
-        }
+
         [HttpPost]
         public IActionResult DeleteCourse(string id)
         {
@@ -292,34 +485,6 @@ namespace Sahayee.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public IActionResult SaveCourse(CourseViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var course = new Course
-                {
 
-                    Institution = model.Institution,
-                    Duration = model.Duration,
-                    Summary = model.Summary,
-                    Category = model.Category,
-                    Location = model.Location,
-                    Name = model.Name,
-                    StartDate = model.StartDate,
-                    Trainer = model.Trainer,
-                    Id = ObjectId.GenerateNewId(),
-                    LastModified = System.DateTime.Now,
-                };
-                if (String.IsNullOrEmpty(model.Id))
-                    _mongoDbService.Insert(course);
-                else
-                {
-                    course.Id = ObjectId.Parse(model.Id);
-                    _mongoDbService.UpdateById(ObjectId.Parse(model.Id), course);
-                }
-            }
-            return RedirectToAction("Index");
-        }
     }
 }

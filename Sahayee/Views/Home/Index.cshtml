@@ -1,58 +1,346 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model Sahayee.Models.ViewModel.HomeViewModels
+<style>
 
-<!-- Hero Section -->
-<section class="hero text-center  py-5">
+</style>
+<!-- /header -->
+<section class="wrapper !bg-[#ffffff]">
     <div class="container">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h2 class="display-4 fw-bold">Unlock Your Global Healthcare Career</h2>
-                <p class="lead">Your journey to a successful healthcare career starts here. Explore our expert guidance and placement services.</p>
-                <a class="btn btn-primary btn-lg" href="/User/Registration">Get Started</a>
+        <div class="card !bg-[#eff7fa] !rounded-[0.8rem] !mt-2 mb-[3rem] xl:!mb-[3rem] lg:!mb-[3rem] md:!mb-[3rem]">
+            <div class="card-body xl:!p-[2.5rem] lg:!p-[2.5rem] md:!p-[2.5rem] xl:!py-12 xl:!px-20 p-[40px]">
+                <div class="flex flex-wrap mx-[-15px] xl:mx-0 lg:mx-[-20px] mt-[-50px] items-center">
+                    <div class="xl:w-6/12 lg:w-6/12 w-full flex-[0_0_auto] px-[15px] xl:px-0 lg:px-[20px] mt-[50px] max-w-full xl:!order-2 lg:!order-2 flex !relative">
+                        <img class="max-w-full h-auto !ml-auto !mx-auto xl:!mr-8 lg:!mr-8" src="~/Images/co3.png" srcset="~/Images/co3.png 2x" alt="image" data-cue="fadeIn">
+                        <div data-cue="slideInRight" data-delay="300">
+
+                            <!--/.card -->
+                        </div>
+                        <!--/div -->
+                    </div>
+                    <!--/column -->
+                    <div class="xl:w-6/12 lg:w-6/12 flex-[0_0_auto] px-[15px] xl:px-0 lg:px-[20px] mt-[50px] max-w-full text-center lg:text-left xl:text-left" data-cues="slideInDown" data-group="page-title" data-delay="600">
+                        <h1 class="xl:text-[2.4rem] text-[calc(1.365rem_+_1.38vw)] !leading-[1.15] !font-DMSerif !font-normal !tracking-normal mb-5 [word-spacing:normal!important]">Welcome to HAAIRD</h1>
+                        <p class="lead !text-[1.05rem] !leading-[1.5] font-medium mb-7 xl:pr-10">Transforming careers, empowering professionals, and connecting talent with global opportunities.</p>
+                        <div class="flex justify-center lg:!justify-start xl:!justify-start" data-cues="slideInDown" data-group="page-title-buttons" data-delay="900">
+                            <span><a href="#" class="btn btn-lg btn-aqua text-white !bg-[#54a8c7] border-[#54a8c7] hover:text-white hover:bg-[#54a8c7] hover:border-[#54a8c7] focus:shadow-[rgba(79,152,181,1)] active:text-white active:bg-[#54a8c7] active:border-[#54a8c7] disabled:text-white disabled:bg-[#54a8c7] disabled:border-[#54a8c7] !rounded-[50rem] !mr-2" data-bs-target="#modal-query" data-bs-toggle="modal" data-bs-dismiss="modal">Apply for Assistance</a></span>
+                            <span><a href="/Home/Contact" class="btn btn-lg btn-outline-aqua !rounded-[50rem] !text-[#54a8c7] !border-[#54a8c7] hover:!bg-[#54a8c7] hover:!text-white">Contact Us</a></span>
+                        </div>
+                        @if (TempData["AssistanceMessage"] != null)
+                        {
+                            <div class="alert alert-success !text-[#308970] !bg-[#edf9f6] !border-[#308970] !p-[1rem]  alert-icon !pl-10 alert-dismissible fade show !border-0 !shadow-none" role="alert">
+                                <i class="uil uil-check-circle before:content-['\e9db']"></i>
+                                @TempData["AssistanceMessage"]
+                                <button type="button" class="btn-close !text-[#308970]" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+                    </div>
+                    <!--/column -->
+                </div>
+                <!--/.row -->
             </div>
+            <!--/.card-body -->
         </div>
+        <div class="container pt-20 xl:pt-10 lg:pt-10 md:pt-10 pb-16 xl:pb-20 lg:pb-20 md:pb-20">
+            <h2 class="text-[calc(1.305rem_+_0.66vw)] font-bold xl:text-[1.8rem] leading-[1.3] mb-3 !text-center">Trending</h2>
+            <div class="!relative">
+                <div class="shape !rounded-[50%] !bg-[#fff8ee] rellax !w-[6rem] !h-[6rem] absolute z-[1]" data-rellax-speed="1" style="bottom: 0.5rem; right: -1.7rem;"></div>
+                <div class="shape bg-dot primary rellax !w-[6rem] !h-[6rem] bg-[radial-gradient(#3f78e0_2px,transparent_2.5px)] absolute z-[1] opacity-50" data-rellax-speed="1" style="top: -1rem; left: -1.7rem;"></div>
+                <div class="swiper-container dots-closer !mb-6 relative z-10" data-margin="0" data-dots="true" data-items-xl="3" data-items-md="2" data-items-xs="1">
+                    <div class="swiper">
+                        <div class="swiper-wrapper">
+                            @for (int i = 0; i < Model.News.Count; i++)
+                            {
+                                int sum = i + 1;
+                                var num = "0" + sum;
+                                var newsItem = Model.News[i];
+                                string firstTwoLetters = newsItem.Country.Length >= 2 ? newsItem.Country.Substring(0, 2) : newsItem.Title;
+                                <div class="swiper-slide">
+                                    <div class="item-inner">
+                                        <a asp-controller="News"
+                                       asp-action="BlogDetails"
+                                       asp-route-id="@newsItem.Id">
+                                            <div class="card" style="height:350px">
+                                                <div class="card-body flex-[1_1_auto] p-[40px]">
+                                                    <blockquote class="text-[0.85rem] leading-[1.7] font-medium pl-4 icon !mb-0 relative p-0 border-0 before:content-['\201d'] before:absolute before:top-[-1.5rem] before:left-[-0.9rem] before:text-[rgba(52,63,82,0.05)] before:text-[10rem] before:leading-none before:z-[1]">
+                                                        <div class="flex items-center text-left">
+                                                            <span class=" flex-[0_0_auto] px-[15px]  mb-2 xl:mb-0 lg:mb-0 md:mb-0 flex items-center text-[#60697b]">
+                                                                <span class="flex items-center justify-center font-bold leading-[1.7] tracking-[-0.01rem] rounded-[100%] bg-[rgba(226,98,107)] opacity-100 text-white !w-9 !h-9 text-[0.85rem] mr-3">
+                                                                    @firstTwoLetters
+                                                                </span>
+                                                            </span>
+                                                            <span class="md:w-9/12  max-w-full px-4 mb-2 md:mb-0 flex items-center text-[#60697b]">
+                                                                <span class="w-full break-words text-wrap leading-[1.5] text-base sm:text-lg"
+                                                                      style="
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;">
+                                                                    @newsItem.Title
+                                                                </span>
+                                                            </span>
+
+                                                        </div>
+                                                        <div style="height:30px"></div>
+                                                        <p style="color:#524f47;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;">
+                                                            @newsItem.Summary
+                                                        </p>
+
+                                                    </blockquote>
+                                                </div>
+                                                <!-- /.card-body -->
+                                            </div>
+                                        </a>
+                                        <!-- /.card -->
+                                    </div>
+                                    <!-- /.item-inner -->
+                                </div>
+
+                            }
+
+                        </div>
+                        <!--/.swiper-wrapper -->
+                    </div>
+                    <!-- /.swiper -->
+                </div>
+                <!-- /.swiper-container -->
+            </div>
+            <!-- /.relative -->
+        </div>
+
+
+        <div class="flex flex-wrap mx-[-15px] xl:mx-[-35px] lg:mx-[-20px] mt-[-50px] !mb-[4.5rem] xl:!mb-[8rem] lg:!mb-[8rem] md:!mb-[8rem] items-center">
+            <div class="md:w-8/12 lg:w-6/12 xl:w-6/12 w-full flex-[0_0_auto] px-[15px] xl:px-[35px] lg:px-[20px] mt-[50px] max-w-full !relative">
+                <div class="shape !bg-[#eff7fa] !rounded-[50%] rellax !w-[10rem] !h-[10rem] !absolute z-[1]" data-rellax-speed="1" style="top: -2rem; left: -1.9rem;"></div>
+                <figure class="rounded-[0.4rem] relative z-[2]"><img class="rounded-[0.4rem]" src="~/Images/about10.png" srcset="~/Images/about10.png" alt="image"></figure>
+            </div>
+            <!--/column -->
+            <div class="xl:w-6/12 lg:w-6/12 w-full flex-[0_0_auto] xl:px-[35px] lg:px-[20px] px-[15px] max-w-full mt-[50px]">
+                <h2 class="xl:text-[2rem] text-[calc(1.325rem_+_0.9vw)] !leading-[1.2] !font-DMSerif !font-normal !tracking-normal !mb-3 [word-spacing:normal!important]">Who Are We?</h2>
+                <p class="lead !text-[1.05rem] !leading-[1.6] font-medium">HAAIRD is a <span class="relative z-[2] whitespace-nowrap after:content-[''] after:block after:absolute after:w-[102.5%] after:h-[30%] after:left-[-1.5%] after:z-[-1] after:transition-all after:duration-[0.2s] after:ease-in-out after:mt-0 after:rounded-[5rem] after:bottom-[9%] motion-reduce:after:transition-none after:bg-[rgba(84,168,199,.12)]">career development platform</span> tailored to healthcare professionals.</p>
+                <p class="!mb-6">It bridges the gap between aspiring students and reputed universities, helping them find the right courses, certifications, and job opportunities with ease.</p>
+                <div class="flex flex-wrap mx-[-15px] xl:mx-[-25px] mt-[-30px]">
+                    <div class="xl:w-6/12 lg:w-6/12 md:w-6/12 w-full flex-[0_0_auto] xl:px-[25px] px-[15px] max-w-full mt-[30px]">
+                        <div class="flex flex-row">
+                            <div>
+                                <img src="~/assets/img/icons/lineal/target.svg" class="svg-inject icon-svg !w-[2.2rem] !h-[2.2rem]  !mr-4" alt="image">
+                            </div>
+                            <div>
+                                <h4 class="!mb-1">Course Finder</h4>
+                                <p class="!mb-0">Connects you to globally recognized healthcare courses offered by trusted universities.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/column -->
+                    <div class="xl:w-6/12 lg:w-6/12 md:w-6/12 w-full flex-[0_0_auto] xl:px-[25px] px-[15px] max-w-full mt-[30px]">
+                        <div class="flex flex-row">
+                            <div>
+                                <img src="~/assets/img/icons/lineal/award-2.svg" class="svg-inject icon-svg !w-[2.2rem] !h-[2.2rem]  !mr-4" alt="image">
+                            </div>
+                            <div>
+                                <h4 class="!mb-1">Career Guidance</h4>
+                                <p class="!mb-0">Offers expert advice to help you plan and achieve your career goals.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="xl:w-6/12 lg:w-6/12 md:w-6/12 w-full flex-[0_0_auto] xl:px-[25px] px-[15px] max-w-full mt-[30px]">
+                        <div class="flex flex-row">
+                            <div>
+                                <img src="~/assets/img/icons/lineal/target.svg" class="svg-inject icon-svg !w-[2.2rem] !h-[2.2rem]  !mr-4" alt="image">
+                            </div>
+                            <div>
+                                <h4 class="!mb-1">Placement Services</h4>
+                                <p class="!mb-0">Provides access to job opportunities in top healthcare institutions domestic and abroad.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/column -->
+                    <div class="xl:w-6/12 lg:w-6/12 md:w-6/12 w-full flex-[0_0_auto] xl:px-[25px] px-[15px] max-w-full mt-[30px]">
+                        <div class="flex flex-row">
+                            <div>
+                                <img src="~/assets/img/icons/lineal/award-2.svg" class="svg-inject icon-svg !w-[2.2rem] !h-[2.2rem]  !mr-4" alt="image">
+                            </div>
+                            <div>
+                                <h4 class="!mb-1">Seamless Process</h4>
+                                <p class="!mb-0">Reduces the hassle of communication by presenting all essential course and enrollment details in one place.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/column -->
+                </div>
+                <!--/.row -->
+            </div>
+            <!--/column -->
+        </div>
+
+        <!-- /.row -->
+        <!--/.card -->
+        <div class="flex flex-wrap mx-[-15px] xl:mx-[-35px] lg:mx-[-20px] mt-[-50px] xl:mt-0 lg:mt-0 mb-[4rem] xl:!mb-[7rem] lg:!mb-[7rem] md:!mb-[7rem]">
+            <div class="xl:w-4/12 lg:w-4/12 w-full flex-[0_0_auto] xl:px-[35px] lg:px-[20px] px-[15px] max-w-full mt-[50px] xl:mt-0 lg:mt-0 ">
+                <h2 class="xl:text-[2rem] text-[calc(1.325rem_+_0.9vw)] !leading-[1.2] !font-DMSerif !font-normal !tracking-normal mb-[.75rem] xxl:pr-[1.25rem] [word-spacing:normal!important]">Our network </h2>
+                <p class="lead text-[1.05rem] !leading-[1.6] !mb-0 xxl:pr-[1.25rem]">HAAIRD’s <span class="relative z-[2] whitespace-nowrap after:content-[''] after:block after:absolute after:w-[102.5%] after:h-[30%] after:left-[-1.5%] after:z-[-1] after:transition-all after:duration-[0.2s] after:ease-in-out after:mt-0 after:rounded-[5rem] after:bottom-[9%] motion-reduce:after:transition-none after:bg-[rgba(84,168,199,.12)]">network spans leading  </span> healthcare institutions, universities, and professionals across India and beyond.</p>
+            </div>
+            <!-- /column -->
+            <div class="xl:w-8/12 lg:w-8/12 w-full flex-[0_0_auto] xl:px-[35px] lg:px-[20px] px-[15px] max-w-full mt-[50px] xl:mt-0 lg:mt-0 ">
+                <div class="flex flex-wrap mx-[-15px] md:mx-[-20px] lg:mx-[-20px] xl:mx-[-35px] mt-[-2.5rem]">
+                    @foreach (var item in Model.Organization)
+                    {
+                        <div class="xl:w-3/12 lg:w-3/12 md:w-3/12 w-6/12 flex-[0_0_auto] xl:px-[35px] lg:px-[20px] md:px-[20px] px-[15px] max-w-full mt-[60px]">
+                            <figure class="px-4 lg:!px-3 xxl:!px-5"><img src="~/uploads/@item.ImagePath" alt="image"></figure>
+                        </div>
+                    }
+
+                    <!--/column -->
+                </div>
+                <!--/.row -->
+            </div>
+            <!-- /column -->
+        </div>
+
+        <!--/.row -->
+        <div class="card !bg-[#eff7fa] !rounded-[0.8rem]">
+            <div class="card-body md:!p-10 lg:!p-10 xl:!p-12 p-[40px]">
+                <div class="flex flex-wrap mx-[-15px] xl:mx-[-35px] lg:mx-[-20px] mt-[-50px]">
+                    <div class="xl:w-6/12 lg:w-6/12 w-full flex-[0_0_auto] xl:px-[35px] lg:px-[20px] px-[15px] max-w-full mt-[50px]">
+                        <h3 class="xl:text-[2rem] text-[calc(1.325rem_+_0.9vw)] !leading-[1.2] font-DMSerif font-normal tracking-normal mb-4 [word-spacing:normal!important]">Frequently Asked Questions</h3>
+                        <p class="lead text-[1.05rem] !leading-[1.6] font-medium !mb-0">If you don't see an answer to your question, you can send us an email from our contact form.</p>
+                    </div>
+                    <!--/column -->
+                    <div class="xl:w-6/12 lg:w-6/12 w-full flex-[0_0_auto] xl:px-[35px] lg:px-[20px] px-[15px] max-w-full mt-[50px]">
+                        <!-- /.accordion -->
+
+                        <div class="accordion accordion-wrapper" id="accordionExample">
+                            <div class="card plain accordion-item">
+                                <div class="card-header !mb-0 !p-[0_0_.8rem_0] !border-0 !bg-inherit" id="headingOne">
+                                    <button class="before:!text-[#54a8c7] hover:!text-[#54a8c7] collapsed" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne"> What is the benefit of joining HAAIRD? </button>
+                                </div>
+                                <!--/.card-header -->
+                                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div class="card-body flex-[1_1_auto]  pb-4 xl:p-[2rem_2.5rem_1.25rem] lg:p-[2rem_2.5rem_1.25rem] md:p-[2rem_2.5rem_1.25rem]">
+                                        <p>
+                                            HAAIRD simplifies the process of finding the right course and university by:
+                                        </p>
+                                        <p>
+                                            •	Ease of Discovery: Offering a curated list of courses from reputed universities, tailored to your career goals.
+                                        </p>
+                                        <p>
+                                            •	Time-Saving: Minimizing back-and-forth communication by providing all essential information—course details, costs, duration, and certification eligibility—in one place.
+                                        </p>
+                                        <p>
+                                            •	Trusted Recommendations: Connecting you with universities known for globally recognized certifications, ensuring your investment leads to career advancement.
+                                        </p>
+                                        <p>
+                                            •	Seamless Process: From exploring options to enrolment, HAAIRD ensures a hassle-free experience with expert guidance at every step.
+                                            ________________________________________
+                                        </p>
+                                    </div>
+                                    <!--/.card-body -->
+                                </div>
+                                <!--/.accordion-collapse -->
+                            </div>
+                            <!--/.accordion-item -->
+                            <div class="card plain accordion-item">
+                                <div class="card-header !mb-0 !p-[0_0_.8rem_0] !border-0 !bg-inherit" id="headingTwo">
+                                    <button class="before:!text-[#54a8c7] hover:!text-[#54a8c7] collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> How can HAAIRD help me find a job? </button>
+                                </div>
+                                <!--/.card-header -->
+                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                    <div class="card-body flex-[1_1_auto]  pb-4 xl:p-[2rem_2.5rem_1.25rem] lg:p-[2rem_2.5rem_1.25rem] md:p-[2rem_2.5rem_1.25rem]">
+                                        <p>HAAIRD connects you with top healthcare employers Globally. From job listings to placement assistance, we provide resources to help you secure the right opportunity for your career.</p>
+                                    </div>
+                                    <!--/.card-body -->
+                                </div>
+                                <!--/.accordion-collapse -->
+                            </div>
+                            <!--/.accordion-item -->
+                            <div class="card plain accordion-item">
+                                <div class="card-header !mb-0 !p-[0_0_.8rem_0] !border-0 !bg-inherit" id="headingThree">
+                                    <button class="before:!text-[#54a8c7] hover:!text-[#54a8c7] collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">How does HAAIRD provide career guidance? </button>
+                                </div>
+                                <!--/.card-header -->
+                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                    <div class="card-body flex-[1_1_auto]  pb-4 xl:p-[2rem_2.5rem_1.25rem] lg:p-[2rem_2.5rem_1.25rem] md:p-[2rem_2.5rem_1.25rem]">
+                                        <p>HAAIRD offers one-on-one sessions with career experts, group webinars, and tools to help you create a personalized career growth plan. We guide you to the right courses and certifications to achieve your professional goals.</p>
+                                    </div>
+                                    <!--/.card-body -->
+                                </div>
+                                <!--/.accordion-collapse -->
+                            </div>
+                            <!--/.accordion-item -->
+                            <div class="card plain accordion-item">
+                                <div class="card-header !mb-0 !p-[0_0_.8rem_0] !border-0 !bg-inherit" id="headingFour">
+                                    <button class="before:!text-[#54a8c7] hover:!text-[#54a8c7] collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour"> How can I search for jobs?</button>
+                                </div>
+                                <!--/.card-header -->
+                                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                                    <div class="card-body flex-[1_1_auto]  pb-4 xl:p-[2rem_2.5rem_1.25rem] lg:p-[2rem_2.5rem_1.25rem] md:p-[2rem_2.5rem_1.25rem]">
+                                        <p>To search for jobs, you must register with HAAIRD. Once registered, HAAIRD provides exclusive job listings tailored to your profile, helping you find opportunities that match your skills and aspirations.</p>
+                                    </div>
+                                    <!--/.card-body -->
+                                </div>
+                                <!--/.accordion-collapse -->
+                            </div>
+                            <!--/.accordion-item -->
+                        </div>
+                        <!--/.accordion -->
+                    </div>
+                    <!--/column -->
+                </div>
+                <!--/.row -->
+            </div>
+            <!--/.card-body -->
+        </div>
+
+        <div class="modal fade !m-0 !p-0" id="modal-signup" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content !text-center">
+                    <div class="relative flex-auto pt-[2.5rem] pr-[2.5rem] pb-[2.5rem] pl-[2.5rem]">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h2 class="mb-3 text-left !leading-[1.35]">Sign up to Sandbox</h2>
+                        <p class="lead text-[0.9rem] font-medium !leading-[1.65] !mb-6 text-left">Registration takes less than a minute.</p>
+                        <form class="text-left !mb-3">
+                            <div class="form-floating relative !mb-4">
+                                <input type="text" class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Name" id="loginName">
+                                <label for="loginName" class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">Name</label>
+                            </div>
+                            <div class="form-floating relative !mb-4">
+                                <input type="email" class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Email" id="loginEmail">
+                                <label for="loginEmail" class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">Email</label>
+                            </div>
+                            <div class="form-floating relative password-field mb-4">
+                                <input type="password" class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Password" id="loginPassword">
+                                <span class="password-toggle absolute -translate-y-2/4 cursor-pointer text-[0.9rem] text-[#959ca9] right-3 top-2/4"><i class="uil uil-eye"></i></span>
+                                <label for="loginPassword" class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">Password</label>
+                            </div>
+                            <div class="form-floating relative password-field mb-4">
+                                <input type="password" class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Confirm Password" id="loginPasswordConfirm">
+                                <span class="password-toggle absolute -translate-y-2/4 cursor-pointer text-[0.9rem] text-[#959ca9] right-3 top-2/4"><i class="uil uil-eye"></i></span>
+                                <label for="loginPasswordConfirm" class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">Confirm Password</label>
+                            </div>
+                            <a class="btn btn-aqua text-white !bg-[#54a8c7] border-[#54a8c7] hover:text-white hover:bg-[#54a8c7] hover:border-[#54a8c7] focus:shadow-[rgba(79,152,181,1)] focus:text-white active:text-white active:bg-[#54a8c7] active:border-[#54a8c7] disabled:text-white disabled:bg-[#54a8c7] disabled:border-[#54a8c7] !rounded-[50rem] btn-login w-full mb-2">Sign Up</a>
+                        </form>
+                        <!-- /form -->
+                        <p class="!mb-0">Already have an account? <a href="#" data-bs-target="#modal-signin" data-bs-toggle="modal" data-bs-dismiss="modal" class="hover text-[#54a8c7]">Sign in</a></p>
+                        <div class="divider-icon !my-4">or</div>
+                        <nav class="nav social justify-center !text-center">
+                            <a href="#" class="btn btn-circle btn-sm btn-google !text-white !bg-[#e44134] !border-transparent !w-[1.8rem] !h-[1.8rem] !text-[0.8rem] !m-[0_.35rem] !inline-flex !items-center !justify-center !leading-none !p-0 !rounded-[100%]"><i class="uil uil-google before:content-['\eb50']"></i></a>
+                            <a href="#" class="btn btn-circle btn-sm btn-facebook-f !text-white !bg-[#4470cf] !border-transparent !w-[1.8rem] !h-[1.8rem] !text-[0.8rem] !m-[0_.35rem] !inline-flex !items-center !justify-center !leading-none !p-0 !rounded-[100%]"><i class="uil uil-facebook-f before:content-['\eae2']"></i></a>
+                            <a href="#" class="btn btn-circle btn-sm btn-twitter !text-white !bg-[#5daed5] !border-transparent !w-[1.8rem] !h-[1.8rem] !text-[0.8rem] !m-[0_.35rem] !inline-flex !items-center !justify-center !leading-none !p-0 !rounded-[100%]"><i class="uil uil-twitter before:content-['\ed59']"></i></a>
+                        </nav>
+                        <!--/.social -->
+                    </div>
+                    <!--/.modal-content -->
+                </div>
+                <!--/.modal-body -->
+            </div>
+            <!--/.modal-dialog -->
+        </div>
+        <!--/.card -->
     </div>
+    <!-- /.container -->
 </section>
-
-
-<section class="container my-5">
-    <!-- Career Guidance Section -->
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <div class="row mb-4">
-                <div class="col-md-12 text-center">
-                    <h2 class="fw-bold">Career Guidance</h2>
-                    <p>Our Career Guidance service offers tailored consultations to help you identify the best path in healthcare. From personalized counseling, certification support, to profile building, we help you achieve your career goals in the healthcare industry.</p>
-                    <a class="btn btn-secondary">Learn More</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <!-- Placements Section -->
-            <div class="row mb-4">
-                <div class="col-md-12 text-center">
-                    <h2 class="fw-bold">Placements</h2>
-                    <p>Find the perfect healthcare job globally. Our placements team works with top healthcare employers to connect you with the best opportunities. Whether you’re seeking a local or international role, we streamline the process for you.</p>
-                    <a class="btn btn-secondary">Explore Jobs</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <!-- About Us Section -->
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h2 class="fw-bold">About Sahayee</h2>
-                    <p>Sahayee is a leading platform dedicated to healthcare professionals, offering comprehensive career services including career guidance, job placements, and certification support. Our mission is to help healthcare workers navigate their career paths and connect with top employers across the globe.</p>
-                    <a class="btn btn-secondary" href="/About">Read More</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-
+<!-- /section -->

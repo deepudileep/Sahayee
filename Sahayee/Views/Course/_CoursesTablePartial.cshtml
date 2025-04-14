@@ -15,14 +15,14 @@
         @foreach (var job in Model)
         {
             <tr>
-                <td>@job.Name</td>
+                <td>@job.CourseTitle</td>
                 <td>@job.Category</td>
                 <td>@job.Location</td>
                 <td>@job.Institution</td>
                 <td>@job.Duration</td>
                 <td>
-                    <button class="btn btn-warning" onclick="openModal('@job.Id')">Edit</button>
-                    <a href="/Course/AdminApplicantDetails?courseId=@job.Id" class="btn btn-warning">Details</a>
+                    <a href="/Course/AdminApplicantDetails?courseId=@job.Id" class="btn btn-primary">Details</a>
+                    <a href="/Course/Create?id=@job.Id" class="btn btn-primary">Edit</a>
                    @* <button class="btn btn-danger" onclick="openDeleteModal('@job.Id')">Delete</button>*@
                 </td>
             </tr>

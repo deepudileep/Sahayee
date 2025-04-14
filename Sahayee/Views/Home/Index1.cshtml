@@ -1,0 +1,296 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model Sahayee.Models.ViewModel.HomeViewModels
+
+<!-- Hero Section -->
+<div class="rounded-5" style="width:100%;background:#abc5e5;margin-top:20px">
+    <div class="p-4 p-xl-5">
+        <div class="row align-items-center">
+            <!-- Image Section -->
+            <div class="col-lg-6 text-center text-lg-end order-lg-2">
+                <img class="img-fluid" src="~/Images/co3.png" srcset="./assets/img/photos/co3@2x.png 2x" alt="image" style="max-width: 80%; animation: fadeIn 700ms ease;">
+
+            </div>
+            <!-- Content Section -->
+            <div class="col-lg-6 text-center text-lg-start mt-4 mt-lg-0">
+                <h1 class="display-5 fw-bold mb-4" style="color:#302b2b">Welcome to HAAIRD</h1>
+                <p class="lead mb-4" style="font-size:25px">Transforming careers, empowering professionals, and connecting talent with global opportunities.</p>
+                <div class="d-flex justify-content-center justify-content-lg-start">
+                    <!-- Button to Trigger Modal -->
+                    <button type="button" class="btn btn-lg  me-3" data-bs-toggle="modal" data-bs-target="#assistanceModal" style="background: #54A8C7;border: none;color:white">
+                        Apply for Assistance
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Section -->
+<div class="modal fade" id="assistanceModal" tabindex="-1" aria-labelledby="assistanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-3 shadow-lg">
+            <div class="modal-header  text-white" style="background:#abc5e5">
+                <h5 class="modal-title" id="assistanceModalLabel">Apply for Assistance</h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="assistanceForm" method="post">
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <input type="text" name="name" class="form-control form-control-lg" placeholder="Your Name" required value="@Model.Query.Name">
+                    </div>
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <input type="email" name="email" class="form-control form-control-lg" placeholder="Your Email" required value="@Model.Query.Email">
+                    </div>
+                    <!-- Contact Number -->
+                    <div class="mb-3">
+                        <input type="tel" name="contact" class="form-control form-control-lg" placeholder="Your Contact Number" required value="@Model.Query.Contact">
+                    </div>
+                    <!-- Profession -->
+                    <div class="mb-3">
+                        <select name="profession" class="form-select form-select-lg" required>
+                            <option value="" disabled selected>Select Profession</option>
+                            <option value="Nurse">Nurse</option>
+                            <option value="Home Care Assistant">Home Care Assistant</option>
+                            <option value="Physician">Physician</option>
+                            <option value="Lab Technician">Lab Technician</option>
+                        </select>
+                    </div>
+                    <!-- Country -->
+                    <div class="mb-3">
+                        <select name="country" class="form-select form-select-lg" required>
+                            <option value="" disabled selected>Looking for Opportunities in</option>
+                            <option value="UK">UK</option>
+                            <option value="Canada">Canada</option>
+                            <option value="Germany">Germany</option>
+                        </select>
+                    </div>
+                    <!-- Message -->
+                    <div class="mb-3">
+                        <textarea name="message" class="form-control form-control-lg" placeholder="Your Message" rows="4"></textarea>
+                    </div>
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <input type="submit" value="Submit Query" class="btn w-100 mb-3 fs-5" style="background:#abc5e5">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="py-5">
+    <div class="row">
+        @for (int i = 0; i < Model.News.Count; i++)
+        {
+            var newsItem = Model.News[i];
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card rounded-5 shadow-sm">
+                    <div class="card-body text-center" style="height:350px">
+                        <!-- Use index to dynamically set the image path -->
+                        <img src="@Url.Content("~/images/news" + (i + 1) + ".png")" class="icon mb-3" width="40" height="40" alt="News Icon">
+
+                        <h2 style=" display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;">
+                            @newsItem.Title
+                        </h2>
+                        <div style="height:5px"></div>
+                        <p class="mb-2 lead" style="font-size: 20px;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;">
+                            @newsItem.Content
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+<div class="mt-4">
+    <div class="row align-items-center">
+        <!-- Image Section -->
+        <div class="col-md-6 col-lg-6 col-xl-6 position-relative px-3 mb-5 mb-md-0">
+            <div class="custom-shape"></div>
+            <figure class="rounded-3 position-relative z-2">
+                <img src="~/Images/about10.jpg" class="img-fluid rounded-3" alt="About Image">
+            </figure>
+        </div>
+
+        <!-- Content Section -->
+        <div class="col-md-6 col-lg-6 col-xl-6 px-3">
+            <h2 class="h2 mb-3 text-dark">Who Are We?</h2>
+            <p class="lead text-muted mb-4">
+                At HAAIRD, we understand that every professional’s journey is unique.
+                That’s why we’ve created a platform that blends personalized career guidance,
+                comprehensive training resources, and global placement opportunities.
+                Whether you’re a seasoned healthcare professional or just starting, HAAIRD is your trusted partner in career growth and success.
+            </p>
+
+            <div class="row mx-0">
+                <!-- Mission Block -->
+                <div class="col-md-6 mb-4">
+                    <div class="d-flex align-items-center">
+                        <!-- Replace this with the actual path to your PNG icon -->
+                        <img src="~/images/mission.png" alt="Mission Icon" class="icon-size me-3" width="60" height="50">
+                        <div>
+                            <h4 class="mb-1">Our Mission</h4>
+                            <p class="mb-0">
+                                Empower professionals worldwide by bridging the gap between talent and opportunity.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Award Block -->
+                <div class="col-md-6 mb-4">
+                    <div class="d-flex align-items-center">
+                        <!-- Replace this with the actual path to your PNG icon -->
+                        <img src="~/images/vision.png" alt="Mission Icon" class="icon-size me-3" width="50" height="50">
+                        <div>
+                            <h4 class="mb-1">Our Vision</h4>
+                            <p class="mb-0">
+                                We aim to provide a seamless experience for individuals aspiring to grow in their careers, offering tools, resources, and connections to help them excel in today’s competitive global landscape.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="rounded-5" style="width:100%;background:#abc5e5;margin-top:50px;margin-bottom:50px">
+    <div class="p-4 p-xl-5">
+        <div class="row mt-4 mb-4">
+            <div class="col-xl-4 col-lg-4 col-12 mb-3">
+                <h3 class="fs-1 fw-normal mb-3">We are proud of our creative team</h3>
+                <p class="lead mb-0">Just sit back and relax while we <span class="position-relative">take care</span> of your business needs.</p>
+            </div>
+            <!-- /column -->
+
+            <div class="col-xl-8 col-lg-8 col-12 mt-5 mt-lg-0 mt-xl-0">
+                <div class="row text-center">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-12 mb-3">
+                        <img src="~/images/4.png" alt="Completed Projects Icon" class="img-fluid mb-3" style="width: 4.6rem; height: 4.6rem;">
+                        <h3 class="fs-1 mb-2">7518</h3>
+                        <h4 class=" lead">Total Jobs</h4>
+                    </div>
+                    <!--/column -->
+
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-12 mb-3">
+                        <img src="~/images/5.png" alt="Cups of Coffee Icon" class="img-fluid mb-3" style="width: 4.6rem; height: 4.6rem;">
+                        <h3 class="fs-1 mb-2">950</h3>
+                        <h4 class=" lead">Total Course Available</h4>
+                    </div>
+                    <!--/column -->
+
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-12 mb-3">
+                        <img src="~/images/6.png" alt="Happy Clients Icon" class="img-fluid mb-3" style="width: 4.6rem; height: 4.6rem;">
+                        <h3 class="fs-1 mb-2">284</h3>
+                        <h4 class=" lead">Happy Clients</h4>
+                    </div>
+                    <!--/column -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mt-4">
+    <div class="row align-items-center">
+        <!-- Image Section -->
+        <div class="col-md-6 col-lg-6 col-xl-6 position-relative px-3 mb-5 mb-md-0">
+            <div class="custom-shape"></div>
+            <figure class="rounded-3 position-relative z-2">
+                <img src="~/Images/about11.jpg" class="img-fluid rounded-3" alt="About Image">
+            </figure>
+        </div>
+
+        <!-- Content Section -->
+        <div class="col-md-6 col-lg-6 col-xl-6 px-3">
+            <h2 class="h2 mb-3 text-dark">What We Do</h2>
+
+            <div class="row mx-0">
+                <!-- Mission Block -->
+                <div class="col-md-12 mb-4">
+                    <div class="d-flex align-items-center">
+                        <!-- Replace this with the actual path to your PNG icon -->
+                        <img src="~/images/1.png" alt="Mission Icon" class="icon-size me-3" width="60" height="50">
+                        <div>
+                            <h4 class="mb-1">Global Placement Services</h4>
+                            <p class="mb-0 lead">
+                                HAAIRD partners with top institutions across the globe to bring you unparalleled job opportunities. From nurses and technicians to specialized roles in healthcare.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Award Block -->
+                <div class="col-md-12 mb-4">
+                    <div class="d-flex align-items-center">
+                        <!-- Replace this with the actual path to your PNG icon -->
+                        <img src="~/images/2.png" alt="Mission Icon" class="icon-size me-3" width="50" height="50">
+                        <div>
+                            <h4 class="mb-1">Personalized Career Guidance</h4>
+                            <p class="mb-0 lead">
+                                Our experts offer tailored advice based on your skills, goals, and aspirations. Through skill-gap analysis, resume building, and interview preparation, we ensure you’re ready to achieve your dream career.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-4">
+                    <div class="d-flex align-items-center">
+                        <!-- Replace this with the actual path to your PNG icon -->
+                        <img src="~/images/3.png" alt="Mission Icon" class="icon-size me-3" width="50" height="50">
+                        <div>
+                            <h4 class="mb-1">Comprehensive Training & Certification</h4>
+                            <p class="mb-0 lead">
+                                Access industry-relevant training programs and certifications designed to enhance your professional skills.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        // Handle form submission with AJAX
+        $('#assistanceForm').on('submit', function (e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Collect form data
+            var formData = $(this).serialize();
+
+            // AJAX request to submit the form data
+            $.ajax({
+                url: '/Home/SaveUserQuery', // Update this URL to the controller and action that will handle the request
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    // If the form submission is successful, hide the modal and reset the form
+                    $('#assistanceModal').modal('hide'); // Close the modal
+                    $('#assistanceForm')[0].reset(); // Reset the form fields
+                },
+                error: function (xhr, status, error) {
+                    // Handle any error during the AJAX request
+                }
+            });
+        });
+    });
+</script>
+
+
+

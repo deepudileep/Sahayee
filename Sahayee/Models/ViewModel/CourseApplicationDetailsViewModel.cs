@@ -6,9 +6,10 @@ namespace Sahayee.Models.ViewModel
     public class CourseApplicationDetailsViewModel
     {
         public List<CourseApplicationWithDetails> CourseApplicationWithDetails { get; set; }
-        public List<Categories> Categories { get; set; }
-        public List<CLocations> Location { get; set; }
-        public List<Institution> Institutions { get; set; }
+        public List<Categories>? Categories { get; set; }
+        public List<Organization>? Institutions { get; set; }
+        public List<CLocations>? CourseTypes { get; set; }
+
     }
 
     public class CourseApplicationWithDetails
@@ -23,7 +24,7 @@ namespace Sahayee.Models.ViewModel
         public string FollowUpBy { get; set; }
         public List<CourseFollowUp> FollowUpHistory { get; set; }
         public Course CourseDetails { get; set; }
-        public UserDetails UserDetails { get; set; }
+        public User UserDetails { get; set; }
     }
     
     

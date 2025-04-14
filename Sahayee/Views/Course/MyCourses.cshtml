@@ -1,88 +1,45 @@
 ﻿@model Sahayee.Models.ViewModel.CourseApplicationDetailsViewModel
 
 
-<div class="container mt-5">
-    <div class="row">
-        <!-- Filter Panel -->
-        <aside class="col-lg-3 col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Filter Courses</h5>
-                    <form>
-                        <!-- Key/Title Filter -->
-                        <div class="mb-3">
-                            <label for="category" class="form-label">Key, Title</label>
-                            <input type="text" id="category" name="category" class="form-control" placeholder="Search by title or keyword">
-                        </div>
-                        <!-- Location Filter -->
-                        <div class="mb-3">
-                            <label for="location" class="form-label">Location</label>
-                            <select id="location" name="location" class="form-select">
-                                @foreach (var location in Model.Location)
-                                {
-                                    <option value="@location.Id">@location.Name</option>
-                                }
-                            </select>
-                        </div>
-                        <!-- Experience Level Filter -->
-                        <div class="mb-3">
-                            <label for="experience" class="form-label">Istituions</label>
-                            <select class="form-select me-2" id="instituion">
-                                @foreach (var position in Model.Institutions)
-                                {
-                                    <option value="@position.Id">@position.Name</option>
-                                }
-                            </select>
-                        </div>
-                        <!-- Department Filter -->
-                        <div class="mb-3">
-                            <label for="department" class="form-label">Categories</label>
-                            <select id="categories" name="categories" class="form-select">
-                                @foreach (var position in Model.Categories)
-                                {
-                                    <option value="@position.Id">@position.Name</option>
-                                }
-                            </select>
-                        </div>
-                        <!-- Submit Button -->
-                        <div class="d-grid">
-                            <button type="button" class="btn btn-primary" onclick="filterCourses()">Apply Filters</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </aside>
+<div class="wrapper  bg-[rgba(246,247,249,1)] ">
+    <div class="container py-3 xl:!py-5 lg:!py-5 md:!py-5">
+        <nav class="inline-block" aria-label="breadcrumb">
+            <ol class="breadcrumb  flex flex-wrap bg-[none] p-0 !rounded-none list-none !mb-0">
+                <li class="breadcrumb-item flex text-[#60697b]"><a class=" text-inherit hover:text-[#3f78e0]" href="/Home/Index">Home</a></li>
+                <li class="breadcrumb-item flex text-[#60697b] pl-2 before:font-normal before:flex before:items-center before:text-[rgba(96,105,123,0.35)] before:content-['\e931'] before:text-[0.9rem] before:-mt-px before:pr-2 before:font-Unicons active" aria-current="page">Course</li>
+            </ol>
+        </nav>
+        <!-- /nav -->
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /section -->
+<section class="wrapper !bg-[#ffffff]">
+    <div class="container pb-[4.5rem] xl:pb-24 lg:pb-24 md:pb-24 pt-14">
+        <div class="flex flex-wrap mx-[-15px] mt-[-50px]">
+            <div class="xl:w-12/12 lg:w-12/12 w-full flex-[0_0_auto] px-[15px] max-w-full xl:!order-2 lg:!order-2 mt-[50px]">
+                <div class="flex flex-wrap mx-[-15px] items-center mb-10 !relative z-[1]">
+                    <div class="md:w-12/12 lg:w-12/12 xl:w-12/12 w-full flex-[0_0_auto] px-[15px] max-w-full xl:pr-40">
 
-        <!-- Job Listings -->
-        <section class="col-lg-9 col-md-8">
-            <div class="row g-3">
-                <div id="jobTableContainer">
+                        <p class="mb-0 text-[#aab0bc]"> @Model.CourseApplicationWithDetails.Count results</p>
+                        
+                    </div>
+                    <!--/column -->
+                   
+
+                    <!--/column -->
+                </div>
+                <div class="flex flex-wrap mx-[-15px] items-center mb-10 !relative z-[1]">
                     @await Html.PartialAsync("_CoursesApplicationDetailsPartial", Model)
                 </div>
-
+               
+                <!-- /nav -->
             </div>
-        </section>
+            <!-- /column -->
+            
+            <!-- /column .sidebar -->
+        </div>
+        <!-- /.row -->
     </div>
-</div>
-<script>
-    function filterCourses() {
-
-        const categories = document.getElementById('categories').value;
-        const location = document.getElementById('location').value;
-        const instituion = document.getElementById('instituion').value;
-
-        fetch(`/Course/ReloadCourse?category=${categories}&location=${location}&institution=${instituion}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'text/html' // Expect HTML response
-            }
-        })
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('jobTableContainer').innerHTML = html;
-            })
-            .catch(error => console.error('Error fetching Course:', error));
-    }
-
-
-</script>
+    <!-- /.container -->
+</section>

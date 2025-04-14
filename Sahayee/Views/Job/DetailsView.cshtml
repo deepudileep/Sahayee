@@ -1,0 +1,139 @@
+﻿@model Sahayee.Models.DB.Jobs
+
+<div class=" my-5">
+    <!-- Display Message -->
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Job Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+        <h2 class="text-primary fw-bold">@Model.JobTitle</h2>
+        <div class="d-flex">
+            <a href="/Jobs" class="btn btn-outline-secondary me-2">Back</a>
+            <form method="post" asp-action="ApplyForJob" class="m-0">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-success">Apply Now</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Job Overview Section -->
+    <div class="col-md-12">
+
+        <!-- Basic Job Information -->
+        <section class="mb-5">
+            <h3 class="h4">Basic Job Information</h3>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Job Title:</strong> @Model.JobTitle</li>
+                <li class="list-group-item"><strong>Company Name:</strong> @Model.CompanyName</li>
+                <li class="list-group-item"><strong>Job Type:</strong> @Model.JobType</li>
+                <li class="list-group-item"><strong>Job Location:</strong> @Model.JobLocation</li>
+                <li class="list-group-item"><strong>Is Remote:</strong> @(Model.IsRemote ? "Yes" : "No")</li>
+                <li class="list-group-item"><strong>Salary Range:</strong> @Model.SalaryRange</li>
+            </ul>
+        </section>
+
+        <!-- Job Description -->
+        <section class="mb-5">
+            <h3 class="h4">Job Description</h3>
+            <p><strong>Overview:</strong> @Model.JobOverview</p>
+            <p><strong>Responsibilities:</strong></p>
+            <ul>
+                @foreach (var responsibility in Model.Responsibilities)
+                {
+                    <li>@responsibility</li>
+                }
+            </ul>
+            <p><strong>Required Skills:</strong></p>
+            <ul>
+                @foreach (var skill in Model.RequiredSkills)
+                {
+                    <li>@skill</li>
+                }
+            </ul>
+            <p><strong>Certifications Required:</strong></p>
+            <ul>
+                @foreach (var cert in Model.CertificationsRequired)
+                {
+                    <li>@cert</li>
+                }
+            </ul>
+        </section>
+
+        <!-- Job Qualifications -->
+        <section class="mb-5">
+            <h3 class="h4">Qualifications</h3>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Education Requirements:</strong> @Model.EducationRequirements</li>
+                <li class="list-group-item"><strong>Experience Level:</strong> @Model.ExperienceLevel</li>
+                <li class="list-group-item"><strong>Preferred Qualifications:</strong> @Model.PreferredQualifications</li>
+            </ul>
+        </section>
+
+        <!-- Job Details -->
+        <section class="mb-5">
+            <h3 class="h4">Workplace Details</h3>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Workplace Setting:</strong> @Model.WorkplaceSetting</li>
+                <li class="list-group-item"><strong>Shift Details:</strong> @Model.ShiftDetails</li>
+                <li class="list-group-item"><strong>Work Hours:</strong> @Model.WorkHours</li>
+            </ul>
+        </section>
+
+        <!-- Application Details -->
+        <section class="mb-5">
+            <h3 class="h4">Application Details</h3>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Application Deadline:</strong>@(Model.ApplicationDeadline.HasValue ? Model.ApplicationDeadline.Value.ToString("MM/dd/yyyy") : "N/A")</li>
+                <li class="list-group-item"><strong>How to Apply:</strong> @Model.HowToApply</li>
+                <li class="list-group-item"><strong>Required Documents:</strong> @Model.DocumentsRequired</li>
+            </ul>
+        </section>
+
+        <!-- Company Details -->
+        <section class="mb-5">
+            <h3 class="h4">Company Details</h3>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Company Overview:</strong> @Model.CompanyOverview</li>
+                <li class="list-group-item"><strong>Website:</strong> @Model.Website</li>
+                <li class="list-group-item"><strong>Contact Person:</strong> @Model.ContactPerson</li>
+                <li class="list-group-item"><strong>Contact Email:</strong> @Model.ContactPersonEmail</li>
+                <li class="list-group-item"><strong>Contact Phone:</strong> @Model.ContactPersonPhone</li>
+            </ul>
+        </section>
+
+        <!-- Additional Information -->
+        <section class="mb-5">
+            <h3 class="h4">Additional Information</h3>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Benefits Offered:</strong> @Model.BenefitsOffered</li>
+                <li class="list-group-item"><strong>Relocation Assistance:</strong> @(Model.RelocationAssistance ? "Yes" : "No")</li>
+                <li class="list-group-item"><strong>Equal Opportunity Statement:</strong> @Model.EqualOpportunityStatement</li>
+            </ul>
+        </section>
+
+        <!-- Optional Fields -->
+        <section class="mb-5">
+            <h3 class="h4">Optional Fields</h3>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Tags:</strong> @Model.Tags</li>
+                <li class="list-group-item"><strong>Job Category:</strong> @Model.JobCategory</li>
+                <li class="list-group-item"><strong>Application Tracking Enabled:</strong> @(Model.ApplicationTrackingEnabled ? "Yes" : "No")</li>
+            </ul>
+        </section>
+
+    </div>
+
+    <!-- Apply Button -->
+    <div class="text-center mt-4">
+        <form method="post" asp-action="ApplyForJob">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit" class="btn btn-success btn-lg shadow-sm">Apply Now</button>
+        </form>
+    </div>
+</div>

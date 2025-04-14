@@ -1,27 +1,186 @@
-﻿<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" href="/">Sahayee</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="/Home/AdminDashboard">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="/Job/Index">Job</a></li>
-                <li class="nav-item"><a class="nav-link" href="/Course/Index">Course</a></li>
-                <li class="nav-item"><a class="nav-link" href="/News/Index">News</a></li>
-                <li class="nav-item"><a class="nav-link" href="/Queries/Index">User Queries</a></li>
-                <li class="nav-item"><a class="nav-link" href="/Candidate/Index">Candidates</a></li>
+﻿<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
+
+
+<script>
+    // Global array to hold notifications
+    let notifications = [];
+
+    // Ensure the DOM is ready before manipulating elements
+    document.addEventListener("DOMContentLoaded", function () {
+        const notificationCountElement = document.getElementById('notificationCount');
+        const notificationMessagesList = document.getElementById('notificationMessages');
+
+        // Create the SignalR connection
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/notificationHub")
+            .build();
+
+        // Listen for "ReceiveMessage" events from the server
+        connection.on("ReceiveMessage", function (message) {
+            // Add new message to the notification list
+            notifications.push(message);
+
+            // Update the notification counter
+            if (notificationCountElement) {
+                let currentCount = parseInt(notificationCountElement.innerText, 10);
+                notificationCountElement.innerText = currentCount + 1; // Increment the counter
+            }
+        });
+
+        // Start the SignalR connection
+        connection.start().catch(function (err) {
+            return console.error("SignalR connection error: ", err.toString());
+        });
+
+        // Function to show the notification list when the bell icon is clicked
+        window.showNotifications = function () {
+            const notificationsList = document.getElementById("notificationDropdown");
+
+            if (notifications.length > 0) {
+                // Display notifications list
+                const notificationMessagesList = document.getElementById("notificationMessages");
+                notificationMessagesList.innerHTML = ''; // Clear existing notifications
+
+                // Add each notification to the list
+                notifications.forEach(function (message) {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('dropdown-item hover:text-[#3f78e0] hover:bg-[inherit] focus:text-[#3f78e0] focus:bg-[inherit]');
+                    listItem.innerHTML = message; // Using innerHTML to support HTML formatting in message if needed
+                    listItem.onclick = function () {
+                        // Clear the notifications after clicking a notification item
+                        notifications = [];
+                        notificationMessagesList.innerHTML = ''; // Clear list
+                        notificationCountElement.innerText = '0'; // Reset notification count
+                        // Close the dropdown
+                        const dropdown = new bootstrap.Dropdown(notificationList);
+                        dropdown.hide();
+                    };
+                    notificationMessagesList.appendChild(listItem);
+                });
+
+                // Reset the notification count after showing
+                notificationCountElement.innerText = '0';
+            } else {
+                // Optionally, you can show a default message if there are no notifications
+                const notificationMessagesList = document.getElementById("notificationMessages");
+                notificationMessagesList.innerHTML = ''; // Clear existing notifications
+                const emptyItem = document.createElement('li');
+                emptyItem.classList.add('dropdown-item');
+                emptyItem.innerText = "No new notifications.";
+                notificationMessagesList.appendChild(emptyItem);
+            }
+        };
+    });
+</script>
+<nav class="navbar navbar-expand-lg classic transparent navbar-light">
+    <div class="container xl:flex-row lg:flex-row !flex-nowrap items-center">
+        <div class="navbar-brand w-full">
+            <a href="/Home/Index">
+                <img src="~/Images/logo.jpg" srcset="~/Images/logo.jpg" alt="image" width="200" height="80">
+            </a>
+        </div>
+        <div class="navbar-collapse offcanvas offcanvas-nav offcanvas-start">
+            <div class="offcanvas-header xl:hidden lg:hidden flex items-center justify-between flex-row p-6">
+                <h3 class="text-white xl:text-[1.5rem] !text-[calc(1.275rem_+_0.3vw)] !mb-0">HAAIRD</h3>
+                <button type="button" class="btn-close btn-close-white mr-[-0.75rem] m-0 p-0 leading-none text-[#343f52] transition-all duration-[0.2s] ease-in-out border-0 motion-reduce:transition-none before:text-[1.05rem] before:content-['\ed3b'] before:w-[1.8rem] before:h-[1.8rem] before:leading-[1.8rem] before:shadow-none before:transition-[background] before:duration-[0.2s] before:ease-in-out before:flex before:justify-center before:items-center before:m-0 before:p-0 before:rounded-[100%] hover:no-underline bg-inherit before:bg-[rgba(255,255,255,.08)] before:font-Unicons hover:before:bg-[rgba(0,0,0,.11)] focus:outline-0" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body xl:!ml-auto lg:!ml-auto flex  flex-col !h-full">
+                <ul class="navbar-nav">
+                    <li class="nav-item ">
+                        <a class="nav-link  font-bold tracking-[-0.01rem] hover:!text-[#54a8c7] after:!text-[#54a8c7]" href="/Home/AdminDashboard">Dashboard</a>
+                        <!--/.dropdown-menu -->
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link  font-bold tracking-[-0.01rem] hover:!text-[#54a8c7] after:!text-[#54a8c7]" href="/Home/Index">Home</a>
+                        <!--/.dropdown-menu -->
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link  font-bold tracking-[-0.01rem] hover:!text-[#54a8c7] after:!text-[#54a8c7]" href="/Course/Learning">Learning</a>
+                        <!--/.dropdown-menu -->
+                    </li>
+                    <li class="nav-item ">
+                        @*<li class="nav-item ">
+                        <a class="nav-link  font-bold tracking-[-0.01rem] hover:!text-[#54a8c7] after:!text-[#54a8c7]" href="#">Employer</a>
+                        <!--/.dropdown-menu -->
+                        </li>*@
+                    <li class="nav-item ">
+                        <a class="nav-link  font-bold tracking-[-0.01rem] hover:!text-[#54a8c7] after:!text-[#54a8c7]" href="/News/Blog">Trending</a>
+                        <!--/.dropdown-menu -->
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link  font-bold tracking-[-0.01rem] hover:!text-[#54a8c7] after:!text-[#54a8c7]" href="/Home/Contact">Contact</a>
+                        <!--/.dropdown-menu -->
+                    </li>
+                </ul>
+                <!-- /.navbar-nav -->
+                <div class="offcanvas-footer xl:hidden lg:hidden">
+                    <div>
+                        <a href="mailto:first.last@email.com" class="link-inverse">contact@haaird.com</a>
+                        <br> +91 7012965538 <br>
+                        <nav class="nav social social-white mt-4">
+                            <a class="text-[#cacaca] text-[1rem] transition-all duration-[0.2s] ease-in-out translate-y-0 motion-reduce:transition-none hover:translate-y-[-0.15rem] m-[0_.7rem_0_0]" href="#"><i class="uil uil-twitter before:content-['\ed59'] !text-white text-[1rem]"></i></a>
+                            <a class="text-[#cacaca] text-[1rem] transition-all duration-[0.2s] ease-in-out translate-y-0 motion-reduce:transition-none hover:translate-y-[-0.15rem] m-[0_.7rem_0_0]" href="#"><i class="uil uil-facebook-f before:content-['\eae2'] !text-white text-[1rem]"></i></a>
+                            <a class="text-[#cacaca] text-[1rem] transition-all duration-[0.2s] ease-in-out translate-y-0 motion-reduce:transition-none hover:translate-y-[-0.15rem] m-[0_.7rem_0_0]" href="#"><i class="uil uil-dribbble before:content-['\eaa2'] !text-white text-[1rem]"></i></a>
+                            <a class="text-[#cacaca] text-[1rem] transition-all duration-[0.2s] ease-in-out translate-y-0 motion-reduce:transition-none hover:translate-y-[-0.15rem] m-[0_.7rem_0_0]" href="#"><i class="uil uil-instagram before:content-['\eb9c'] !text-white text-[1rem]"></i></a>
+                            <a class="text-[#cacaca] text-[1rem] transition-all duration-[0.2s] ease-in-out translate-y-0 motion-reduce:transition-none hover:translate-y-[-0.15rem] m-[0_.7rem_0_0]" href="#"><i class="uil uil-youtube before:content-['\edb5'] !text-white text-[1rem]"></i></a>
+                        </nav>
+                        <!-- /.social -->
+                    </div>
+                </div>
+                <!-- /.offcanvas-footer -->
+            </div>
+            <!-- /.offcanvas-body -->
+        </div>
+        <!-- /.navbar-collapse -->
+        <div class="navbar-other lg:!ml-4 xl:!ml-4">
+            <ul class="navbar-nav !flex-row !items-center !ml-auto">
+                <li class="nav-item xl:hidden lg:hidden">
+                    <button class="hamburger offcanvas-nav-btn"><span></span></button>
+                </li>
+                <li class="nav-item xl:hidden lg:hidden">
+                    <a class="nav-link" data-bs-toggle="modal" data-bs-target="#modal-signin"><img src="~/assets/img/icons/lineal/login.svg" width="1.5rem" height="1.5rem" class="svg-inject  icon-svg-sm text-[#3f78e0] " alt="" /></a>
+                </li>
                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                 {
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="@Url.Content("~/Images/user.png")" alt="Profile Picture" width="30" class="rounded-circle me-2" />
-                            @User.Identity.Name
+                    <li class="nav-item dropdown language-select uppercase group" style="position: relative;">
+                        <a class="nav-link" style="font-size:16px; cursor:pointer; position: relative;" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false" onclick="showNotifications()">
+                            <img src="~/assets/img/icons/lineal/bell.svg" height="1.5rem" width="1.5rem" class="svg-inject icon-svg-sm text-[#3f78e0]" alt="" />
+                            <span class="badge" id="notificationCount" style="
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: black;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            padding: 2px 5px;
+            min-width: 18px;
+            text-align: center;
+        ">
+                                0
+                            </span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                            <li><a class="dropdown-item" href="/User/Profile">Profile</a></li>
-                            <li>
+                        <ul class="dropdown-menu group-hover:shadow-[0_0.25rem_0.75rem_rgba(30,34,40,0.15)]" aria-labelledby="notificationDropdown" id="notificationMessages" style="max-height: 300px; overflow-y: auto;">
+                        </ul>
+                    </li>
+
+
+                    <li class="nav-item dropdown language-select ">
+                        @{
+                            string firstTwoLetters = new string(
+                            User.Identity.Name?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) // Split by spaces
+                            .Take(2) // Take the first two words
+                            .Select(word => word[0]) // Get the first letter of each word
+                            .ToArray() // Convert to a char array
+                            );
+                        }
+                        <a class="nav-link dropdown-item dropdown-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            @firstTwoLetters
+                        </a>
+                        <ul class="dropdown-menu group-hover:shadow-[0_0.25rem_0.75rem_rgba(30,34,40,0.15)]" aria-labelledby="userMenu">
+                            <li class="nav-item"><a class="dropdown-item hover:text-[#3f78e0] hover:bg-[inherit] focus:text-[#3f78e0] focus:bg-[inherit]" href="/User/Profile">Profile</a></li>
+                            <li class="nav-item"><a class="dropdown-item hover:text-[#3f78e0] hover:bg-[inherit] focus:text-[#3f78e0] focus:bg-[inherit]" href="/Course/MyCourses">My Courses</a></li>
+                            <li class="nav-item">
                                 <form method="post" asp-action="Logout" asp-controller="User">
                                     <button type="submit" class="dropdown-item">Logout</button>
                                 </form>
@@ -31,9 +190,293 @@
                 }
                 else
                 {
-                    <li class="nav-item"><a class="nav-link" href="/User/Registration">Login/Sign Up</a></li>
+
+
+                    <li class="nav-item hidden xl:block lg:block md:block">
+                        <a href="#" class="btn btn-sm btn-aqua text-white !bg-[#54a8c7] border-[#54a8c7] hover:text-white hover:bg-[#54a8c7] hover:border-[#54a8c7] focus:shadow-[rgba(79,152,181,1)] active:text-white active:bg-[#54a8c7] active:border-[#54a8c7] disabled:text-white disabled:bg-[#54a8c7] disabled:border-[#54a8c7] !rounded-[50rem]" data-bs-toggle="modal" data-bs-target="#modal-signin">Sign In</a>
+                    </li>
+
                 }
+
             </ul>
+            <!-- /.navbar-nav -->
         </div>
+        <!-- /.navbar-other -->
     </div>
+    <!-- /.container -->
 </nav>
+<!-- /.navbar -->
+<div class="modal fade !m-0 !p-0" id="modal-signin" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content !text-center">
+            <div class="relative flex-auto pt-[2.5rem] pr-[2.5rem] pb-[2.5rem] pl-[2.5rem]">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h2 class="mb-3 text-left !leading-[1.35]">Welcome Back</h2>
+                <p class="lead text-[0.9rem] font-medium !leading-[1.65] !mb-6 text-left">Fill your email and password to sign in.</p>
+                <form class="text-left !mb-3" asp-action="Login" method="post" asp-controller="User" id="loginForm" onsubmit="return validateSignForm()">
+                    <div class="form-floating relative !mb-4">
+                        <input type="email" id="username" required name="Username" class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Email">
+                        <label for="loginEmail1" class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">Email</label>
+                    </div>
+                    <div class="form-floating relative password-field mb-4">
+                        <input type="password" id="password" required class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Password" id="password" name="Password">
+                        <span class="password-toggle absolute -translate-y-2/4 cursor-pointer text-[0.9rem] text-[#959ca9] right-3 top-2/4"><i class="uil uil-eye"></i></span>
+                        <label for="loginPassword1" class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">Password</label>
+                    </div>
+                    <input type="submit" class="btn btn-aqua text-white !bg-[#54a8c7] border-[#54a8c7] hover:text-white hover:bg-[#54a8c7] hover:border-[#54a8c7] focus:shadow-[rgba(79,152,181,1)] focus:text-white active:text-white active:bg-[#54a8c7] active:border-[#54a8c7] disabled:text-white disabled:bg-[#54a8c7] disabled:border-[#54a8c7] !rounded-[50rem] btn-login w-full mb-2" value="Sign In" />
+                </form>
+                <p><div id="userError" style="color:red" class="text-red-500 text-sm hidden">Username/password is incorrect</div></p>
+                <!-- /form -->
+                <p class="!mb-1"><a href="#" class="hover text-[#54a8c7]">Forgot Password?</a></p>
+                <p class="!mb-0">Don't have an account? <a href="#" data-bs-target="#modal-signup" data-bs-toggle="modal" data-bs-dismiss="modal" class="hover text-[#54a8c7]">Sign up</a></p>
+                <div class="divider-icon !my-4">or</div>
+                <nav class="nav social justify-center !text-center">
+                    <a href="#" class="btn btn-circle btn-sm btn-google !text-white !bg-[#e44134] !border-transparent !w-[1.8rem] !h-[1.8rem] !text-[0.8rem] !m-[0_.35rem] !inline-flex !items-center !justify-center !leading-none !p-0 !rounded-[100%]"><i class="uil uil-google before:content-['\eb50']"></i></a>
+                    <a href="#" class="btn btn-circle btn-sm btn-facebook-f !text-white !bg-[#4470cf] !border-transparent !w-[1.8rem] !h-[1.8rem] !text-[0.8rem] !m-[0_.35rem] !inline-flex !items-center !justify-center !leading-none !p-0 !rounded-[100%]"><i class="uil uil-facebook-f before:content-['\eae2']"></i></a>
+                    <a href="#" class="btn btn-circle btn-sm btn-twitter !text-white !bg-[#5daed5] !border-transparent !w-[1.8rem] !h-[1.8rem] !text-[0.8rem] !m-[0_.35rem] !inline-flex !items-center !justify-center !leading-none !p-0 !rounded-[100%]"><i class="uil uil-twitter before:content-['\ed59']"></i></a>
+                </nav>
+                <!--/.social -->
+            </div>
+            <!--/.modal-content -->
+        </div>
+        <!--/.modal-body -->
+    </div>
+    <!--/.modal-dialog -->
+</div>
+<!--/.modal -->
+<div class="modal fade !m-0 !p-0" id="modal-signup" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content !text-center">
+            <div class="relative flex-auto pt-[2.5rem] pr-[2.5rem] pb-[2.5rem] pl-[2.5rem]">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h2 class="mb-3 text-left !leading-[1.35]">Sign up to HAAIRD</h2>
+                <p class="lead text-[0.9rem] font-medium !leading-[1.65] !mb-6 text-left">Registration takes less than a minute.</p>
+                <form class="text-left !mb-3" method="post" action="/User/Registration" onsubmit="return validateForm()" id="registrationForm">
+                    <div class="form-floating relative !mb-4">
+                        <input type="text" name="FirstName" required class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Name" id="loginName">
+                        <label class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">First Name</label>
+                    </div>
+                    <div class="form-floating relative !mb-4">
+                        <input type="text" name="LastName" required class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Name" id="loginName">
+                        <label class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">Last Name</label>
+                    </div>
+                    <div class="form-floating relative !mb-4">
+                        <input type="Email" name="Email" required id="loginEmail" class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Email" id="loginEmail">
+                        <label class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">Email</label>
+                        <div id="emailError" class="text-red-500 text-sm hidden">Email is already registered</div>
+                    </div>
+                    <div class="form-floating relative !mb-4">
+                        <input type="number" name="PhoneNumber" required class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Email" id="loginEmail">
+                        <label class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-Manrope">PhoneNumber</label>
+                    </div>
+                    <div class="form-floating relative password-field mb-4">
+                        <input type="password" name="password" required class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="password" id="loginpassword">
+                        <span class="password-toggle absolute -translate-y-2/4 cursor-pointer text-[0.9rem] text-[#959ca9] right-3 top-2/4"><i class="uil uil-eye"></i></span>
+                        <label for="loginpassword" class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-manrope">password</label>
+                        <div id="passwordError" class="text-red-500 text-sm hidden">Passwords do not match</div>
+                    </div>
+                    <div class="form-floating relative password-field mb-4">
+                        <input type="password" name="cPassword" required class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="confirm password" id="loginpasswordconfirm">
+                        <span class="password-toggle absolute -translate-y-2/4 cursor-pointer text-[0.9rem] text-[#959ca9] right-3 top-2/4"><i class="uil uil-eye"></i></span>
+                        <label for="loginpasswordconfirm" class="text-[#959ca9] mb-2 inline-block text-[.75rem] absolute z-[2] h-full overflow-hidden text-start text-ellipsis whitespace-nowrap pointer-events-none border origin-[0_0] px-4 py-[0.6rem] border-solid border-transparent left-0 top-0 font-manrope">confirm password</label>
+                    </div>
+                    <input type="submit" value="Sign Up" class="btn btn-aqua text-white !bg-[#54a8c7] border-[#54a8c7] hover:text-white hover:bg-[#54a8c7] hover:border-[#54a8c7] focus:shadow-[rgba(79,152,181,1)] focus:text-white active:text-white active:bg-[#54a8c7] active:border-[#54a8c7] disabled:text-white disabled:bg-[#54a8c7] disabled:border-[#54a8c7] !rounded-[50rem] btn-login w-full mb-2" />
+                </form>
+                <!-- /form -->
+                <p class="!mb-0">Already have an account? <a href="#" data-bs-target="#modal-signin" data-bs-toggle="modal" data-bs-dismiss="modal" class="hover text-[#54a8c7]">Sign in</a></p>
+                <div class="divider-icon !my-4">or</div>
+                <nav class="nav social justify-center !text-center">
+                    <a href="#" class="btn btn-circle btn-sm btn-google !text-white !bg-[#e44134] !border-transparent !w-[1.8rem] !h-[1.8rem] !text-[0.8rem] !m-[0_.35rem] !inline-flex !items-center !justify-center !leading-none !p-0 !rounded-[100%]"><i class="uil uil-google before:content-['\eb50']"></i></a>
+                    <a href="#" class="btn btn-circle btn-sm btn-facebook-f !text-white !bg-[#4470cf] !border-transparent !w-[1.8rem] !h-[1.8rem] !text-[0.8rem] !m-[0_.35rem] !inline-flex !items-center !justify-center !leading-none !p-0 !rounded-[100%]"><i class="uil uil-facebook-f before:content-['\eae2']"></i></a>
+                    <a href="#" class="btn btn-circle btn-sm btn-twitter !text-white !bg-[#5daed5] !border-transparent !w-[1.8rem] !h-[1.8rem] !text-[0.8rem] !m-[0_.35rem] !inline-flex !items-center !justify-center !leading-none !p-0 !rounded-[100%]"><i class="uil uil-twitter before:content-['\ed59']"></i></a>
+                </nav>
+                <!--/.social -->
+            </div>
+            <!--/.modal-content -->
+        </div>
+        <!--/.modal-body -->
+    </div>
+    <!--/.modal-dialog -->
+</div>
+
+<div class="modal fade !m-0 !p-0" id="modal-query" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content !text-center">
+            <div class="relative flex-auto pt-[2.5rem] pr-[2.5rem] pb-[2.5rem] pl-[2.5rem]">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h2 class="mb-3 text-left !leading-[1.35]">Apply for Assistance</h2>
+                <form id="assistanceForm" method="post" action="/Home/SaveUserQuery">
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <input type="text" name="name" required class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Your Name" required>
+                    </div>
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <input type="email" name="email" required class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Your Email" required>
+                    </div>
+                    <!-- Contact Number -->
+                    <div class="mb-3">
+                        <input type="tel" name="contact" class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Your Contact Number" required>
+                    </div>
+                    <!-- Profession -->
+                    <div class="mb-3">
+                        <select name="profession" class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" required>
+                            <option value="" disabled selected>Select Profession</option>
+                            <option value="Nurse">Nurse</option>
+                            <option value="Home Care Assistant">Home Care Assistant</option>
+                            <option value="Physician">Physician</option>
+                            <option value="Lab Technician">Lab Technician</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <!-- Country -->
+                    <div class="mb-3">
+                        <select name="country" class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" required>
+                            <option value="" disabled selected>Looking for Opportunities in</option>
+                            <option value="UK">UK</option>
+                            <option value="Canada">Canada</option>
+                            <option value="Germany">Germany</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <!-- Message -->
+                    <div class="mb-3">
+                        <textarea name="message" class=" form-control  relative block w-full text-[.75rem] font-medium text-[#60697b] bg-[#fefefe] bg-clip-padding border shadow-[0_0_1.25rem_rgba(30,34,40,0.04)] rounded-[0.4rem] border-solid border-[rgba(8,60,130,0.07)] transition-[border-color] duration-[0.15s] ease-in-out focus:text-[#60697b] focus:bg-[rgba(255,255,255,.03)] focus:shadow-[0_0_1.25rem_rgba(30,34,40,0.04),unset] focus:!border-[rgba(63,120,224,0.5)] focus-visible:!border-[rgba(63,120,224,0.5)] focus-visible:!outline-0 placeholder:text-[#959ca9] placeholder:opacity-100 m-0 !pr-9 p-[.6rem_1rem] h-[calc(2.5rem_+_2px)] min-h-[calc(2.5rem_+_2px)] leading-[1.25]" placeholder="Your Message" rows="4"></textarea>
+                    </div>
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <input type="submit" value="Apply" class="btn w-100 mb-3 fs-5" style="background:#abc5e5">
+                    </div>
+                </form>
+            </div>
+            <!--/.modal-content -->
+        </div>
+        <!--/.modal-body -->
+    </div>
+    <!--/.modal-dialog -->
+</div>
+<!--/.modal -->
+<div class="offcanvas offcanvas-top !bg-[#ffffff] " id="offcanvas-search" data-bs-scroll="true">
+    <div class="container flex flex-row py-6">
+        <form class=" search-form relative before:content-['\eca5'] before:block before:absolute before:-translate-y-2/4 before:text-[1rem] before:text-[#343f52] before:z-[1] before:right-auto before:top-2/4 before:font-Unicons w-full before:left-0 focus:!outline-offset-0 focus:outline-0">
+            <input id="search-form1" type="text" class="form-control text-[0.8rem] !shadow-none pl-[1.75rem] !pr-[.75rem] border-0 bg-inherit m-0 block w-full font-medium leading-[1.7] text-[#60697b] px-4 py-[0.6rem] rounded-[0.4rem] focus:!outline-offset-0 focus:outline-0" placeholder="Type keyword and hit enter">
+        </form>
+        <button type="button" class="btn-close leading-none text-[#343f52] transition-all duration-[0.2s] ease-in-out p-0 border-0 motion-reduce:transition-none before:text-[1.05rem] before:content-['\ed3b'] before:w-[1.8rem] before:h-[1.8rem] before:leading-[1.8rem] before:shadow-none before:transition-[background] before:duration-[0.2s] before:ease-in-out before:flex before:justify-center before:items-center before:m-0 before:p-0 before:rounded-[100%] hover:no-underline bg-inherit before:bg-[rgba(0,0,0,.08)] before:font-Unicons hover:before:bg-[rgba(0,0,0,.11)] focus:outline-0" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <!-- /.container -->
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    function validatePassword() {
+        var password = document.getElementById("loginpassword").value;
+        var confirmPassword = document.getElementById("loginpasswordconfirm").value;
+        var errorDiv = document.getElementById("passwordError");
+
+        if (password !== confirmPassword) {
+            errorDiv.classList.remove("hidden"); // Show error message
+            return false; // Prevent form submission
+        } else {
+            errorDiv.classList.add("hidden"); // Hide error message
+            return true; // Allow form submission
+        }
+    }
+
+    function validateEmail() {
+        var email = document.getElementById("loginEmail").value;
+        var emailError = document.getElementById("emailError");
+
+        if (email.length > 0) {
+            // Disable email error when the user is typing
+            emailError.classList.add("hidden");
+
+            // Perform AJAX request to check email existence
+            $.ajax({
+                url: "/User/CheckEmailExist",
+                type: "POST",
+                data: { email: email },
+                success: function (response) {
+                    if (response.exists) {
+                        emailError.classList.remove("hidden"); // Show error message
+                        emailError.textContent = "Email is already registered"; // Set error message
+                    } else {
+                        emailError.classList.add("hidden"); // Hide error message
+                        // Submit the form via JavaScript if email is valid
+                        document.getElementById("registrationForm").submit();
+                    }
+                },
+                error: function () {
+                    console.error("Error checking email");
+                }
+            });
+        } else {
+            // If the email is empty, hide the error message
+            emailError.classList.add("hidden");
+            return true; // Allow form submission
+        }
+    }
+
+    function validateForm() {
+        var isPasswordValid = validatePassword();
+        var isEmailValid = validateEmail();
+
+        // If password and email are valid, trigger the email validation AJAX request
+        if (isPasswordValid && isEmailValid) {
+            // Return false to prevent default form submission so AJAX can complete
+            return false;
+        } else {
+            // If validation fails, prevent form submission
+            return false;
+        }
+    }
+
+    function validateEmailPass() {
+        var email = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+
+        var emailError = document.getElementById("userError");
+
+        if (email.length > 0) {
+            // Disable email error when the user is typing
+            emailError.classList.add("hidden");
+
+            // Perform AJAX request to check email existence
+            $.ajax({
+                url: "/User/CheckEmailPassExist",
+                type: "POST",
+                data: { email: email, pass: password },
+                success: function (response) {
+
+                    if (response.exists) {
+                        emailError.classList.add("hidden");
+                        document.getElementById("loginForm").submit();
+                    }
+                    else {
+                        emailError.classList.remove("hidden");
+                    }
+                },
+                error: function () {
+                    console.error("Error checking email");
+                }
+            });
+        } else {
+            // If the email is empty, hide the error message
+            emailError.classList.add("hidden");
+            return true; // Allow form submission
+        }
+    }
+    function validateSignForm() {
+
+        var isEmailValid = validateEmailPass();
+
+        // If password and email are valid, trigger the email validation AJAX request
+        if (isEmailValid) {
+            // Return false to prevent default form submission so AJAX can complete
+            return false;
+        } else {
+            // If validation fails, prevent form submission
+            return false;
+        }
+    }
+
+</script>

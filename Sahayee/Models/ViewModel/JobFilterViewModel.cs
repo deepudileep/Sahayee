@@ -6,9 +6,10 @@ namespace Sahayee.Models.ViewModel
 {
     public class JobFilterViewModel
     {
-        public List<Positions> Position { get; set; }
-        public List<Locations> Location { get; set; }
-        public List<Institution> Institutions { get; set; }
+        public List<CommonList>? Locations { get; set; }
+        public List<CommonList>? Companies { get; set; }
+        public List<JobTypes>? JobTypes { get; set; }
+        public List<Categories>? JobCategories { get; set; }
         public List<Jobs> Jobs { get; set; } = new List<Jobs>();
     }
 

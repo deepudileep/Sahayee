@@ -1,5 +1,5 @@
 ﻿@model Sahayee.Models.DB.User
-<div class="container mt-5">
+<div class=" mt-5">
     <div class="row g-4">
         <!-- First Column: Profile Section -->
         <div class="col-md-3">
@@ -15,7 +15,7 @@
                     <p class="card-text">Location: @Model.Location</p>
                     <p class="card-text">Phone: @Model.PhoneNumber</p>
                     <p class="card-text">Gender: @Model.Gender</p>
-                    <p class="card-text">Date of Birth: @Model.DOB.ToString("MMMM dd, yyyy")</p>
+                    <p class="card-text">Date of Birth: @(Model.DOB.HasValue ? Model.DOB.Value.ToString("MM/dd/yyyy") : "N/A")</p>
 
                     <!-- Button to View Profile -->
                     <a href="/ProfileView" class="btn btn-outline-primary btn-sm">View Profile</a>

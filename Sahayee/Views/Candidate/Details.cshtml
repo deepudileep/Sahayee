@@ -1,6 +1,8 @@
 ﻿@model Sahayee.Models.ViewModel.CandidateDetailsViewModel
-
-<div class="container mt-5">
+@{
+    Layout = "_LayoutAdmin";
+}
+<div class=" mt-5">
     <div class="row">
         <!-- Left Section: Profile Picture and Details -->
         <div class="col-md-2 mb-4">
@@ -27,7 +29,7 @@
                     <div class="mb-2">First Name:      <strong><span data-field="FirstName">@Model.User.FirstName</span></strong></div>
                     <div class="mb-2">Last Name:      <strong><span data-field="LastName">@Model.User.LastName</span></strong></div>
                     <div class="mb-2">Gender:      <strong><span data-field="Gender">@Model.User.Gender</span></strong></div>
-                    <div class="mb-2">Date of Birth:      <strong><span data-field="DOB">@Model.User.DOB.ToString("yyyy-MM-dd")</span></strong></div>
+                    <div class="mb-2">Date of Birth:      <strong><span data-field="DOB">@(Model.User.DOB.HasValue ? Model.User.DOB.Value.ToString("MM/dd/yyyy") : "N/A")</span></strong></div>
                     <div class="mb-2">Nationality:      <strong><span data-field="Nationality">@Model.User.Nationality</span></strong></div>
                     <div class="mb-2">Email:      <strong><span data-field="Email">@Model.User.Email</span></strong></div>
                     <div class="mb-2">Phone Number:      <strong><span data-field="PhoneNumber">@Model.User.PhoneNumber</span></strong></div>

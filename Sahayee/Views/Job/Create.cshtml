@@ -1,0 +1,213 @@
+﻿@model Sahayee.Models.ViewModel.JobsViewModel
+
+@{
+    ViewData["Title"] = String.IsNullOrEmpty(Model.Id) ? "Create a new course " : "Update a course"; ;
+}
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<div>
+    <h2 class="text-center">@ViewData["Title"]</h2>
+
+    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+        <!-- Hidden Field for Job ID -->
+        <input type="hidden" asp-for="Id" />
+
+        <!-- Basic Job Information -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4>Basic Job Information</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label asp-for="JobTitle" class="form-label fw-bold">Job Title</label>
+                    <input type="text" asp-for="JobTitle" class="form-control" placeholder="Enter job title" />
+                    <span asp-validation-for="JobTitle" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="JobCategory" class="form-label fw-bold">Job Category</label>
+                    <select name="JobCategory" id="JobCategory" class="form-select" asp-for="JobCategory" asp-items="@(new SelectList(Model.JobCategories, "Id", "Name", Model.JobCategory))" required>
+                    </select>
+                    <span asp-validation-for="JobCategory" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CompanyName" class="form-label fw-bold">Company Name</label>
+                    <input type="text" asp-for="CompanyName" class="form-control" placeholder="Enter company name" />
+                    <span asp-validation-for="CompanyName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="JobType" class="form-label fw-bold">Job Type</label>
+                    <select name="JobType" id="JobType" class="form-select" asp-for="JobType" asp-items="@(new SelectList(Model.JobTypes, "Id", "Name", Model.JobType))" required>
+                    </select>
+                    <span asp-validation-for="JobType" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="JobLocation" class="form-label fw-bold">Job Location</label>
+                    <input type="text" asp-for="JobLocation" class="form-control" placeholder="Enter job location" />
+                    <span asp-validation-for="JobLocation" class="text-danger"></span>
+                </div>
+                <div class="form-check mb-3">
+                    <input type="checkbox" asp-for="IsRemote" class="form-check-input" />
+                    <label class="form-check-label fw-bold">Remote Option</label>
+                    <span asp-validation-for="IsRemote" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Description -->
+        <div class="card mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h4>Job Description</h4>
+            </div>
+            <div class="card-body">
+                <div class="col-md-4 mb-3">
+                    <label asp-for="ApplicationDeadline" class="form-label fw-bold">Application DeadLine Date</label>
+                    <input type="date" asp-for="ApplicationDeadline" class="form-control" />
+                    <span asp-validation-for="ApplicationDeadline" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="JobOverview" class="form-label fw-bold">Job Overview</label>
+                    <textarea asp-for="JobOverview" class="form-control" rows="4" placeholder="Provide job overview"></textarea>
+                    <span asp-validation-for="JobOverview" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Responsibilities" class="form-label fw-bold">Responsibilities</label>
+                    <textarea asp-for="Responsibilities" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Responsibilities" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="RequiredSkills" class="form-label fw-bold">Required Skills</label>
+                    <textarea asp-for="RequiredSkills" class="form-control" rows="4" placeholder="Mention required skills"></textarea>
+                    <span asp-validation-for="RequiredSkills" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CertificationsRequired" class="form-label fw-bold">Certifications Required</label>
+                    <textarea asp-for="CertificationsRequired" class="form-control" rows="4" placeholder="List certifications required"></textarea>
+                    <span asp-validation-for="CertificationsRequired" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Qualification Details -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h4>Qualifications</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label asp-for="EducationRequirements" class="form-label fw-bold">Education Requirements</label>
+                    <input type="text" asp-for="EducationRequirements" class="form-control" placeholder="Enter education requirements" />
+                    <span asp-validation-for="EducationRequirements" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ExperienceLevel" class="form-label fw-bold">Experience Level</label>
+                    <input type="text" asp-for="ExperienceLevel" class="form-control" placeholder="Enter experience level" />
+                    <span asp-validation-for="ExperienceLevel" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="PreferredQualifications" class="form-label fw-bold">Preferred Qualifications</label>
+                    <input type="text" asp-for="PreferredQualifications" class="form-control" placeholder="Enter preferred qualifications" />
+                    <span asp-validation-for="PreferredQualifications" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Company Details -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h4>Company Details</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label asp-for="CompanyOverview" class="form-label fw-bold">Company Overview</label>
+                    <input type="text" asp-for="CompanyOverview" class="form-control" placeholder="Enter company overview" />
+                    <span asp-validation-for="CompanyOverview" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CompanyLogoPath" class="form-label fw-bold">Company Logo</label>
+                    <input type="file" asp-for="CompanyLogoPath" name="companyLogo" class="form-control-file" />
+                    @if (!string.IsNullOrEmpty(Model.CompanyLogoPath))
+                    {
+                        <img src="@Model.CompanyLogoPath" alt="Company Logo" class="img-thumbnail" width="100" />
+                    }
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Website" class="form-label fw-bold">Website</label>
+                    <input type="text" asp-for="Website" class="form-control" placeholder="Enter company website URL" />
+                    <span asp-validation-for="Website" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ContactPerson" class="form-label fw-bold">Contact Person</label>
+                    <input type="text" asp-for="ContactPerson" class="form-control" placeholder="Enter contact person name" />
+                    <span asp-validation-for="ContactPerson" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ContactPersonEmail" class="form-label fw-bold">Contact Person Email</label>
+                    <input type="email" asp-for="ContactPersonEmail" class="form-control" placeholder="Enter contact person email" />
+                    <span asp-validation-for="ContactPersonEmail" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ContactPersonPhone" class="form-label fw-bold">Contact Person Phone</label>
+                    <input type="tel" asp-for="ContactPersonPhone" class="form-control" placeholder="Enter contact person phone number" />
+                    <span asp-validation-for="ContactPersonPhone" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4>Additional Information</h4>
+            </div>
+            <div class="card-body">
+                <!-- Benefits Offered -->
+                <div class="mb-3">
+                    <label asp-for="BenefitsOffered" class="form-label fw-bold">Benefits Offered (Separate each benefit by new line)</label>
+                    <textarea asp-for="BenefitsOffered" class="form-control" rows="4" placeholder="Health Insurance, Paid Time Off, etc.">                       
+                    </textarea>
+                    <span asp-validation-for="BenefitsOffered" class="text-danger"></span>
+                </div>
+
+                <!-- Relocation Assistance -->
+                <div class="form-check mb-3">
+                    <input type="checkbox" asp-for="RelocationAssistance" class="form-check-input" />
+                    <label asp-for="RelocationAssistance" class="form-check-label fw-bold">Relocation Assistance</label>
+                    <span asp-validation-for="RelocationAssistance" class="text-danger"></span>
+                </div>
+
+                <!-- Equal Opportunity Statement -->
+                <div class="mb-3">
+                    <label asp-for="EqualOpportunityStatement" class="form-label fw-bold">Equal Opportunity Statement</label>
+                    <textarea asp-for="EqualOpportunityStatement" class="form-control" rows="4" placeholder="Enter your Equal Opportunity Statement"></textarea>
+                    <span asp-validation-for="EqualOpportunityStatement" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optional Fields Section -->
+        <div class="card mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h4>Optional Fields</h4>
+            </div>
+            <div class="card-body">
+                <!-- Tags -->
+                <div class="mb-3">
+                    <label asp-for="Tags" class="form-label fw-bold">Tags (Separate each tag by commas)</label>
+                    <input type="text" asp-for="Tags" class="form-control" placeholder="E.g., Full-time, Remote, Experienced" />
+                    <span asp-validation-for="Tags" class="text-danger"></span>
+                </div>
+
+                <!-- Job Category -->
+                <!-- Application Tracking Enabled -->
+                <div class="form-check mb-3">
+                    <input type="checkbox" asp-for="ApplicationTrackingEnabled" class="form-check-input" />
+                    <label asp-for="ApplicationTrackingEnabled" class="form-check-label fw-bold">Enable Application Tracking</label>
+                    <span asp-validation-for="ApplicationTrackingEnabled" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <!-- Submit Button -->
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary btn-lg">@ViewData["Title"]</button>
+        </div>
+    </form>
+</div>

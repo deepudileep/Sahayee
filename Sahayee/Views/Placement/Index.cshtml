@@ -4,7 +4,7 @@
 }
 
 <!-- Main container -->
-<section class="container mt-5">
+<section class="mt-5">
     <div class="row g-4">
 
         <!-- First Column: Trending Jobs Section -->
@@ -83,7 +83,7 @@
                         {
                             <li class="mb-3">
                                 <h5 class="h5 text-dark">@newsItem.Title</h5>
-                                <small class="text-muted">@newsItem.NewsDate.ToString("MMM dd, yyyy")</small>
+                                <small class="text-muted">@newsItem.NewsDate?.ToString("MMM dd, yyyy")</small>
                                 <p>@newsItem.Content</p>
                             </li>
                         }

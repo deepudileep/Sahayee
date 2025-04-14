@@ -1,6 +1,7 @@
 using MongoDB.Driver;
 using Sahayee.Helper;
 using Sahayee.Models.DB;
+using Sahayee.Models.ViewModel;
 using Sahayee.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +18,7 @@ builder.Services.AddScoped(typeof(MongoDbService<>)); // Register MongoDbService
 builder.Services.AddAuthentication("CookieAuth")
     .AddCookie("CookieAuth", options =>
     {
-        options.LoginPath = "/User/Login"; // Redirect to login page if unauthorized
+        options.LoginPath = "/User/Error"; // Redirect to login page if unauthorized
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Session expiration time
     });
 // Add services to the container.

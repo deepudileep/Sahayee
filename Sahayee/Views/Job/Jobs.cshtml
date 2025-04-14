@@ -6,7 +6,7 @@
         @TempData["Message"]
     </div>
 }
-<div class="container mt-5">
+<div class=" mt-5">
     <div class="row">
         <!-- Filter Panel -->
         <aside class="col-lg-3 col-md-4 mb-4">
@@ -21,19 +21,19 @@
                         </div>
                         <!-- Location Filter -->
                         <div class="mb-3">
-                            <label for="location" class="form-label">Location</label>
-                            <select id="location" name="location" class="form-select">
-                                @foreach (var location in Model.Location)
+                            <label for="location" class="form-label">Job Types</label>
+                            <select class="form-select me-2" id="JobTypes" style="width: auto;">
+                                @foreach (var position in Model.JobTypes)
                                 {
-                                    <option value="@location.Id">@location.Name</option>
+                                    <option value="@position.Id">@position.Name</option>
                                 }
                             </select>
                         </div>
                         <!-- Experience Level Filter -->
                         <div class="mb-3">
-                            <label for="experience" class="form-label">Istituions</label>
-                            <select class="form-select me-2" id="instituion">
-                                @foreach (var position in Model.Institutions)
+                            <label for="experience" class="form-label">Companies</label>
+                            <select class="form-select me-2" id="Companies" style="width: auto;">
+                                @foreach (var position in Model.Companies)
                                 {
                                     <option value="@position.Id">@position.Name</option>
                                 }
@@ -41,11 +41,11 @@
                         </div>
                         <!-- Department Filter -->
                         <div class="mb-3">
-                            <label for="department" class="form-label">Department</label>
-                            <select id="department" name="department" class="form-select">
-                                @foreach (var position in Model.Position)
+                            <label for="department" class="form-label">Locations</label>
+                            <select class="form-select me-2" id="locationFilter" style="width: auto;">
+                                @foreach (var location in Model.Locations)
                                 {
-                                    <option value="@position.Id">@position.Name</option>
+                                    <option value="@location.Id">@location.Name</option>
                                 }
                             </select>
                         </div>
@@ -60,7 +60,6 @@
 
         <!-- Job Listings -->
         <section class="col-lg-9 col-md-8">
-            <h2 class="mb-4">Job Listings</h2>
             <div class="row g-3">
                 <div id="jobTableContainer">
                     @await Html.PartialAsync("_JobListPartial", Model)
@@ -73,11 +72,11 @@
 <script>
     function filterJobs() {
 
-        const position = document.getElementById("department").value;
-        const location = document.getElementById("location").value;
-        const institution = document.getElementById("instituion").value;
+        const JobTypes = document.getElementById('JobTypes').value;
+        const Companies = document.getElementById('Companies').value;
+        const locationFilter = document.getElementById('locationFilter').value;
 
-        fetch(`/Job/ReloadJobs?position=${position}&location=${location}&institution=${institution}`, {
+        fetch(`/Job/ReloadJobs?JobType=${JobTypes}&Company=${Companies}&location=${locationFilter}`, {
             method: 'GET',
             headers: {
                 'Accept': 'text/html'

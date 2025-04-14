@@ -1,0 +1,132 @@
+﻿@model Sahayee.Models.ViewModel.BlogViewModel
+
+<section class="section-frame overflow-hidden">
+    <div class="wrapper !bg-[#edf2fc]">
+        <div class="container py-14 xl:!py-24 lg:!py-24 md:!py-24 !text-center">
+            <div class="flex flex-wrap mx-[-15px]">
+                <div class="md:w-7/12 lg:w-6/12 xl:w-5/12 w-full flex-[0_0_auto] px-[15px] max-w-full !mx-auto">
+                    <h1 class="text-[calc(1.365rem_+_1.38vw)] font-bold leading-[1.2] xl:text-[2.4rem] !mb-3">Business News</h1>
+                    <p class="lead lg:!px-[1.25rem] xl:!px-[1.25rem] xxl:!px-[2rem] leading-[1.65] text-[0.9rem] font-medium !mb-[.25rem]">Welcome to our journal. Here you can find the latest company news and business articles.</p>
+                </div>
+                <!-- /column -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /.wrapper -->
+</section>
+<!-- /section -->
+<div class="wrapper !bg-[#ffffff]">
+    <div class="container py-[4.5rem] xl:!py-24 lg:!py-24 md:!py-24">
+        <div class="flex flex-wrap mx-[-15px] xl:mx-[-35px] lg:mx-[-20px]">
+            <div class="xl:w-8/12 lg:w-8/12 w-ful flex-[0_0_auto] xl:px-[35px] lg:px-[20px] px-[15px] max-w-full xl:order-2 lg:order-2">
+
+                <!-- /.blog -->
+                <div class="blog itemgrid grid-view">
+                    <div class="flex flex-wrap mx-[-15px] isotope xl:mx-[-20px] lg:mx-[-20px] md:mx-[-20px] mt-[-40px] !mb-8">
+                        @foreach (var item in Model.News)
+                        {
+                            <article class="item post xl:w-6/12 lg:w-6/12 md:w-6/12 w-full flex-[0_0_auto] xl:px-[20px] lg:px-[20px] md:px-[20px] mt-[40px] px-[15px] max-w-full">
+                                <div class="card">
+                                    <figure class="card-img-top overlay overlay-1 hover-scale group">
+                                        <a asp-controller="News"
+                                       asp-action="BlogDetails"
+                                       asp-route-id="@item.Id"> <img class="!transition-all !duration-[0.35s] !ease-in-out group-hover:scale-105" src="~/uploads/@item.image" alt="image"></a>
+                                        <figcaption class="group-hover:opacity-100 absolute w-full h-full opacity-0 text-center px-4 py-3 inset-0 z-[5] pointer-events-none p-2">
+                                            <a asp-controller="News"
+                                           asp-action="BlogDetails"
+                                           asp-route-id="@item.Id"><h5 class="from-top  !mb-0 absolute w-full translate-y-[-80%] p-[.75rem_1rem] left-0 top-2/4">Read More</h5></a>
+                                        </figcaption>
+                                    </figure>
+                                    <div class="card-body flex-[1_1_auto] p-[40px] xl:p-[1.75rem_1.75rem_1rem_1.75rem] lg:p-[1.75rem_1.75rem_1rem_1.75rem] md:p-[1.75rem_1.75rem_1rem_1.75rem] sm:pb-4 xsm:pb-4  ">
+                                        <div class="post-header !mb-[.9rem]">
+                                            <div class="inline-flex mb-[.4rem] uppercase tracking-[0.02rem] text-[0.7rem] font-bold text-[#aab0bc] relative align-top pl-[1.4rem] before:content-[''] before:absolute before:inline-block before:translate-y-[-60%] before:w-3 before:h-[0.05rem] before:left-0 before:top-2/4 before:bg-[#3f78e0]">
+                                                <a href="#" class="hover" rel="category">@item.TypeId</a>
+                                            </div>
+                                            <!-- /.post-category -->
+                                            <h2 class="post-title h3 !mt-1 !mb-3">
+                                                <a class="text-[#343f52] hover:text-[#3f78e0]" asp-controller="News"
+                                               asp-action="BlogDetails"
+                                               asp-route-id="@item.Id">@item.Title</a>
+                                            </h2>
+                                        </div>
+                                        <!-- /.post-header -->
+                                        <div class="!relative">
+                                            <p>@item.Summary.</p>
+                                        </div>
+                                        <!-- /.post-content -->
+                                    </div>
+                                    <!--/.card-body -->
+                                    <div class="card-footer xl:p-[1.25rem_1.75rem_1.25rem] lg:p-[1.25rem_1.75rem_1.25rem] md:p-[1.25rem_1.75rem_1.25rem] p-[18px_40px]">
+                                        <ul class="text-[0.7rem] text-[#aab0bc] m-0 p-0 list-none flex  !mb-0">
+                                            <li class="post-date inline-block"><i class="uil uil-calendar-alt pr-[0.2rem] align-[-.05rem] before:content-['\e9ba']"></i><span>@item.NewsDate</span></li>
+                                        </ul>
+                                        <!-- /.post-meta -->
+                                    </div>
+                                    <!-- /.card-footer -->
+                                </div>
+                                <!-- /.card -->
+                            </article>
+
+                        }<!-- /.post -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /nav -->
+            </div>
+            <!-- /column -->
+            <aside class="xl:w-4/12 lg:w-4/12 w-full flex-[0_0_auto] xl:px-[35px] lg:px-[20px] px-[15px] max-w-full sidebar mt-8 xl:!mt-6 lg:!mt-6">
+
+                <!-- /.widget -->
+                <div class="widget mt-[40px]">
+                    <h4 class="widget-title !mb-3">About Us</h4>
+                    <p>
+                        HAAIRD is a career development platform tailored to healthcare professionals.
+                        It bridges the gap between aspiring students and reputed universities, helping them find the right courses, certifications, and job opportunities with ease
+                    </p>
+                    <nav class="nav social">
+                        <a class=" text-[1rem] transition-all duration-[0.2s] ease-in-out translate-y-0 motion-reduce:transition-none hover:translate-y-[-0.15rem] m-[0_.7rem_0_0]" href="#"><i class=" text-[1rem] text-[#5daed5] before:content-['\ed59'] uil uil-twitter"></i></a>
+                        <a class=" text-[1rem] transition-all duration-[0.2s] ease-in-out translate-y-0 motion-reduce:transition-none hover:translate-y-[-0.15rem] m-[0_.7rem_0_0]" href="#"><i class=" text-[1rem] text-[#4470cf] before:content-['\eae2'] uil uil-facebook-f"></i></a>
+                        <a class=" text-[1rem] transition-all duration-[0.2s] ease-in-out translate-y-0 motion-reduce:transition-none hover:translate-y-[-0.15rem] m-[0_.7rem_0_0]" href="#"><i class=" text-[1rem] text-[#e94d88] before:content-['\eaa2'] uil uil-dribbble"></i></a>
+                        <a class=" text-[1rem] transition-all duration-[0.2s] ease-in-out translate-y-0 motion-reduce:transition-none hover:translate-y-[-0.15rem] m-[0_.7rem_0_0]" href="#"><i class=" text-[1rem] text-[#d53581] before:content-['\eb9c'] uil uil-instagram"></i></a>
+                        <a class=" text-[1rem] transition-all duration-[0.2s] ease-in-out translate-y-0 motion-reduce:transition-none hover:translate-y-[-0.15rem] m-[0_.7rem_0_0]" href="#"><i class=" text-[1rem] text-[#c8312b] before:content-['\edb5'] uil uil-youtube"></i></a>
+                    </nav>
+                    <!-- /.social -->
+                </div>
+                <!-- /.widget -->
+                <div class="widget mt-[40px]">
+                    <h4 class="widget-title !mb-3">Popular Posts</h4>
+                    <ul class="m-0 p-0 after:content-[''] after:block after:h-0 after:clear-both after:invisible">
+                        @foreach (var item in Model.PopularNews)
+                        {
+                            <li class=" clear-both block overflow-hidden">
+                                <figure class="!rounded-[.4rem] float-left w-14 !h-[4.5rem]">
+                                    <a asp-controller="News"
+                                   asp-action="BlogDetails"
+                                   asp-route-id="@item.Id"><img class="!rounded-[.4rem]" src="~/uploads/@item.image" alt="image"></a>
+                                </figure>
+                                <div class="!relative ml-[4.25rem] mb-0">
+                                    <h6 class="!mb-2">
+                                        <a class="text-[#343f52] hover:text-[#3f78e0]" asp-controller="News"
+                                       asp-action="BlogDetails"
+                                       asp-route-id="@item.Id">@item.Title</a>
+                                    </h6>
+                                    <ul class="text-[0.7rem] text-[#aab0bc] m-0 p-0 list-none">
+                                        <li class="post-date inline-block"><i class="uil uil-calendar-alt pr-[0.2rem] align-[-.05rem] before:content-['\e9ba']"></i><span>@item.NewsDate</span></li>
+                                    </ul>
+                                    <!-- /.post-meta -->
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                    <!-- /.image-list -->
+                </div>
+                <!-- /.widget -->
+            </aside>
+            <!-- /column .sidebar -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+</div>

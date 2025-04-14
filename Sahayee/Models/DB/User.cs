@@ -11,7 +11,7 @@ namespace Sahayee.Models.DB
         public string Password { get; set; }
         public string Location { get; set; }
         public string PhoneNumber { get; set; }
-        public DateTime DOB { get; set; }
+        public DateTime? DOB { get; set; }
         public string Gender { get; set; }
         public UserType UserType { get; set; }
 

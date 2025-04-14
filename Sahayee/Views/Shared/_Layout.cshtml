@@ -1,55 +1,78 @@
 ﻿@using System.Security.Claims
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - Sahayee</title>
-    <link rel="icon" type="image/x-icon" href="/images/sahayee-logo.png" />
+    <meta name="description" content="An impressive and flawless site template that includes various UI elements and countless features, attractive ready-made blocks and rich pages, basically everything you need to create a unique and professional website.">
+    <meta name="keywords" content="Tailwind CSS, business, corporate, creative, gulp, marketing, minimal, modern, multipurpose, one page, responsive, saas, sass, seo, startup, html5 template, site template">
+    <meta name="author" content="elemis">
+    <title>HAAIRD – Track your future </title>
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Manrope:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="~/assets/img/favicon.png">
+    <link rel="stylesheet" type="text/css" href="~/assets/fonts/unicons/unicons.css">
+    <link rel="stylesheet" href="~/assets/css/plugins.css">
+    <link rel="preload" href="~/assets/css/fonts/dm.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="stylesheet" href="~/assets/style.css">
+    <link rel="stylesheet" href="~/assets/css/colors/aqua.css">
+    <style>
+        .navbar.navbar-light.fixed .btn:not(.btn-expand):not(.btn-gradient) {
+            background: #54a8c7 !important;
+            border-color: #54a8c7 !important;
+            color: #ffffff !important;
+        }
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet" />
+        .accordion-wrapper .card-header button {
+            color: #54a8c7;
+        }
+
+        .lineal-fill {
+            fill: #98cbdd !important;
+        }
+    </style>
 </head>
-<body>
-    <header>
-        @if (User.Identity != null && User.Identity.IsAuthenticated)
-        {
-            var roleClaim = User.FindFirst(ClaimTypes.Role);
-            if (roleClaim != null)
+<body class="[word-spacing:.05rem!important] font-Manrope text-[0.8rem] !leading-[1.7] font-medium">
+    <div class="grow shrink-0">
+        <header class="relative wrapper !bg-[#ffffff]  pt-1">
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                if (roleClaim.Value == "Admin")
+                var roleClaim = User.FindFirst(ClaimTypes.Role);
+                if (roleClaim != null)
                 {
-                    @await Html.PartialAsync("_adminMenu")
-                }
-                else
-                {
-                    @await Html.PartialAsync("_UserMenu")
-                }
+                    if (roleClaim.Value == "Admin")
+                    {
+                        @await Html.PartialAsync("_adminMenu")
+                    }
+                    else
+                    {
+                        @await Html.PartialAsync("_MainMenu")
+                    }
 
+                }
             }
-        }
-        else
-        {
-            @await Html.PartialAsync("_MainMenu")
-        }
-
-    </header>
-
-    <main class="container">
+            else
+            {
+                @await Html.PartialAsync("_MainMenu")
+            }
+        </header>
         @RenderBody()
-    </main>
-
-    <footer>
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="!bg-[#ffffff] ">
         @await Html.PartialAsync("_Footer")
     </footer>
-
-    <!-- Bootstrap CSS -->
-    <!-- Bootstrap Bundle with Popper.js -->
-  
-
+    <!-- progress wrapper -->
+    <div class="progress-wrap fixed w-[2.3rem] h-[2.3rem] cursor-pointer block shadow-[inset_0_0_0_0.1rem_rgba(128,130,134,0.25)] z-[1010] opacity-0 invisible translate-y-3 transition-all duration-[0.2s] ease-[linear,margin-right] delay-[0s] rounded-[100%] right-6 bottom-6 motion-reduce:transition-none after:absolute after:content-['\e951'] after:text-center after:leading-[2.3rem] after:text-[1.2rem] after:text-[#54a8c7] after:h-[2.3rem] after:w-[2.3rem] after:cursor-pointer after:block after:z-[1] after:transition-all after:duration-[0.2s] after:ease-linear after:left-0 after:top-0 motion-reduce:after:transition-none after:font-Unicons">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path class="fill-none stroke-[#54a8c7] stroke-[4] box-border transition-all duration-[0.2s] ease-linear motion-reduce:transition-none" d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+        </svg>
+    </div>
+    <script src="~/assets/js/plugins.js"></script>
+    <script src="~/assets/js/theme.js"></script>
 </body>
+
 </html>

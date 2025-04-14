@@ -8,8 +8,10 @@ namespace Sahayee.Models.DB
         public string TypeId { get; set; }
         public string Title { get; set; }
         public string Country { get; set; }
-        public DateTime NewsDate { get; set; }
+        public DateTime? NewsDate { get; set; }
         public string Summary { get; set; }
         public string Content { get; set; }
+
+        public string image { get; set; }
     }
 }

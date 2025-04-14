@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
 using Sahayee.Helper;
 using Sahayee.Models.DB;
+using Sahayee.Models.ViewModel;
 
 public class MongoDBChangeWatcher : BackgroundService
 {
@@ -73,7 +74,7 @@ public class MongoDBChangeWatcher : BackgroundService
             }
 
             // Wait for 10 seconds before polling again
-            await Task.Delay(TimeSpan.FromSeconds(60), stoppingToken);
+            await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
         }
     }
 

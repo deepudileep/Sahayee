@@ -40,9 +40,9 @@ namespace Sahayee.Controllers
             PlacementsViewModels placementsViewModels = new PlacementsViewModels();
             placementsViewModels.News = _mongoDbServiceNews.Get().ToList();
             JobCounts jobCounts = new JobCounts();
-            jobCounts.Category = await _mongoDbServiceJobs.CountDistinctValuesAsync("Department");
-            jobCounts.Hospital = await _mongoDbServiceJobs.CountDistinctValuesAsync("Institution");
-            jobCounts.Country = await _mongoDbServiceJobs.CountDistinctValuesAsync("Location");
+            jobCounts.Category = await _mongoDbServiceJobs.CountDistinctValuesAsync("JobType");
+            jobCounts.Hospital = await _mongoDbServiceJobs.CountDistinctValuesAsync("CompanyName");
+            jobCounts.Country = await _mongoDbServiceJobs.CountDistinctValuesAsync("JobLocation");
             placementsViewModels.JobCounts = jobCounts;
             string userId = string.Empty;
             if (User.Identity != null && User.Identity.IsAuthenticated)

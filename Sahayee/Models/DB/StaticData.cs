@@ -1,4 +1,5 @@
-﻿using Sahayee.Models.ViewModel;
+﻿using Microsoft.CodeAnalysis.Options;
+using Sahayee.Models.ViewModel;
 
 namespace Sahayee.Models.DB
 {
@@ -17,12 +18,13 @@ namespace Sahayee.Models.DB
         // Method to get categories
         public static List<Categories> GetCategories() => new List<Categories>
         {
-            new Categories { Id = "all", Name = "All Categories" },
-            new Categories { Id = "Healthcare", Name = "Healthcare" },
-            new Categories { Id = "Management", Name = "Management" },
-            new Categories { Id = "Technical", Name = "Technical" }
+            new Categories { Id = "Medical Training", Name = "Medical Training", Icon="light-bulb.svg" },
+            new Categories { Id = "Nursing & Patient Care" , Name = "Nursing & Patient Care" ,Icon="pie-chart-2.svg"},
+            new Categories { Id = "Health Administration", Name = "Health Administration", Icon="design.svg"},
+            new Categories { Id = "Pharmaceutical Sciences", Name = "Pharmaceutical Sciences" , Icon="adjust.svg"},
+            new Categories { Id = "Nutrition & Dietetics", Name = "Nutrition & Dietetics" , Icon="analytics.svg"},
+            new Categories { Id = "Mental Health & Counseling", Name = "Mental Health & Counseling", Icon="agenda.svg" }
         };
-
         // Method to get locations
         public static List<Locations> GetLocations() => new List<Locations>
         {
@@ -34,15 +36,14 @@ namespace Sahayee.Models.DB
         };
 
         // Method to get CLocations
-        public static List<CLocations> GetCLocations() => new List<CLocations>
+        public static List<CLocations> GetCourseType() => new List<CLocations>
         {
-            new CLocations { Id = "all", Name = "All Locations" },
-            new CLocations { Id = "Onsite", Name = "Onsite" },
+            new CLocations { Id = "Hybrid", Name = "Hybrid" },
+            new CLocations { Id = "Offline", Name = "Offline" },
             new CLocations { Id = "Online", Name = "Online" },
         };
         public static List<Institution> GetInstitution() => new List<Institution>
         {
-            new Institution { Id = "all", Name = "All Institution" },
             new Institution { Id = "Institution1", Name = "Institution 1" },
             new Institution { Id = "Institution2", Name = "Institution 2" }
         };
@@ -70,7 +71,14 @@ namespace Sahayee.Models.DB
             new QueriesType { Id = "Home Care Assistant", Name = "Home Care Assistant" },
             new QueriesType { Id = "General", Name = "General" }
         };
-
+        public static List<JobTypes> GetJobType() => new List<JobTypes>
+        {
+            new JobTypes { Id = "all", Name = "All " },
+            new JobTypes { Id = "Full-time", Name = "Full-time" },
+            new JobTypes { Id = "Part-time", Name = "Part-time" },
+            new JobTypes { Id = "Contract", Name = "Contract" },
+            new JobTypes { Id = "Internship", Name = "Internship" },
+        };
 
     }
 }

@@ -1,83 +1,149 @@
 ﻿@model Sahayee.Models.DB.Course
 
-<div class="container my-5">
-    <!-- Display Message -->
-    @if (TempData["Message"] != null)
-    {
-        <div class="alert alert-info alert-dismissible fade show" role="alert">
-            @TempData["Message"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+<div class="wrapper  bg-[rgba(246,247,249,1)] ">
+    <div class="container py-3 xl:!py-5 lg:!py-5 md:!py-5">
+        <nav class="inline-block" aria-label="breadcrumb">
+            <ol class="breadcrumb  flex flex-wrap bg-[none] p-0 !rounded-none list-none !mb-0">
+                <li class="breadcrumb-item flex text-[#60697b]"><a class=" text-inherit hover:text-[#3f78e0]" href="~/Home/Index">Home</a></li>
+                <li class="breadcrumb-item flex text-[#60697b] pl-2 before:font-normal before:flex before:items-center before:text-[rgba(96,105,123,0.35)] before:content-['\e931'] before:text-[0.9rem] before:-mt-px before:pr-2 before:font-Unicons"><a class=" text-inherit hover:text-[#3f78e0]" href="~/Course/Courses">Courses</a></li>
+                <li class="breadcrumb-item flex text-[#60697b] pl-2 before:font-normal before:flex before:items-center before:text-[rgba(96,105,123,0.35)] before:content-['\e931'] before:text-[0.9rem] before:-mt-px before:pr-2 before:font-Unicons"><a class=" text-inherit hover:text-[#3f78e0]" href="#">@Model.CourseTitle</a></li>
+            </ol>
+        </nav>
+        <!-- /nav -->
+    </div>
+    <!-- /.container -->
+</div>
+
+<section class="wrapper ">
+    <div class="container pt-10 pb-36 xl:pt-[4.5rem] lg:pt-[4.5rem] md:pt-[4.5rem] xl:pb-60 lg:pb-60 md:pb-60 !text-center">
+        <div class="flex flex-wrap mx-[-15px]">
+            <div class="md:w-10/12 lg:w-8/12 xl:w-7/12 w-full flex-[0_0_auto] px-[15px] max-w-full !mx-auto">
+                <div class="post-header">
+                    @if (TempData["Message"] != null)
+                    {
+                        if (TempData["Success"] != null)
+                        {
+                            <div class="alert alert-success !text-[#308970] !bg-[#edf9f6] !border-[#308970] !p-[1rem]  alert-icon !pl-10 alert-dismissible fade show !border-0 !shadow-none" role="alert">
+                                <i class="uil uil-check-circle before:content-['\e9db']"></i>
+                                @TempData["Message"]
+                                <button type="button" class="btn-close !text-[#308970]" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger !text-[#9e454b] !bg-[#fcf0f1] !border-[#9e454b] !p-[1rem]  alert-icon !pl-10 alert-dismissible fade show !border-0 !shadow-none" role="alert">
+                                <i class="uil uil-times-circle before:content-['\ed37']"></i>
+                                @TempData["Message"] <a href="#" data-bs-toggle="modal" data-bs-target="#modal-signin">Sign In</a>
+                                <button type="button" class="btn-close !text-[#9e454b]" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                    }
+                    <div class="inline-flex mb-[.4rem] uppercase tracking-[0.02rem] text-[0.7rem] font-bold text-[#aab0bc] relative align-top pl-[1.4rem] before:content-[''] before:absolute before:inline-block before:translate-y-[-60%] before:w-3 before:h-[0.05rem] before:left-0 before:top-2/4 before:bg-[#3f78e0]">
+
+                        <a href="#" class="hover" rel="category">@Model.Category</a>
+                    </div>
+                    <!-- /.post-category -->
+                    <h1 class="text-[calc(1.365rem_+_1.38vw)] font-bold leading-[1.2] xl:text-[2.4rem] !mb-3">@Model.CourseTitle</h1>
+                    <p class="lead leading-[1.65] text-[.9rem] font-medium md:!px-14 lg:!px-14 xl:!px-20 xxl:!px-32">Institution - @Model.Institution</p>
+                    <p class="lead leading-[1.65] text-[.9rem] font-medium md:!px-14 lg:!px-14 xl:!px-20 xxl:!px-32">Start Date - @Model.StartDate</p>
+                    <form method="post" asp-action="ApplyForCourse">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn btn-sm btn-aqua text-white !bg-[#54a8c7] border-[#54a8c7] hover:text-white hover:bg-[#54a8c7] hover:border-[#54a8c7] focus:shadow-[rgba(79,152,181,1)] active:text-white active:bg-[#54a8c7] active:border-[#54a8c7] disabled:text-white disabled:bg-[#54a8c7] disabled:border-[#54a8c7] !rounded-[50rem]">Enroll Now</button>
+                    </form>
+                </div>
+                <!-- /.post-header -->
+            </div>
+            <!-- /column -->
         </div>
-    }
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+</section>
+<!-- /section -->
+<div class="wrapper !bg-[#ffffff]  border-b-[rgba(164,174,198,0.2)] border-b border-solid">
+    <div class="container !pb-[4.5rem] xl:!pb-24 lg:!pb-24 md:!pb-24">
+        <div class="flex flex-wrap mx-[-15px]">
+            <div class="w-full flex-[0_0_auto] px-[15px] max-w-full">
+                <article class="mt-[-12.5rem]">
+                    <div class="flex flex-wrap mx-[-15px]">
+                        <div class="xl:w-10/12 xl:!ml-[8.33333333%] lg:w-10/12 lg:!ml-[8.33333333%] w-full flex-[0_0_auto] px-[15px] max-w-full">
+                            <h2 class="text-[calc(1.265rem_+_0.18vw)] font-bold xl:text-[1.4rem] leading-[1.35] mb-4">Course Overview</h2>
+                            <div class="flex flex-wrap mx-0">
+                                <div class="xl:w-12/12 lg:w-12/12 md:w-12/12 w-full flex-[0_0_auto] max-w-full">
+                                    <p>@Model.CourseOverview</p>
+                                </div>
 
-    <!-- Course Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
-        <h2 class="text-primary fw-bold">@Model.Name</h2>
-        <div class="d-flex">
-            <a href="/Courses" class="btn btn-outline-secondary me-2">Back</a>
-            <form method="post" asp-action="ApplyForCourse" class="m-0">
-                <input type="hidden" name="id" value="@Model.Id" />
-                <button type="submit" class="btn btn-success">Enroll</button>
-            </form>
+                                <!--/column -->
+                            </div>
+                            <h2 class="text-[calc(1.265rem_+_0.18vw)] font-bold xl:text-[1.4rem] leading-[1.35] mb-4">Learning Objectives</h2>
+                            <div class="flex flex-wrap mx-0">
+                                <div class="xl:w-12/12 lg:w-12/12 md:w-12/12 w-full flex-[0_0_auto] max-w-full">
+                                    <p>@Model.LearningObjectives</p>
+                                </div>
+
+                                <!--/column -->
+                            </div>
+                            <h2 class="text-[calc(1.265rem_+_0.18vw)] font-bold xl:text-[1.4rem] leading-[1.35] mb-4">Course Content</h2>
+                            <div class="flex flex-wrap mx-0">
+                                <div class="xl:w-12/12 lg:w-12/12 md:w-12/12 w-full flex-[0_0_auto] max-w-full">
+                                    <p>
+                                        @Model.CourseContent
+                                    </p>
+                                </div>
+                            </div>
+
+                            <h2 class="text-[calc(1.265rem_+_0.18vw)] font-bold xl:text-[1.4rem] leading-[1.35] mb-4"> Prerequisites</h2>
+                            <div class="flex flex-wrap mx-0">
+                                <div class="xl:w-12/12 lg:w-12/12 md:w-12/12 w-full flex-[0_0_auto] max-w-full">
+                                    <p>
+                                        @Model.Prerequisites
+                                    </p>
+                                </div>
+                            </div>
+                            <h2 class="text-[calc(1.265rem_+_0.18vw)] font-bold xl:text-[1.4rem] leading-[1.35] mb-4"> Certification Information</h2>
+                            <div class="flex flex-wrap mx-0">
+                                <div class="xl:w-12/12 lg:w-12/12 md:w-12/12 w-full flex-[0_0_auto] max-w-full">
+                                    <section class="mb-5">
+                                        <ul class="list-group" style="padding-left: 0 !important;">
+                                            <li class="list-group-item"><strong>Certification Offered:</strong> @(Model.CertificationOffered ? "Yes" : "No")</li>
+                                            <li class="list-group-item"><strong>Certificate Title:</strong> @Model.CertificateTitle</li>
+                                            <li class="list-group-item"><strong>Certification Body:</strong> @Model.CertificationBody</li>
+                                        </ul>
+                                    </section>
+                                </div>
+                            </div>
+                            <h2 class="text-[calc(1.265rem_+_0.18vw)] font-bold xl:text-[1.4rem] leading-[1.35] mb-4">Additional Information</h2>
+                            <div class="flex flex-wrap mx-0">
+                                <div class="xl:w-12/12 lg:w-12/12 md:w-12/12 w-full flex-[0_0_auto] max-w-full">
+                                    <section class="mb-5">
+                                        <ul class="list-group" style="padding-left: 0 !important;">
+                                            <li class="list-group-item"><strong>Category:</strong> @Model.Category</li>
+                                            <li class="list-group-item"><strong>Location:</strong> @Model.Location</li>
+                                            <li class="list-group-item"><strong>Course Type:</strong> @Model.CourseType</li>
+                                            <li class="list-group-item"><strong>Duration:</strong> @Model.Duration</li>
+                                            <li class="list-group-item"><strong>Start Date:</strong> @(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("MM/dd/yyyy") : "N/A")</li>
+                                            <li class="list-group-item"><strong>End Date:</strong> @(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("MM/dd/yyyy") : "N/A")</li>
+                                            <li class="list-group-item"><strong>Application Deadline:</strong> @(Model.ApplicationDeadline.HasValue ? Model.ApplicationDeadline.Value.ToString("MM/dd/yyyy") : "N/A")</li>
+                                            <li class="list-group-item"><strong>Enrollment Type:</strong> @Model.EnrollmentType</li>
+                                            <li class="list-group-item"><strong>Course Fee:</strong> @(Model.CourseFee.HasValue ? $"₹{Model.CourseFee.Value}" : "Free or Price on Request")</li>
+                                            <li class="list-group-item"><strong>Payment Options:</strong> @Model.PaymentOptions</li>
+                                        </ul>
+                                    </section>
+                                </div>
+                            </div>
+                            <!--/.row -->
+                        </div>
+                        <!-- /column -->
+                    </div>
+
+                </article>
+                <!-- /.project -->
+            </div>
+            <!-- /column -->
         </div>
+        <!-- /.row -->
     </div>
-
-    <!-- Video Section -->
-    <div class="mb-4 text-center">
-        <iframe src="https://www.youtube.com/embed/example_video_id"
-                title="Course Introduction"
-                class="w-100 rounded shadow-lg"
-                style="height: 400px;"
-                allowfullscreen>
-        </iframe>
-    </div>
-
-    <!-- Course Details -->
-    <div class="mb-4">
-        <h3 class="text-dark">Course Details</h3>
-        <table class="table table-hover table-striped">
-            <tbody>
-                <tr>
-                    <th scope="row" class="text-secondary">Duration:</th>
-                    <td>@Model.Duration</td>
-                </tr>
-                <tr>
-                    <th scope="row" class="text-secondary">Start Date:</th>
-                    <td>@Model.StartDate</td>
-                </tr>
-                <tr>
-                    <th scope="row" class="text-secondary">Trainer:</th>
-                    <td>@Model.Trainer</td>
-                </tr>
-                <tr>
-                    <th scope="row" class="text-secondary">Category:</th>
-                    <td>@Model.Category</td>
-                </tr>
-                <tr>
-                    <th scope="row" class="text-secondary">Mode:</th>
-                    <td>@Model.Location</td>
-                </tr>
-                <tr>
-                    <th scope="row" class="text-secondary">Institution:</th>
-                    <td>@Model.Institution</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Course Description -->
-    <div class="mb-4">
-        <h3 class="text-dark">Course Description</h3>
-        <p class="text-muted">
-            @Model.Summary
-        </p>
-    </div>
-
-    <!-- Enroll Button -->
-    <div class="text-center mt-4">
-        <form method="post" asp-action="ApplyForCourse">
-            <input type="hidden" name="id" value="@Model.Id" />
-            <button type="submit" class="btn btn-success btn-lg shadow-sm">Enroll Now</button>
-        </form>
-    </div>
+    <!-- /.container -->
 </div>

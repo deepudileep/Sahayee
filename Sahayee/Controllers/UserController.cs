@@ -38,6 +38,8 @@ namespace Sahayee.Controllers
         {
             return View();
         }
+
+        [Authorize]
         public IActionResult Profile()
         {
             var userId = string.Empty;
@@ -70,7 +72,8 @@ namespace Sahayee.Controllers
                 // Create user claims
                 var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, user.Email),
+            //new Claim(ClaimTypes.Name, user.Email),
+            new Claim(ClaimTypes.Name, user.FirstName+" "+user.LastName),
             new Claim(ClaimTypes.Role, user.UserType.Type), // Assuming 'UserType.Type' represents the role
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
         };
@@ -85,19 +88,18 @@ namespace Sahayee.Controllers
                     return RedirectToAction("AdminDashboard", "Home");
 
                 // Redirect to profile page or desired action
-                return RedirectToAction("DashBoard");
+                return RedirectToAction("Index", "Home");
             }
 
             // Handle invalid login attempt
-            ViewBag.ErrorMessage = "Invalid login attempt.";
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync("CookieAuth");
-            return RedirectToAction("Login");
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Registration()
@@ -141,25 +143,37 @@ namespace Sahayee.Controllers
             // Redirect after successful submission
             return RedirectToAction("Profile");
         }
+
         [HttpPost]
-        public async Task<IActionResult> Registration(RegistrationViewModel registrationViewModel)
+        public IActionResult CheckEmailExist(string email)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(); // Return to the form if validation fails
-            }
+            var user = _mongoDbService.ApplyFilters(new Dictionary<string, string> { { "Email", email } }).FirstOrDefault();
+            return Json(new { exists = user != null });
+        }
+
+        [HttpPost]
+        public IActionResult CheckEmailPassExist(string email,string pass)
+        {
+            var user = _mongoDbService.ApplyFilters(new Dictionary<string, string> { { "Email", email }, { "Password", pass } }).FirstOrDefault();
+            return Json(new { exists = user != null });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Registration(string FirstName, string LastName, string Email, string PhoneNumber, string password, string cPassword)
+        {
+
 
             // Create a new registration object to save
             var registration = new User
             {
-                FirstName = registrationViewModel.FirstName,
-                LastName = registrationViewModel.LastName,
-                Email = registrationViewModel.Email,
+                FirstName = FirstName,
+                LastName = LastName,
+                Email = Email,
                 Password = CommonHelper.GenerateRandomPassword(5),
-                Location = registrationViewModel.Location,
-                PhoneNumber = registrationViewModel.PhoneNumber,
-                DOB = registrationViewModel.DOB,
-                Gender = registrationViewModel.Gender,
+                Location = string.Empty,
+                PhoneNumber = PhoneNumber,
+                DOB = null,
+                Gender = string.Empty,
                 UserType = new UserType
                 {
                     Id = 1,
@@ -194,7 +208,7 @@ namespace Sahayee.Controllers
 
 
             // Redirect after successful submission
-            return RedirectToAction("Dashboard");
+            return RedirectToAction("Index","Home");
         }
 
 
@@ -216,9 +230,9 @@ namespace Sahayee.Controllers
             }
             profileViewModel.User = registration;
             JobCounts jobCounts = new JobCounts();
-            jobCounts.Category = await _mongoDbServiceJobs.CountDistinctValuesAsync("Department");
-            jobCounts.Hospital = await _mongoDbServiceJobs.CountDistinctValuesAsync("Institution");
-            jobCounts.Country = await _mongoDbServiceJobs.CountDistinctValuesAsync("Location");
+            jobCounts.Category = await _mongoDbServiceJobs.CountDistinctValuesAsync("JobType");
+            jobCounts.Hospital = await _mongoDbServiceJobs.CountDistinctValuesAsync("CompanyName");
+            jobCounts.Country = await _mongoDbServiceJobs.CountDistinctValuesAsync("JobLocation");
             profileViewModel.JobCounts = jobCounts;
 
             return View(profileViewModel);

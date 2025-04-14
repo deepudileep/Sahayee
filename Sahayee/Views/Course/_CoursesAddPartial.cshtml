@@ -22,7 +22,7 @@
 
     <div class="mb-3">
         <label for="courseLocation" class="form-label">Location</label>
-        <select name="Location" id="courseLocation" class="form-select" asp-for="Location" asp-items="@(new SelectList(Model.Locations, "Id", "Name", Model.Location))" required>
+        <select name="Location" id="courseLocation" class="form-select" asp-for="Location" asp-items="@(new SelectList(Model.CourseTypes, "Id", "Name", Model.Location))" required>
         </select>
     </div>
 

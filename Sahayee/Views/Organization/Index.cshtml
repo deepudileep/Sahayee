@@ -1,0 +1,72 @@
+﻿@model List<Sahayee.Models.DB.Organization>
+
+@{
+    ViewData["Title"] = "Jobs | Sahayee Admin";
+}@{
+    Layout = "_LayoutAdmin";
+}
+
+    <div class="row">
+        <div class="card">
+            <div class="card-body ">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <a class="btn btn-primary" href="/Organization/Create">Add New Organization</a>
+                  
+                </div>
+
+                <div id="jobTableContainer">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>OrganizationId</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Website</th>
+                                <th>Contact</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var job in Model)
+                            {
+                                <tr>
+                                    <td>@job.Id</td>
+                                    <td>@job.Name</td>
+                                    <td>@job.Email</td>
+                                    <td>@job.Website</td>
+                                    <td>@job.Contact</td>
+                                    <td>
+
+                                        <a href="/Organization/Details?id=@job.Id" class="btn btn-warning">Details</a>
+                                        <a href="/Organization/Create?id=@job.Id" class="btn btn-warning">Edit</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<script>
+    const modal = new bootstrap.Modal(document.getElementById('jobModal'));
+    function filterQueries() {
+        const filter = document.getElementById('filter').value;
+
+        fetch(`/Queries/FilterQueries?type=${filter}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'text/html' // Expect HTML response
+            }
+        })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('jobTableContainer').innerHTML = html;
+            })
+            .catch(error => console.error('Error fetching jobs:', error));
+    }
+
+</script>
